@@ -1,93 +1,112 @@
-# Daejeon_5_13_finalproject_TravelQuest
+# TRAVEL QUEST
+
+## 🧭 주제
+
+> **여행 RPG 파티 매칭 플랫폼 - "TRAVEL QUEST"**
+
+현실 속 여행을 판타지 RPG 게임처럼!
+MBTI 기반 직업 설정, 여행지(던전) 도전, 실시간 파티 매칭, 미션 수행 및 후기 공유까지 가능한 게이미피케이션 여행 플랫폼.
+
+---
+
+## 👥 팀원 구성
+
+* **양준하**
+
+  * 기획 총괄 / UIUX 설계 / 프론트엔드 개발
+
+* **신승용**
+
+  * 백엔드 아키텍처 / API 설계 / 이벤트 기반 시스템 구축
+
+---
+
+## 🌍 시장 조사
+
+* **2030 MZ 세대** 중심의 자유 여행, 혼행 수요 증가
+* 여행 동행 구하기 위해 ‘당근마켓’, ‘오픈카카오톡’, ‘여행 카페’ 활용 사례 다수
+* 기존 플랫폼 (마이리얼트립, 트리플 등)은 '일정 생성 및 정보 제공' 중심
+* → 실시간 매칭 + 게이미피케이션 + 후기 공유형 플랫폼 **전무**
+* **MZ세대는 경험 공유와 소셜, 재미를 동시에 추구**
+* 당근마켓과 같이 ‘가볍게 참여 → 채팅 → 취소도 쉬움’ 구조 필요
+
+---
+
+## 🛠 주요 기능
+
+### 1. **여행 프로필 & 직업군**
+
+* 회원가입 시 MBTI 기반 성향 검사
+* 마이페이지에 표시, 파티 매칭 시 활용
+
+| 직업군                    | 성향 키워드                   | MBTI 기반 추천 | 설명                                                 |
+| ---------------------- | ------------------------ | ---------- | -------------------------------------------------- |
+| 🛡️ **전사**             | 리더십, 추진력, 책임감            | ESTJ, ENTJ | 파티의 선두에서 **일정을 이끌고 추진**하는 유형. 여행 일정을 밀고 나가는 핵심 멤버. |
+| 🧙 **마법사**             | 전략, 정보력, 계획형             | INTJ, INTP | 여행지를 분석하고, **최적의 루트를 계산**하는 브레인. 계획 수립에 강함.        |
+| 🧝 **도적**              | 즉흥, 자유, 감각적 경험           | ESFP, ISFP | 계획보다는 분위기를 따라가는 **감성 여행자**. 숨은 명소를 잘 찾아냄.          |
+| 🧚 **힐러**              | 감성, 공감, 분위기 메이커          | INFJ, INFP | 팀 내 분위기를 조율하고, **감성적 순간**을 만드는 공감 캐릭터.             |
+| 🎭 **바드** | 사교성, 멀티태스킹, 조율           | ENFP, ENTP | 모두를 연결하고 **시너지를 내는 매칭형 캐릭터**. 흥 많은 리액션 담당.         |
+| 🏹 **레인저**             | 탐험, 체험 위주, 단독 행동 선호      | ISTP, ISFJ | **자연이나 숨은 여행지**를 즐기며, 때로는 솔로잉도 선호하는 탐험가형.          |
+| 🛠 **메카닉**       | 실용적, 문제 해결, 기술 활용        | ISTJ, ESTP | **여행 중 문제 상황 대처에 강한 실전파**. 렌터카, 네비, 예산 등 처리에 강함.   |
+| 🦊 **트릭스터**	       | 커뮤니케이션, 연결, 사람과 어울리기 좋아함 | ENFJ, ESFJ | **여행지에서 새로운 인연 만들기**에 특화된 사교성 최강자. 분위기 주도도 잘함.     |
 
 
+### 2. **여행 계획 생성 (던전 투입)**
 
-## Getting started
+* 사용자가 일정 (1\~7일), 지역(도/광역시 단위)을 선택
+    - 운영자는 해당 던전(여행) + 퀘스트 생성 (하루 기준으로 배치 작업을 통해 AI 생성)
+    - 사용자는 해당 던전을 깰 파티 생성
+* 던전 시작 시간이 되면 던전 모집 닫힘 -> 닫힌 던전은 노출 안됨됨
+* 퀘스트 완료 조건 명시 (사진 + GPS 위치 인증)
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+### 3. **파티 매칭 시스템**
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+* 던전별 MBTI 및 직업군 기반 파티모집
+    - ex) `현재 전사 1 / 마법사 1 / 힐러 1, 딜러 직업군 모집해요`
+    - 시스템적으로 직업군 제한 (너무 겹치지만 않게)
+* 모집시 채팅방 오픈 시작되기전 까지는 나가기 가능
 
-## Add your files
+### 4. **세부 일정 편집 & 채팅**
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+* 파티장이 일정 직접 편집 가능 (권한 설정) (위임 가능)
+* 왼쪽은 일정 편집 UI, 오른쪽은 채팅 UI
+* Google Map 연동 및 숙소/교통 링크 첨부 기능
 
-```
-cd existing_repo
-git remote add origin https://lab.ssafy.com/dign552/daejeon_5_13_finalproject_travelquest.git
-git branch -M master
-git push -uf origin master
-```
+### 5. **미션 수행 및 인증**
 
-## Integrate with your tools
+* 각 여행지 미션 완료 시 GPS + 사진 인증 필요
+* 인증 실패 시 해당 미션 보상 제한
 
-- [ ] [Set up project integrations](https://lab.ssafy.com/dign552/daejeon_5_13_finalproject_travelquest/-/settings/integrations)
+### 6. **후기 작성 및 공유**
 
-## Collaborate with your team
+* 여행 종료 시 ‘던전 탐사 결과’ 작성
+* 텍스트 + 이미지 + 팁 형식의 후기 → 플랫폼 메인에 피드 형태로 노출
+* 좋아요 / 북마크 / 댓글 기능 지원
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+---
 
-## Test and Deploy
+## 💼 향후 효과
 
-Use the built-in continuous integration in GitLab.
+* 여행의 게임화로 MZ 세대 중심 신규 유저 유입
+* 동행자 찾기와 계획짜기를 한 플랫폼 내 통합
+* 후기 공유를 통한 커뮤니티 활성화
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+---
 
-***
+## 🔧 기능 및 역할 분담
 
-# Editing this README
+| 기능                   | 담당  | 설명                                         |
+| -------------------- | --- | ------------------------------------------ |
+| 회원관리 및 인증    | 신승용 | 프론트 UI 설계 및 결과 렌더링                         |
+| MBTI 테스트 및 직업군 설정    | 양준하 | 프론트 UI 설계 및 결과 렌더링                         |
+| 여행 계획 및 던전 생성 기능     | 신승용  | UI 설계 및 백엔드 로직 협업                          |
+| 파티 매칭 및 실시간 채팅       | 신승용 | WebSocket 채팅       |
+| 일정 편집 UI / 채팅 연동     | 양준하 | 일정 편집, 채팅 연동                 |
+| 인증 시스템 (GPS + 사진)    | 신승용 | Spring Boot + 외부 API(GPS) 처리, 사진 업로드 저장 처리 |
+| 후기 시스템 (소셜 기능 포함)    | 양준하  | 게시글 등록 / 댓글 / 좋아요, FE/BE 분업 개발             |
+| UI/UX 기획 및 마케팅 자료 제작 | 양준하 | 온보딩, 피드화면, 로딩 등 디자인 구성                     |
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
+---
 
-## Suggestions for a good README
-
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
-
-## Name
-Choose a self-explaining name for your project.
-
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
-
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
-
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
-
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
-
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
-
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
-
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+필요 시, 피그마 기반 와이어프레임이나 API 명세 구조도 이어서 도와드릴 수 있습니다.
+다음 단계로 **기술 스택 선정**이나 **ERD 설계**, **기능 상세 설계서**도 원하시면 말씀해주세요.
