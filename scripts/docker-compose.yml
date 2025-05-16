@@ -1,14 +1,14 @@
 version: '3.8'
 
 services:
-  travelog-mysql:
+  travelquest-mysql:
     image: mysql:latest
-    container_name: travelog-mysql
+    container_name: travelquest-mysql
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: ssafytrip
-      MYSQL_USER: travelog
-      MYSQL_PASSWORD: travelog
+      MYSQL_USER: travelquest
+      MYSQL_PASSWORD: travelquest
       TZ: Asia/Seoul
     command:
       - --character-set-server=utf8mb4
@@ -18,26 +18,26 @@ services:
     ports:
       - "3306:3306"
     networks:
-      - travelog-network
+      - travelquest-network
 
-  travelog-adminer:
+  travelquest-adminer:
     image: adminer:latest
-    container_name: travelog-adminer
+    container_name: travelquest-adminer
     environment:
-      ADMINER_DEFAULT_SERVER: travelog-mysql
+      ADMINER_DEFAULT_SERVER: travelquest-mysql
     ports:
       - "18080:8080"
     networks:
-      - travelog-network
+      - travelquest-network
 
-  travelog-redis:
+  travelquest-redis:
     image: redis:latest
-    container_name: travelog-redis
+    container_name: travelquest-redis
     ports:
       - "6379:6379"
     networks:
-      - travelog-network
+      - travelquest-network
 
 networks:
-  travelog-network:
+  travelquest-network:
     driver: bridge
