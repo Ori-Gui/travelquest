@@ -1,0 +1,49 @@
+<template>
+  <div class="party-card">
+    <div class="party-title">{{ title }}</div>
+    <div class="party-desc">{{ desc }}</div>
+    <div class="party-meta">
+      <span>👥 {{ currentMembers }}/{{ maxMembers }}</span>
+      <button class="join-button">참가</button>
+    </div>
+  </div>
+</template>
+
+<script setup>
+defineProps(['title', 'desc', 'currentMembers', 'maxMembers']);
+</script>
+
+<style scoped>
+@import "@/assets/styles/fonts.css";
+
+.party-card {
+  background-color: #fff;
+  border: 1px solid #aaa;
+  border-radius: 10px;
+  padding: 1rem;
+  margin-bottom: 0.8rem;
+  font-size: 1rem;
+  overflow-x: auto;
+}
+
+.party-title {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  font-size: 1.2rem;
+}
+
+.party-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.join-button {
+  background-color: #f9b44d;
+  border: 1px solid #2d2d2d;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+</style>
