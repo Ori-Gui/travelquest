@@ -11,15 +11,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor(access = lombok.AccessLevel.PRIVATE)
 public class OAuthIdentity {
 
-    private Integer oauthIdentityId;
+    private Long oauthIdentityId;
 
     private String sub;
 
     private OAuthProvider provider;
 
-    private Integer userId;
+    private Long userId;
 
-    public static OAuthIdentity of(String sub, OAuthProvider provider, Integer userId) {
+    public static OAuthIdentity of(String sub, OAuthProvider provider, Long userId) {
         return OAuthIdentity.builder()
                 .sub(sub)
                 .provider(provider)

@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class CreateUserEvent {
-    private Integer userId;
+    private Long userId;
     private String sub;
     private OAuthProvider provider;
 }

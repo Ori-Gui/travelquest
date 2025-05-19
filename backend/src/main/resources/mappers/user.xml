@@ -1,67 +1,49 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//MyBatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ssafy.travelquest.domain.user.repository.UserRepository">
 
     <resultMap id="userResultMap" type="com.ssafy.travelquest.domain.user.entity.User">
-        <id property="no" column="no" />
-        <result property="userId" column="user_id" />
-        <result property="userName" column="user_name" />
-        <result property="password" column="password" />
-        <result property="email" column="email" />
-        <result property="joinDate" column="join_date" />
-        <result property="role" column="role" />
+        <id property="id" column="id"/>
+        <result property="userName" column="user_name"/>
+        <result property="email" column="email"/>
+        <result property="mbti" column="mbti" javaType="com.ssafy.travelquest.domain.user.entity.MBTI"/>
+        <result property="jobClassCode" column="job_class_code" javaType="com.ssafy.travelquest.domain.user.entity.JobCode"/>
+        <result property="joinDate" column="join_date"/>
+        <result property="role" column="role" javaType="com.ssafy.travelquest.domain.user.entity.UserRole"/>
     </resultMap>
 
-    <!-- 전체 사용자 조회 -->
     <select id="findAll" resultMap="userResultMap">
         SELECT * FROM users
     </select>
 
-    <!-- 번호로 조회 -->
-    <select id="findById" resultMap="userResultMap" parameterType="int">
-        SELECT * FROM users WHERE no = #{no}
+    <select id="findById" resultMap="userResultMap" parameterType="long">
+        SELECT * FROM users WHERE id = #{id}
     </select>
 
-    <!-- userId로 조회 -->
-    <select id="findByUserId" resultMap="userResultMap" parameterType="String">
-        SELECT * FROM users WHERE user_id = #{userId}
-    </select>
-
-    <!-- 사용자 등록 -->
     <insert id="insert" parameterType="com.ssafy.travelquest.domain.user.entity.User"
-	        useGeneratedKeys="true" keyProperty="no">
-	    INSERT INTO users (user_id, user_name, password, email, join_date, role)
-	    VALUES (#{userId}, #{userName}, #{password}, #{email}, #{joinDate}, #{role})
-	</insert>
+            useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO users (user_name, email, mbti, job_class_code, join_date, role)
+        VALUES (#{userName}, #{email}, #{mbti}, #{jobClassCode}, #{joinDate}, #{role})
+    </insert>
 
-
-
-
-
-    <!-- 사용자 정보 수정 -->
     <update id="update" parameterType="com.ssafy.travelquest.domain.user.entity.User">
         UPDATE users
         SET user_name = #{userName},
-            password = #{password},
             email = #{email},
+            mbti = #{mbti},
+            job_class_code = #{jobClassCode},
             role = #{role}
-        WHERE no = #{no}
+        WHERE id = #{id}
     </update>
 
-    <!-- 사용자 삭제 -->
-    <delete id="delete" parameterType="int">
-        DELETE FROM users WHERE no = #{no}
+    <delete id="delete" parameterType="long">
+        DELETE FROM users WHERE id = #{id}
     </delete>
-    
-    <!-- 비밀번호 찾기 -->
-    <select id="findByUserIdAndNameAndEmail" resultMap="userResultMap">
-	    SELECT * FROM users
-	    WHERE user_id = #{userId}
-	      AND user_name = #{userName}
-	      AND email = #{email}
-	</select>
+
+    <select id="findByUserNameAndEmail" resultMap="userResultMap" parameterType="map">
+        SELECT * FROM users
+        WHERE user_name = #{userName}
+          AND email = #{email}
+    </select>
 
 </mapper>
