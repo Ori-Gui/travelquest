@@ -1,13 +1,16 @@
 <template>
-  <div>
-    dd
+  <div id="app">
+    <DungeonExplorer />
   </div>
 </template>
 
 <script setup>
-
+import DungeonExplorer from './views/DungeonDetail.vue';
+// import DungeonExplorer from './views/DungeonExplorer.vue';
 </script>
 
-<style lang="scss" scoped>
-
+<style>
+body {
+  margin: 0;
+}
 </style>
