@@ -51,6 +51,7 @@ const searchDungeon = () => {
 </script>
 
 <style scoped>
+@import "@/assets/styles/fonts.css";
 .main {
   padding: 1rem;
 }
