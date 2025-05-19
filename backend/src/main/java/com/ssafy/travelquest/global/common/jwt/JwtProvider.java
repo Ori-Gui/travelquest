@@ -34,7 +34,7 @@ public class JwtProvider {
 
     private final UserDetailsService userDetailsService;
 
-    public JwtToken provideTokens(Integer sub, UserRole role) {
+    public JwtToken provideTokens(Long sub, UserRole role) {
         Claims claims = makeAccessClaims(sub, role);
         Claims refresh_claims = makeRefreshClaims(sub);
         return JwtToken.builder()
@@ -87,16 +87,16 @@ public class JwtProvider {
         return null;
     }
 
-    private Claims makeAccessClaims(Integer sub, UserRole role) {
+    private Claims makeAccessClaims(Long sub, UserRole role) {
         Claims claims = Jwts.claims();
-        claims.setSubject(Integer.toString(sub));
+        claims.setSubject(Long.toString(sub));
         claims.put("role", role);
         return claims;
     }
 
-    private Claims makeRefreshClaims(Integer sub) {
+    private Claims makeRefreshClaims(Long sub) {
         Claims claims = Jwts.claims();
-        claims.setSubject(Integer.toString(sub));
+        claims.setSubject(Long.toString(sub));
         return claims;
     }
 
@@ -104,4 +104,9 @@ public class JwtProvider {
         String userId = getClaims(token).getSubject();
         return userDetailsService.loadUserByUsername(userId);
     }
+
+    public String extractUserId(String token) {
+        return getClaims(token).getSubject();
+    }
+
 }

@@ -9,7 +9,7 @@ import com.ssafy.travelquest.domain.user.entity.User;
 
 @Mapper
 public interface UserRepository {
-    User findById(int no);
+    User findById(Long no);
     User findByUserId(String userId);
     int insert(User user);
     void update(User user);

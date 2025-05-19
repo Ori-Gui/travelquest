@@ -55,7 +55,7 @@ public class Oauth2AuthenticationSuccessHandler implements AuthenticationSuccess
         }
 
         JwtToken token = jwtProvider.provideTokens(
-                user.get().getNo(),
+                user.get().getId(),
                 user.get().getRole()
         );
 

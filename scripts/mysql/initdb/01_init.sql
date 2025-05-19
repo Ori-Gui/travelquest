@@ -4,115 +4,66 @@ SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 
--- -----------------------------------------------------
--- Schema mydb
--- -----------------------------------------------------
--- -----------------------------------------------------
--- Schema ssafytrip
--- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `ssafytrip` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+USE `ssafytrip`;
 
--- -----------------------------------------------------
--- Schema ssafytrip
--- ---------------------------------attractionsattractions--------------------
+-- 시도 테이블
+DROP TABLE IF EXISTS `sidos`;
+CREATE TABLE `sidos` (
+                         `no` INT NOT NULL AUTO_INCREMENT COMMENT '시도번호',
+                         `sido_code` INT NOT NULL COMMENT '시도코드',
+                         `sido_name` VARCHAR(20) DEFAULT NULL COMMENT '시도이름',
+                         PRIMARY KEY (`no`),
+                         UNIQUE INDEX `sido_code_UNIQUE` (`sido_code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='시도정보테이블';
 
-CREATE SCHEMA IF NOT EXISTS `ssafytrip` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci ;
-USE `ssafytrip` ;
+-- 구군 테이블
+DROP TABLE IF EXISTS `guguns`;
+CREATE TABLE `guguns` (
+                          `no` INT NOT NULL AUTO_INCREMENT COMMENT '구군번호',
+                          `sido_code` INT NOT NULL COMMENT '시도코드',
+                          `gugun_code` INT NOT NULL COMMENT '구군코드',
+                          `gugun_name` VARCHAR(20) DEFAULT NULL COMMENT '구군이름',
+                          PRIMARY KEY (`no`),
+                          UNIQUE KEY `uq_sido_gugun_code` (`sido_code`, `gugun_code`),
+                          CONSTRAINT `guguns_sido_to_sidos_cdoe_fk` FOREIGN KEY (`sido_code`) REFERENCES `sidos` (`sido_code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='구군정보테이블';
 
--- -----------------------------------------------------
--- Table `ssafytrip`.`sidos`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `ssafytrip`.`sidos` ;
+-- 콘텐츠 타입 테이블
+DROP TABLE IF EXISTS `contenttypes`;
+CREATE TABLE `contenttypes` (
+                                `content_type_id` INT NOT NULL COMMENT '콘텐츠타입번호',
+                                `content_type_name` VARCHAR(45) DEFAULT NULL COMMENT '콘텐츠타입이름',
+                                PRIMARY KEY (`content_type_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='콘텐츠타입정보테이블';
 
-CREATE TABLE IF NOT EXISTS `ssafytrip`.`sidos` (
-  `no` int NOT NULL AUTO_INCREMENT  comment '시도번호',
-  `sido_code` int NOT NULL comment '시도코드',
-  `sido_name` varchar(20) DEFAULT NULL comment '시도이름',
-  PRIMARY KEY (`no`),
-  UNIQUE INDEX `sido_code_UNIQUE` (`sido_code` ASC) VISIBLE)
-ENGINE = InnoDB
-AUTO_INCREMENT = 18
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci comment '시도정보테이블';
-
-
--- -----------------------------------------------------
--- Table `ssafytrip`.`guguns`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `ssafytrip`.`guguns` ;
-
-CREATE TABLE IF NOT EXISTS `ssafytrip`.`guguns` (
-  `no` int NOT NULL AUTO_INCREMENT comment '구군번호',
-  `sido_code` int NOT NULL comment '시도코드',
-  `gugun_code` int NOT NULL comment '구군코드',
-  `gugun_name` varchar(20) DEFAULT NULL comment '구군이름',
-  PRIMARY KEY (`no`),
-  UNIQUE KEY `uq_gugun_code` (`gugun_code`),  -- ✅ 유니크 제약 추가
-  INDEX `guguns_sido_to_sidos_cdoe_fk_idx` (`sido_code` ASC) VISIBLE,
-  INDEX `gugun_code_idx` (`gugun_code` ASC) VISIBLE,
-  CONSTRAINT `guguns_sido_to_sidos_cdoe_fk`
-    FOREIGN KEY (`sido_code`)
-    REFERENCES `ssafytrip`.`sidos` (`sido_code`))
-ENGINE = InnoDB
-AUTO_INCREMENT = 235
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci
-comment '구군정보테이블';
-
-
--- -----------------------------------------------------
--- Table `ssafytrip`.`contenttypes`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `ssafytrip`.`contenttypes` ;
-
-CREATE TABLE IF NOT EXISTS `ssafytrip`.`contenttypes` (
-  `content_type_id` int NOT NULL comment '콘텐츠타입번호',
-  `content_type_name` varchar(45) DEFAULT NULL comment '콘텐츠타입이름',
-  PRIMARY KEY (`content_type_id`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci comment '콘텐츠타입정보테이블';
-
-
--- -----------------------------------------------------
--- Table `ssafytrip`.`attractions`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `ssafytrip`.`attractions` ;
-
-CREATE TABLE IF NOT EXISTS `ssafytrip`.`attractions` (
-  `no` int NOT NULL AUTO_INCREMENT  comment '명소코드',
-  `content_id` int DEFAULT NULL comment '콘텐츠번호',
-  `title` varchar(500) DEFAULT NULL comment '명소이름',
-  `content_type_id` int DEFAULT NULL comment '콘텐츠타입',
-  `area_code` int DEFAULT NULL comment '시도코드',
-  `si_gun_gu_code` int DEFAULT NULL comment '구군코드',
-  `first_image1` varchar(100) DEFAULT NULL comment '이미지경로1',
-  `first_image2` varchar(100) DEFAULT NULL comment '이미지경로2',
-  `map_level` int DEFAULT NULL comment '줌레벨',
-  `latitude` decimal(20,17) DEFAULT NULL comment '위도',
-  `longitude` decimal(20,17) DEFAULT NULL comment '경도',
-  `tel` varchar(20) DEFAULT NULL comment '전화번호',
-  `addr1` varchar(100) DEFAULT NULL comment '주소1',
-  `addr2` varchar(100) DEFAULT NULL comment '주소2',
-  `homepage` varchar(1000) DEFAULT NULL comment '홈페이지',
-  `overview` varchar(10000) DEFAULT NULL comment '설명',
-  PRIMARY KEY (`no`),
-  INDEX `attractions_typeid_to_types_typeid_fk_idx` (`content_type_id` ASC) VISIBLE,
-  INDEX `attractions_sido_to_sidos_code_fk_idx` (`area_code` ASC) VISIBLE,
-  INDEX `attractions_sigungu_to_guguns_gugun_fk_idx` (`si_gun_gu_code` ASC) VISIBLE,
-  CONSTRAINT `attractions_area_to_sidos_code_fk`
-    FOREIGN KEY (`area_code`)
-    REFERENCES `ssafytrip`.`sidos` (`sido_code`),
-  CONSTRAINT `attractions_sigungu_to_guguns_gugun_fk`
-    FOREIGN KEY (`si_gun_gu_code`)
-    REFERENCES `ssafytrip`.`guguns` (`gugun_code`),
-  CONSTRAINT `attractions_typeid_to_types_typeid_fk`
-    FOREIGN KEY (`content_type_id`)
-    REFERENCES `ssafytrip`.`contenttypes` (`content_type_id`))
-ENGINE = InnoDB
-AUTO_INCREMENT = 56644
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci
-comment '명소정보테이블';
+-- 명소 테이블
+DROP TABLE IF EXISTS `attractions`;
+CREATE TABLE `attractions` (
+                               `no` INT NOT NULL AUTO_INCREMENT COMMENT '명소코드',
+                               `content_id` INT DEFAULT NULL COMMENT '콘텐츠번호',
+                               `title` VARCHAR(500) DEFAULT NULL COMMENT '명소이름',
+                               `content_type_id` INT DEFAULT NULL COMMENT '콘텐츠타입',
+                               `area_code` INT DEFAULT NULL COMMENT '시도코드',
+                               `si_gun_gu_code` INT DEFAULT NULL COMMENT '구군코드',
+                               `first_image1` VARCHAR(100) DEFAULT NULL COMMENT '이미지경로1',
+                               `first_image2` VARCHAR(100) DEFAULT NULL COMMENT '이미지경로2',
+                               `map_level` INT DEFAULT NULL COMMENT '줌레벨',
+                               `latitude` DECIMAL(20,17) DEFAULT NULL COMMENT '위도',
+                               `longitude` DECIMAL(20,17) DEFAULT NULL COMMENT '경도',
+                               `tel` VARCHAR(20) DEFAULT NULL COMMENT '전화번호',
+                               `addr1` VARCHAR(100) DEFAULT NULL COMMENT '주소1',
+                               `addr2` VARCHAR(100) DEFAULT NULL COMMENT '주소2',
+                               `homepage` VARCHAR(1000) DEFAULT NULL COMMENT '홈페이지',
+                               `overview` VARCHAR(10000) DEFAULT NULL COMMENT '설명',
+                               PRIMARY KEY (`no`),
+                               INDEX `idx_typeid` (`content_type_id`),
+                               INDEX `idx_area_code` (`area_code`),
+                               INDEX `idx_sigungu_code` (`si_gun_gu_code`),
+                               CONSTRAINT `fk_attractions_sido` FOREIGN KEY (`area_code`) REFERENCES `sidos` (`sido_code`),
+                               CONSTRAINT `fk_attractions_sigungu` FOREIGN KEY (`area_code`, `si_gun_gu_code`) REFERENCES `guguns` (`sido_code`, `gugun_code`),
+                               CONSTRAINT `fk_attractions_contenttype` FOREIGN KEY (`content_type_id`) REFERENCES `contenttypes` (`content_type_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='명소정보테이블';
 
 -- -----------------------------------------------------
 -- Table `ssafytrip`.`users`
@@ -120,17 +71,14 @@ comment '명소정보테이블';
 DROP TABLE IF EXISTS `ssafytrip`.`users`;
 
 CREATE TABLE IF NOT EXISTS `ssafytrip`.`users` (
-                                                   `no` BIGINT NOT NULL AUTO_INCREMENT COMMENT '사용자 번호',
-                                                   `user_id` VARCHAR(50) NOT NULL COMMENT '로그인 아이디',
-    `password` VARCHAR(255) NOT NULL COMMENT '비밀번호',
+   `id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '사용자 번호',
     `user_name` VARCHAR(100) NOT NULL COMMENT '사용자 이름',
     `email` VARCHAR(100) DEFAULT NULL COMMENT '이메일 주소',
     `mbti` VARCHAR(10) DEFAULT NULL COMMENT 'MBTI 성향',
     `job_class_code` VARCHAR(50) NOT NULL COMMENT '직업 코드',
     `join_date` DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '가입일시',
     `role` VARCHAR(20) DEFAULT 'USER' COMMENT '권한 (USER, ADMIN)',
-    PRIMARY KEY (`no`),
-    UNIQUE INDEX `user_id_UNIQUE` (`user_id` ASC),
+    PRIMARY KEY (`id`),
     UNIQUE INDEX `email_UNIQUE` (`email` ASC),
     CONSTRAINT `fk_users_job_class`
     FOREIGN KEY (`job_class_code`)
@@ -154,7 +102,7 @@ CREATE TABLE IF NOT EXISTS oauth_identity (
   UNIQUE KEY uq_sub_provider (sub, provider),
   CONSTRAINT fk_oauth_identity_user
     FOREIGN KEY (user_id)
-    REFERENCES users(no)
+    REFERENCES users(id)
     ON DELETE CASCADE
 ) ENGINE=InnoDB
   DEFAULT CHARSET=utf8mb4
@@ -170,16 +118,17 @@ CREATE TABLE IF NOT EXISTS job_class (
     icon_url VARCHAR(500)
     );
 
--- 사용자
-CREATE TABLE IF NOT EXISTS user (
-                                    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                                    name VARCHAR(255),
-    email VARCHAR(255) UNIQUE,
-    mbti VARCHAR(10),
-    job_class_code VARCHAR(50) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT fk_user_job_class FOREIGN KEY (job_class_code) REFERENCES job_class(code)
-    );
+INSERT INTO job_class (code, name, description)
+VALUES
+    ('WARRIOR', '전사', '파티의 선두에서 일정을 이끌고 추진하는 유형'),
+    ('MAGE', '마법사', '여행지를 분석하고 최적의 루트를 계산하는 브레인'),
+    ('ROGUE', '도적', '분위기를 따라가는 감성 여행자'),
+    ('HEALER', '힐러', '분위기를 조율하는 감성형'),
+    ('BARD', '바드', '시너지를 내는 흥 많은 캐릭터'),
+    ('RANGER', '레인저', '자연을 탐험하고 솔로잉도 선호'),
+    ('MECHANIC', '메카닉', '문제 상황에 강한 실전파'),
+    ('TRICKSTER', '트릭스터', '사교성 최강자'),
+    ('NONE', '없음', '직업 미지정');
 
 -- 유저 던전 기록
 CREATE TABLE IF NOT EXISTS user_dungeon_record (

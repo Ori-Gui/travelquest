@@ -20,9 +20,9 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
-        var user = userService.getUser(Integer.parseInt(userId));
+        var user = userService.getUser(Long.parseLong(userId));
         return new User(
-                Integer.toString(user.getNo()), "", List.of(new SimpleGrantedAuthority(user.getRole().name()))
+                Long.toString(user.getId()), "", List.of(new SimpleGrantedAuthority(user.getRole().name()))
         );
     }
 }

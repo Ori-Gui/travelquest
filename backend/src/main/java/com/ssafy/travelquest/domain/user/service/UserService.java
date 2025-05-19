@@ -33,18 +33,17 @@ public class UserService {
         // 유저 정보 생성
         User user = User.of();
         userRepository.insert(user); // no 필드에 자동 주입됨
-        System.out.println("✅ 생성된 PK: " + user.getNo()); // 여기서 ID 꺼냄
-        int targetId = user.getNo();
+        Long targetId = user.getId();
         User target = userRepository.findById(targetId);
 
         publisher.publishEvent(CreateUserEvent.builder()
-                .userId(target.getNo())
+                .userId(target.getId())
                 .sub(sub)
                 .provider(provider)
                 .build());
     }
     
-    public User getUser(int no) {
+    public User getUser(Long no) {
         return userRepository.findById(no);
     }
 
@@ -66,14 +65,6 @@ public class UserService {
 
     public List<User> list() {
         return userRepository.findAll();
-    }
-
-    public String findPassword(String userId, String userName, String email) {
-        User user = userRepository.findByUserIdAndNameAndEmail(userId, userName, email);
-        if (user == null) {
-            throw new NoSuchUserException("일치하는 사용자가 없습니다.");
-        }
-        return user.getPassword();
     }
 
 }

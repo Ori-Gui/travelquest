@@ -14,7 +14,7 @@ services:
       - --character-set-server=utf8mb4
       - --collation-server=utf8mb4_0900_ai_ci
     volumes:
-      - ./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+    - ./mysql/initdb:/docker-entrypoint-initdb.d
     ports:
       - "3306:3306"
     networks:
@@ -38,6 +38,39 @@ services:
     networks:
       - travelquest-network
 
+  travelquest-mongodb:
+    image: mongo:latest
+    container_name: travelquest-mongodb
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+    restart: unless-stopped
+    networks:
+      - travelquest-network
+    volumes:
+      - mongo_data:/data/db
+
+  travelquest-mongo-express:
+    image: mongo-express:latest
+    container_name: travelquest-mongo-express
+    ports:
+      - "18081:8081"
+    environment:
+      ME_CONFIG_MONGODB_URL: mongodb://root:root@travelquest-mongodb:27017/?authSource=admin
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: root
+      ME_CONFIG_BASICAUTH_USERNAME: admin
+      ME_CONFIG_BASICAUTH_PASSWORD: admin
+    depends_on:
+      - travelquest-mongodb
+    networks:
+      - travelquest-network
+
 networks:
   travelquest-network:
     driver: bridge
+
+volumes:
+  mongo_data:

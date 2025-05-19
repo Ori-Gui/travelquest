@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//MyBatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.travelquest.domain.user.repository">
+
+    <resultMap id="jobClassResultMap" type="com.ssafy.travelquest.domain.user.entity.JobClass">
+        <id property="code" column="code" javaType="com.ssafy.travelquest.domain.user.entity.JobCode" />
+        <result property="name" column="name" />
+        <result property="description" column="description" />
+        <result property="imageUrl" column="image_url" />
+        <result property="iconUrl" column="icon_url" />
+    </resultMap>
+
+    <!-- 직업군 전체 조회 -->
+    <select id="findAll" resultMap="jobClassResultMap">
+        SELECT * FROM job_class
+    </select>
+
+    <!-- 직업군 코드로 조회 -->
+    <select id="findByCode" resultMap="jobClassResultMap" parameterType="string">
+        SELECT * FROM job_class WHERE code = #{code}
+    </select>
+</mapper>
