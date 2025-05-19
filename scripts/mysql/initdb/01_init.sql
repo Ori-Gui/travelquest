@@ -153,6 +153,7 @@ CREATE TABLE IF NOT EXISTS dungeon (
     start_date DATE,
     end_date DATE,
     main_attraction INT,
+    difficulty INT NOT NULL,
     max_party_size INT NOT NULL,
     status VARCHAR(20),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
