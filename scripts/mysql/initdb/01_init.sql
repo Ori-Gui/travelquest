@@ -120,17 +120,14 @@ comment '명소정보테이블';
 DROP TABLE IF EXISTS `ssafytrip`.`users`;
 
 CREATE TABLE IF NOT EXISTS `ssafytrip`.`users` (
-                                                   `no` BIGINT NOT NULL AUTO_INCREMENT COMMENT '사용자 번호',
-                                                   `user_id` VARCHAR(50) NOT NULL COMMENT '로그인 아이디',
-    `password` VARCHAR(255) NOT NULL COMMENT '비밀번호',
+   `id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '사용자 번호',
     `user_name` VARCHAR(100) NOT NULL COMMENT '사용자 이름',
     `email` VARCHAR(100) DEFAULT NULL COMMENT '이메일 주소',
     `mbti` VARCHAR(10) DEFAULT NULL COMMENT 'MBTI 성향',
     `job_class_code` VARCHAR(50) NOT NULL COMMENT '직업 코드',
     `join_date` DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '가입일시',
     `role` VARCHAR(20) DEFAULT 'USER' COMMENT '권한 (USER, ADMIN)',
-    PRIMARY KEY (`no`),
-    UNIQUE INDEX `user_id_UNIQUE` (`user_id` ASC),
+    PRIMARY KEY (`id`),
     UNIQUE INDEX `email_UNIQUE` (`email` ASC),
     CONSTRAINT `fk_users_job_class`
     FOREIGN KEY (`job_class_code`)
@@ -154,7 +151,7 @@ CREATE TABLE IF NOT EXISTS oauth_identity (
   UNIQUE KEY uq_sub_provider (sub, provider),
   CONSTRAINT fk_oauth_identity_user
     FOREIGN KEY (user_id)
-    REFERENCES users(no)
+    REFERENCES users(id)
     ON DELETE CASCADE
 ) ENGINE=InnoDB
   DEFAULT CHARSET=utf8mb4
@@ -170,16 +167,17 @@ CREATE TABLE IF NOT EXISTS job_class (
     icon_url VARCHAR(500)
     );
 
--- 사용자
-CREATE TABLE IF NOT EXISTS user (
-                                    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                                    name VARCHAR(255),
-    email VARCHAR(255) UNIQUE,
-    mbti VARCHAR(10),
-    job_class_code VARCHAR(50) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT fk_user_job_class FOREIGN KEY (job_class_code) REFERENCES job_class(code)
-    );
+INSERT INTO job_class (code, name, description)
+VALUES
+    ('WARRIOR', '전사', '파티의 선두에서 일정을 이끌고 추진하는 유형'),
+    ('MAGE', '마법사', '여행지를 분석하고 최적의 루트를 계산하는 브레인'),
+    ('ROGUE', '도적', '분위기를 따라가는 감성 여행자'),
+    ('HEALER', '힐러', '분위기를 조율하는 감성형'),
+    ('BARD', '바드', '시너지를 내는 흥 많은 캐릭터'),
+    ('RANGER', '레인저', '자연을 탐험하고 솔로잉도 선호'),
+    ('MECHANIC', '메카닉', '문제 상황에 강한 실전파'),
+    ('TRICKSTER', '트릭스터', '사교성 최강자'),
+    ('NONE', '없음', '직업 미지정');
 
 -- 유저 던전 기록
 CREATE TABLE IF NOT EXISTS user_dungeon_record (
