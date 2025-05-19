@@ -1,9 +1,10 @@
 <template>
   <header>
-    <div class="logo">Travel Quest</div>
+    <div class="logo-container">
+      <img src="@/assets/travelquest_logo2.png" alt="Travel Quest Logo" class="logo-image" />
+    </div>
     <button class="menu-button">☰</button>
   </header>
-  <br>
 </template>
 
 <script setup>
@@ -17,12 +18,18 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem;
+  padding: 0.5rem 1rem;
   border-bottom: 2px solid #6cd395;
+  z-index: 1000;
 }
 
-.logo {
-  font-size: 1.3rem;
+.logo-container {
+  display: flex;
+  align-items: center;
+}
+
+.logo-image {
+  width: 150px;
 }
 
 .menu-button {
