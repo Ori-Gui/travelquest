@@ -11,7 +11,27 @@ const router = createRouter({
     {
       path: '/login',
       name: 'Login',
-      component: () => import('@/views/LoginView.vue')  // Lazy loading
+      component: () => import('@/views/UserLogin.vue')  // Lazy loading
+    },
+    {
+      path: '/oauth/callback',
+      name: 'OAuthCallback',
+      component: () => import('@/components/OAuthCallback.vue')
+    },
+    {
+      path: '/register',
+      name: 'Register',
+      component: () => import('@/views/UserRegister.vue')
+    },
+    {
+      path: '/mbti',
+      name: 'MBTITEST',
+      component: () => import('@/views/MbtiTest.vue')
+    },
+    {
+      path: '/mbti/result/:mbtiCode',
+      name: 'MbtiResult',
+      component: () => import('@/views/MbtiResult.vue')
     }
   ],
 })

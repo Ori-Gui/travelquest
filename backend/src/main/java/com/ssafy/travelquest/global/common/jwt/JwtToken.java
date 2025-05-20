@@ -1,10 +1,11 @@
 package com.ssafy.travelquest.global.common.jwt;
 
 import lombok.Builder;
+import lombok.Getter;
 
 @Builder
-public record JwtToken(
-        String accessToken,
-        String refreshToken
-) {
+@Getter
+public class JwtToken {
+    private String accessToken;
+    private String refreshToken;
 }

@@ -1,36 +1,23 @@
 <template>
-  <div class="min-h-screen flex flex-col items-center justify-between bg-mint px-4 py-6">
-    <!-- 헤더 -->
-    <Header />
+  <div class="login-box">
+    <h1 class="title">Travel Quest</h1>
 
-    <!-- 본문 -->
-    <main class="flex-grow flex items-center justify-center w-full">
-      <div class="login-box">
-        <h1 class="title">Travel Quest</h1>
+    <!-- 카카오 로그인 버튼 -->
+    <a id="kakao-login-btn" class="login-btn-wrapper">
+      <img
+        src="https://k.kakaocdn.net/14/dn/btroDszwNrM/I6efHub1SN5KCJqLm1Ovx1/o.jpg"
+        alt="카카오 로그인 버튼"
+        class="social-btn-img"
+      />
+    </a>
 
-        <!-- 카카오 로그인 버튼 -->
-        <a id="kakao-login-btn" class="login-btn-wrapper">
-          <img
-            src="https://k.kakaocdn.net/14/dn/btroDszwNrM/I6efHub1SN5KCJqLm1Ovx1/o.jpg"
-            alt="카카오 로그인 버튼"
-            class="social-btn-img"
-          />
-        </a>
-
-        <!-- 네이버 로그인 버튼 -->
-        <div id="naverIdLogin" class="login-btn-wrapper"></div>
-      </div>
-    </main>
-
-    <!-- 푸터 -->
-    <Footer />
+    <!-- 네이버 로그인 버튼 -->
+    <div id="naverIdLogin" class="login-btn-wrapper"></div>
   </div>
 </template>
 
 <script setup>
 import { onMounted } from 'vue'
-import Header from '@/components/Header.vue'
-import Footer from '@/components/Footer.vue'
 
 onMounted(() => {
   // ✅ 카카오 SDK
@@ -38,11 +25,11 @@ onMounted(() => {
     const kakaoScript = document.createElement('script')
     kakaoScript.src = 'https://developers.kakao.com/sdk/js/kakao.js'
     kakaoScript.onload = () => {
-      window.Kakao.init('YOUR_KAKAO_JAVASCRIPT_KEY') // 👉 실제 앱 키로 교체
+      window.Kakao.init('3164bebdfd11236cfd36fe638572aae1') // 👉 실제 앱 키로 교체
       const kakaoLoginBtn = document.getElementById('kakao-login-btn')
       kakaoLoginBtn.addEventListener('click', () => {
         window.Kakao.Auth.authorize({
-          redirectUri: 'http://localhost:5173/kakao-callback' // 👉 실제 도메인에 맞게 수정
+          redirectUri: 'http://localhost:8080/oauth2/authorization/kakao'
         })
       })
     }
@@ -54,8 +41,8 @@ onMounted(() => {
   naverScript.src = 'https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.2.js'
   naverScript.onload = () => {
     new window.naver.LoginWithNaverId({
-      clientId: 'YOUR_NAVER_CLIENT_ID', // 👉 네이버 앱 클라이언트 ID로 교체
-      callbackUrl: 'http://localhost:5173/naver-callback',
+      clientId: 'KmZoLWlEVZtPZNHcdUv5',
+      callbackUrl: 'http://localhost:8080/oauth2/authorization/naver',
       isPopup: false,
       loginButton: {
         color: 'green',
@@ -70,10 +57,6 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.bg-mint {
-  background-color: #e6fff2;
-}
-
 .login-box {
   margin: auto;
   background-color: white;
@@ -93,7 +76,6 @@ onMounted(() => {
   margin-bottom: 1.5rem;
 }
 
-/* 공통 버튼 wrapper */
 .login-btn-wrapper {
   width: 100%;
   height: 45px;
@@ -103,10 +85,10 @@ onMounted(() => {
   align-items: center;
 }
 
-/* 카카오 버튼 이미지 */
 .social-btn-img {
   width: 80%;
   height: 45px;
   display: block;
+  cursor: pointer;
 }
 </style>

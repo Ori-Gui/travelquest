@@ -1,5 +1,6 @@
 -- MySQL Workbench Forward Engineering
 
+SET NAMES utf8mb4;
 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
@@ -69,15 +70,16 @@ CREATE TABLE `attractions` (
 -- Table `ssafytrip`.`users`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `ssafytrip`.`users`;
-
 CREATE TABLE IF NOT EXISTS `ssafytrip`.`users` (
-   `id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '사용자 번호',
-    `user_name` VARCHAR(100) NOT NULL COMMENT '사용자 이름',
+                                                   `id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '사용자 번호',
+                                                   `user_name` VARCHAR(100) NOT NULL COMMENT '사용자 이름',
     `email` VARCHAR(100) DEFAULT NULL COMMENT '이메일 주소',
     `mbti` VARCHAR(10) DEFAULT NULL COMMENT 'MBTI 성향',
     `job_class_code` VARCHAR(50) NOT NULL COMMENT '직업 코드',
-    `join_date` DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '가입일시',
+    `birthday` DATE DEFAULT NULL COMMENT '생년월일',
+    `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '가입일시',
     `role` VARCHAR(20) DEFAULT 'USER' COMMENT '권한 (USER, ADMIN)',
+    `regist_status` VARCHAR(20) DEFAULT 'NOT_YET' COMMENT '가입 진행 상태 (NOT_YET, IN_PROGRESS, REGISTERED)',
     PRIMARY KEY (`id`),
     UNIQUE INDEX `email_UNIQUE` (`email` ASC),
     CONSTRAINT `fk_users_job_class`
@@ -91,6 +93,8 @@ CREATE TABLE IF NOT EXISTS `ssafytrip`.`users` (
     DEFAULT CHARACTER SET = utf8mb4
     COLLATE = utf8mb4_0900_ai_ci
     COMMENT = '통합 사용자 테이블';
+
+
 
 
 CREATE TABLE IF NOT EXISTS oauth_identity (
