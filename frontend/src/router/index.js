@@ -4,8 +4,13 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/dungeon',
+      path: '/map',
       name: 'DungeonExplorer',
+      component: () => import('@/views/DungeonExplorer.vue') // Lazy loaded
+    },
+    {
+      path: '/dungeon',
+      name: 'DungeonDetail',
       component: () => import('@/views/DungeonDetail.vue') // Lazy loaded
     },
     {
