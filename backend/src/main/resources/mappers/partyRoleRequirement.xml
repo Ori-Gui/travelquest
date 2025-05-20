@@ -11,7 +11,7 @@
         <result property="partyId" column="party_id" />
         <result property="maxCount" column="max_count" />
         <association property="jobCode" javaType="com.ssafy.travelquest.domain.user.entity.JobCode">
-            <id property="id" column="job_code_id" />
+            <id property="id" column="job_class_code" />
         </association>
     </resultMap>
 
@@ -19,7 +19,7 @@
     <!-- 단일 INSERT -->
     <insert id="insert" parameterType="com.ssafy.travelquest.domain.party.entity.PartyRoleRequirement"
             useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO party_role_requirement (party_id, job_code_id, max_count)
+        INSERT INTO party_role_requirement (party_id, job_class_code, max_count)
         VALUES (#{partyId}, #{jobCode}, #{maxCount})
     </insert>
 
@@ -43,5 +43,12 @@
         DELETE FROM party_role_requirement
         WHERE job_code_id = #{jobCodeId}
     </delete>
+
+    <select id="findByPartyId" parameterType="long"
+            resultMap="partyRoleRequirementResultMap">
+        SELECT id, party_id, job_class_code, max_count
+        FROM party_role_requirement
+        WHERE party_id = #{partyId}
+    </select>
 
 </mapper>

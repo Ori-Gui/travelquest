@@ -21,7 +21,7 @@ import java.util.List;
 public class PartyService {
     private final PartyRepository partyRepository;
     private final PartyRoleRequirementRepository partyRoleRequirementRepository;
-    private final PartyMemberRepository partyMemberService;
+    private final PartyMemberRepository partyMemberRepository;
 
     @Transactional
     public void createParty(CustomUserDetails userDetails, CreatePartyRequest request, Long dungeonId) {
@@ -45,7 +45,7 @@ public class PartyService {
                 .toList();
         partyRoleRequirementRepository.insertList(partyRoleRequirements);
 
-        partyMemberService.insertPartyMember(
+        partyMemberRepository.insertPartyMember(
                 PartyMember.of(
                         party.getId(),
                         userDetails.getId(),
@@ -56,7 +56,7 @@ public class PartyService {
 
     @Transactional
     public void joinParty(CustomUserDetails userDetails, Long partyId) {
-        List<PartyMember> partyMembers = partyMemberService.getPartyMembersByPartyId(partyId);
+        List<PartyMember> partyMembers = partyMemberRepository.getPartyMembersByPartyId(partyId);
         Party target = partyRepository.findById(partyId);
         List<PartyRoleRequirement> partyRoleRequirements = partyRoleRequirementRepository.findByPartyId(partyId);
         if (partyMembers.size() >= target.getMaxMember()) {
@@ -72,7 +72,7 @@ public class PartyService {
             }
         }
 
-        partyMemberService.insertPartyMember(
+        partyMemberRepository.insertPartyMember(
                 PartyMember.of(
                         partyId,
                         userDetails.getId(),
