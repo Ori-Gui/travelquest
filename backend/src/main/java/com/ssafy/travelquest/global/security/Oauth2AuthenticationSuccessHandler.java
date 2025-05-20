@@ -56,11 +56,12 @@ public class Oauth2AuthenticationSuccessHandler implements AuthenticationSuccess
 
         JwtToken token = jwtProvider.provideTokens(
                 user.get().getId(),
-                user.get().getRole()
+                user.get().getRole(),
+                user.get().getRegistStatus()
         );
 
-        response.addCookie(createAccessTokenCookie(token.accessToken()));
-        response.addCookie(createRefreshTokenCookie(token.refreshToken()));
+        response.addCookie(createAccessTokenCookie(token.getAccessToken()));
+        response.addCookie(createRefreshTokenCookie(token.getRefreshToken()));
 
         response.sendRedirect(REDIRECT_URL);
     }
