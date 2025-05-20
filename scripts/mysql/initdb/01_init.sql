@@ -151,7 +151,6 @@ CREATE TABLE IF NOT EXISTS user_dungeon_record (
 -- 던전
 CREATE TABLE IF NOT EXISTS dungeon (
                                        id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                                       user_id INT NOT NULL,
                                        sido_code INT NOT NULL,
                                        title VARCHAR(255),
     start_date DATE,
@@ -161,7 +160,6 @@ CREATE TABLE IF NOT EXISTS dungeon (
     max_party_size INT NOT NULL,
     status VARCHAR(20),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT fk_dungeon_user FOREIGN KEY (user_id) REFERENCES user(id),
     CONSTRAINT fk_dungeon_sido FOREIGN KEY (sido_code) REFERENCES sidos(sido_code),
     CONSTRAINT fk_dungeon_main_attraction FOREIGN KEY (main_attraction) REFERENCES attractions(no)
     );
@@ -195,15 +193,30 @@ CREATE TABLE IF NOT EXISTS quest_verification (
     );
 
 -- 파티
-CREATE TABLE IF NOT EXISTS party (
-                                     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                                     dungeon_id INT NOT NULL,
-                                     leader_id INT NOT NULL,
-                                     status VARCHAR(20),
+DROP TABLE IF EXISTS `party`;
+CREATE TABLE IF NOT EXISTS `party` (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    dungeon_id INT NOT NULL,
+    leader_id INT NOT NULL,
+    name VARCHAR(100) NOT NULL COMMENT '파티 이름',
+    status VARCHAR(20) COMMENT 'matching, active, completed, failed',
+    max_members INT DEFAULT 5 COMMENT '파티 최대 인원 수',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_party_dungeon FOREIGN KEY (dungeon_id) REFERENCES dungeon(id),
-    CONSTRAINT fk_party_leader FOREIGN KEY (leader_id) REFERENCES user(id)
-    );
+    CONSTRAINT fk_party_leader FOREIGN KEY (leader_id) REFERENCES users(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='여행 파티 테이블';
+
+-- 파티 역할 구성 테이블 추가
+DROP TABLE IF EXISTS `party_role_requirement`;
+CREATE TABLE IF NOT EXISTS `party_role_requirement` (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    party_id INT NOT NULL,
+    job_class_code VARCHAR(50) NOT NULL,
+    max_count INT NOT NULL,
+    CONSTRAINT fk_party_role_party FOREIGN KEY (party_id) REFERENCES party(id),
+    CONSTRAINT fk_party_role_job_class FOREIGN KEY (job_class_code) REFERENCES job_class(code)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='파티 내 직업군 인원 제한 테이블';
+
 
 -- 파티원
 CREATE TABLE IF NOT EXISTS party_member (
