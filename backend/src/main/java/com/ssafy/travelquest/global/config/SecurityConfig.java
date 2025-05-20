@@ -18,7 +18,7 @@ import com.ssafy.travelquest.global.security.filter.JwtAuthenticationFilter;
 
 import lombok.RequiredArgsConstructor;
 
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @RequiredArgsConstructor
 @EnableMethodSecurity
 public class SecurityConfig {

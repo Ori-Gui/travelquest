@@ -1,0 +1,38 @@
+package com.ssafy.travelquest.domain.user.Controller;
+
+import com.ssafy.travelquest.domain.user.dto.MbtiAnswer;
+import com.ssafy.travelquest.domain.user.dto.MbtiResultResponse;
+import com.ssafy.travelquest.domain.user.dto.UserProfileEditRequest;
+import com.ssafy.travelquest.domain.user.service.UserService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RequiredArgsConstructor
+@RestController
+@RequestMapping("/api/v1/user")
+public class UserController {
+    private final UserService userService;
+
+    @PostMapping("/register")
+    public ResponseEntity<Void> registUser(@AuthenticationPrincipal UserDetails userDetails, @RequestBody UserProfileEditRequest userProfileEditRequest) {
+        userService.editUserProfile(Long.parseLong(userDetails.getUsername()), userProfileEditRequest);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/mbti")
+    public ResponseEntity<MbtiResultResponse> registMbti(@AuthenticationPrincipal UserDetails userDetails, @RequestBody List<MbtiAnswer> answers) {
+        return ResponseEntity.ok(
+                userService.checkMbtiAndSave(Long.parseLong(userDetails.getUsername()), answers)
+        );
+    }
+
+    @GetMapping("/mbti/{mbtiType}")
+    public ResponseEntity<MbtiResultResponse> getMbti(@PathVariable String mbtiType) {
+        return ResponseEntity.ok(userService.getMbti(mbtiType));
+    }
+}

@@ -1,7 +1,15 @@
 package com.ssafy.travelquest.domain.user.service;
 
+import com.ssafy.travelquest.domain.user.dto.MbtiAnswer;
+import com.ssafy.travelquest.domain.user.dto.MbtiResultResponse;
+import com.ssafy.travelquest.domain.user.dto.UserProfileEditRequest;
+import com.ssafy.travelquest.domain.user.entity.JobClass;
+import com.ssafy.travelquest.domain.user.entity.MBTI;
+import com.ssafy.travelquest.domain.user.repository.JobClassRepository;
+import com.ssafy.travelquest.domain.user.utils.MBTICalculator;
 import lombok.RequiredArgsConstructor;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,9 +26,11 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserService {
 
     private final UserRepository userRepository;
+    private final JobClassRepository jobClassRepository;
     private final OAuthService oAuthService;
     private final ApplicationEventPublisher publisher;
     
@@ -67,4 +77,51 @@ public class UserService {
         return userRepository.findAll();
     }
 
+    @Transactional
+    public void editUserProfile(Long userId, UserProfileEditRequest userProfileEditRequest) {
+        User user = userRepository.findById(userId);
+        if (user == null) {
+            throw new NoSuchUserException("사용자를 찾을 수 없음");
+        }
+
+        User updateUser = User.update(user, userProfileEditRequest);
+
+        userRepository.update(updateUser);
+    }
+
+    public MbtiResultResponse checkMbtiAndSave(Long userId, List<MbtiAnswer> answers) {
+        User user = userRepository.findById(userId);
+        if (user == null) {
+            throw new NoSuchUserException("사용자를 찾을 수 없음");
+        }
+
+        MBTI mbtiType = MBTI.valueOf(MBTICalculator.calculate(answers));
+
+        User updateUser = User.updateMbti(user, mbtiType);
+        userRepository.update(updateUser);
+
+
+        JobClass jobClass = jobClassRepository.findByCode(mbtiType.getJobClassCode());
+
+        log.info("Job Type: {}", jobClass.getCode().getDisplayName());
+
+        return MbtiResultResponse.builder()
+                .mbti(mbtiType)
+                .jobCode(jobClass.getCode())
+                .jobDisplayName(jobClass.getCode().getDisplayName())
+                .mbtiDescription(jobClass.getDescription())
+                .build();
+    }
+
+    public MbtiResultResponse getMbti(String mbtiType) {
+        MBTI mbti = MBTI.valueOf(mbtiType);
+        JobClass jobClass = jobClassRepository.findByCode(mbti.getJobClassCode());
+
+        return MbtiResultResponse.builder()
+                .mbti(mbti)
+                .jobCode(jobClass.getCode())
+                .jobDisplayName(jobClass.getCode().getDisplayName())
+                .mbtiDescription(jobClass.getDescription())
+                .build();
+    }
 }
