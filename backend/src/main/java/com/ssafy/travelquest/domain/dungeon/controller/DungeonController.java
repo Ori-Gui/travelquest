@@ -23,7 +23,7 @@ public class DungeonController {
 
     private final DungeonService dungeonService;
 
-    /** 1. 특정 던전의 여행지 리스트 */
+    /** 특정 던전의 여행지 리스트 */
     @GetMapping("/{dungeonId}/attractions")
     public ResponseEntity<List<Attraction>> getAttractions(
             @PathVariable Integer dungeonId) {
@@ -32,27 +32,18 @@ public class DungeonController {
         );
     }
 
-    /** 2. 특정 던전의 대표 여행지 (랜덤) */
-    @GetMapping("/{dungeonId}/attractions/random")
+    /** 특정 던전의 대표 여행지 */
+    @GetMapping("/{dungeonId}/attractions/first")
     public ResponseEntity<Attraction> getRandomAttraction(
             @PathVariable Integer dungeonId) {
-        var attraction = dungeonService.getRandomAttraction(dungeonId);
+        var attraction = dungeonService.getFirstAttraction(dungeonId);
         if (attraction == null) {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(attraction);
     }
 
-    /** 3. 검색 조건에 따른 여행지 리스트 */
-    @PostMapping("/attractions/search")
-    public ResponseEntity<List<Attraction>> searchAttractions(
-            @RequestBody @Valid AttractionSearchCondition cond) {
-        return ResponseEntity.ok(
-            dungeonService.searchAttractions(cond)
-        );
-    }
-
-    /** 4. 검색된 여행지를 포함하는 던전 리스트 */
+    /** 검색된 여행지를 포함하는 던전 리스트 */
     @PostMapping("/search")
     public ResponseEntity<List<Dungeon>> searchDungeonsByAttractions(
             @RequestBody @Valid AttractionSearchCondition cond) {

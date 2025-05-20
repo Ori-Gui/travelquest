@@ -5,6 +5,7 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ssafy.travelquest.domain.attraction.dto.AttractionSearchCondition;
 import com.ssafy.travelquest.domain.attraction.entity.Attraction;
@@ -20,30 +21,25 @@ public class DungeonService {
 
     private final DungeonRepository dungeonRepo;
     private final AttractionService attractionService;
-    private final Random rnd = new Random();
 
-    /** 1. 던전의 여행지 리스트 */
+    /** 던전의 여행지 리스트 */
     public List<Attraction> getAttractions(Integer dungeonId) {
         return dungeonRepo.getAttractionsByDungeonId(dungeonId);
     }
 
-    /** 2. 던전의 대표 여행지 (랜덤) */
-    public Attraction getRandomAttraction(Integer dungeonId) {
+    /** 던전의 대표 여행지  */
+    public Attraction getFirstAttraction(Integer dungeonId) {
         var list = getAttractions(dungeonId);
         if (list.isEmpty()) {
             return null;
         }
-        return list.get(rnd.nextInt(list.size()));
+        return list.get(0);
     }
 
-    /** 3. 검색 조건에 따른 여행지 리스트 */
-    public List<Attraction> searchAttractions(AttractionSearchCondition cond) {
-        return attractionService.searchAttractions(cond);
-    }
-
-    /** 4. 검색된 여행지 중 하나라도 포함하는 던전 리스트 */
+    /** 검색된 여행지 중 하나라도 포함하는 던전 리스트 */
+    @Transactional
     public List<Dungeon> findDungeonsByCondition(AttractionSearchCondition cond) {
-        var attractions = searchAttractions(cond);
+        var attractions = attractionService.searchAttractions(cond);
         var ids = attractions.stream()
                              .map(Attraction::getNo)
                              .collect(Collectors.toList());
