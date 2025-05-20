@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.travelquest.domain.party.repository.PartyRoleRequirementRepository">
+
+    <!-- resultMap -->
+    <resultMap id="partyRoleRequirementResultMap" type="com.ssafy.travelquest.domain.party.entity.PartyRoleRequirement">
+        <id property="id" column="id" />
+        <result property="partyId" column="party_id" />
+        <result property="maxCount" column="max_count" />
+        <association property="jobCode" javaType="com.ssafy.travelquest.domain.user.entity.JobCode">
+            <id property="id" column="job_class_code" />
+        </association>
+    </resultMap>
+
+
+    <!-- 단일 INSERT -->
+    <insert id="insert" parameterType="com.ssafy.travelquest.domain.party.entity.PartyRoleRequirement"
+            useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO party_role_requirement (party_id, job_class_code, max_count)
+        VALUES (#{partyId}, #{jobCode}, #{maxCount})
+    </insert>
+
+    <!-- 다중 INSERT -->
+    <insert id="insertList" parameterType="java.util.List">
+        INSERT INTO party_role_requirement (party_id, job_class_code, max_count)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.partyId}, #{item.jobCode}, #{item.maxCount})
+        </foreach>
+    </insert>
+
+    <!-- party_id 기준 삭제 -->
+    <delete id="deleteByPartyId">
+        DELETE FROM party_role_requirement
+        WHERE party_id = #{partyId}
+    </delete>
+
+    <!-- job_code_id 기준 삭제 -->
+    <delete id="deleteByJobCodeId">
+        DELETE FROM party_role_requirement
+        WHERE job_code_id = #{jobCodeId}
+    </delete>
+
+    <select id="findByPartyId" parameterType="long"
+            resultMap="partyRoleRequirementResultMap">
+        SELECT id, party_id, job_class_code, max_count
+        FROM party_role_requirement
+        WHERE party_id = #{partyId}
+    </select>
+
+</mapper>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.travelquest.domain.party.repository.PartyRepository">
+
+    <resultMap id="partyResultMap" type="com.ssafy.travelquest.domain.party.entity.Party">
+        <id property="id" column="id" />
+        <result property="dungeonId" column="dungeon_id" />
+        <result property="leaderId" column="leader_id" />
+        <result property="title" column="title" />
+        <result property="status" column="status" javaType="com.ssafy.travelquest.domain.party.entity.PartyStatus" />
+        <result property="maxMember" column="max_members" />
+        <result property="createdAt" column="created_at" />
+    </resultMap>
+
+    <!-- INSERT -->
+    <insert id="insert" parameterType="com.ssafy.travelquest.domain.party.entity.Party"
+            useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO party (dungeon_id, leader_id, title, status, max_members, created_at)
+        VALUES (#{dungeonId}, #{leaderId}, #{title}, #{status}, #{maxMember}, #{createdAt})
+    </insert>
+
+
+    <!-- SELECT -->
+    <select id="findById" resultMap="partyResultMap">
+        SELECT id, dungeon_id, leader_id, title, status, max_members, created_at
+        FROM party
+        WHERE id = #{id}
+    </select>
+
+    <!-- UPDATE -->
+    <update id="update" parameterType="com.ssafy.travelquest.domain.party.entity.Party">
+        UPDATE party
+        SET dungeon_id = #{dungeonId},
+            leader_id = #{leaderId},
+            title = #{title},
+            status = #{status},
+            max_members = #{maxMember}
+        WHERE id = #{id}
+    </update>
+
+    <!-- DELETE -->
+    <delete id="delete">
+        DELETE FROM party
+        WHERE id = #{id}
+    </delete>
+
+</mapper>
