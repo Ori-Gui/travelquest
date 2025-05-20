@@ -197,7 +197,7 @@ DROP TABLE IF EXISTS `party`;
 CREATE TABLE IF NOT EXISTS `party` (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     dungeon_id INT NOT NULL,
-    leader_id INT NOT NULL,
+    leader_id BIGINT NOT NULL,
     name VARCHAR(100) NOT NULL COMMENT '파티 이름',
     status VARCHAR(20) COMMENT 'matching, active, completed, failed',
     max_members INT DEFAULT 5 COMMENT '파티 최대 인원 수',
