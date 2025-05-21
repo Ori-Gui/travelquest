@@ -25,16 +25,32 @@
   </select>
 
   <!-- 여행지 ID 리스트 중 하나라도 포함하는 던전 리스트 조회 -->
-  <select id="findDungeonsByAttractionIds"
-          parameterType="java.util.List"
-          resultType="Dungeon">
-    SELECT DISTINCT d.*
-      FROM dungeon d
-      JOIN dungeon_attraction da ON d.id = da.dungeon_id
-     WHERE da.attraction_id IN
-     <foreach item="id" collection="ids" open="(" separator="," close=")">
-       #{id}
-     </foreach>
-  </select>
+  <select id="findDungeonsByCondition"
+        parameterType="DungeonSearchCondition"
+        resultType="Dungeon">
+  SELECT DISTINCT d.*
+    FROM dungeon d
+    JOIN dungeon_attraction da ON d.id = da.dungeon_id
+    JOIN attractions a ON da.attraction_id = a.no
+   WHERE 1=1
+     <if test="sidoCode != null and sidoCode &gt; 0">
+       AND a.sido_code = #{sidoCode}
+     </if>
+     <if test="gugunCode != null and gugunCode &gt; 0">
+       AND a.gugun_code = #{gugunCode}
+     </if>
+     <if test="contentTypeId != null and contentTypeId &gt; 0">
+       AND a.content_type_id = #{contentTypeId}
+     </if>
+     <if test="keyword != null and keyword.trim() != ''">
+       AND a.title LIKE CONCAT('%', #{keyword}, '%')
+     </if>
+     <if test="startDate != null">
+       AND d.start_date &gt;= #{startDate}
+     </if>
+     <if test="endDate != null">
+       AND d.end_date &lt;= #{endDate}
+     </if>
+</select>
 
 </mapper>

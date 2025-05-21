@@ -1,4 +1,3 @@
-// src/main/java/com/ssafy/travelquest/domain/dungeon/controller/DungeonController.java
 package com.ssafy.travelquest.domain.dungeon.controller;
 
 import java.util.List;
@@ -9,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.ssafy.travelquest.domain.attraction.dto.AttractionSearchCondition;
 import com.ssafy.travelquest.domain.attraction.entity.Attraction;
+import com.ssafy.travelquest.domain.dungeon.dto.DungeonSearchCondition;
 import com.ssafy.travelquest.domain.dungeon.entity.Dungeon;
 import com.ssafy.travelquest.domain.dungeon.service.DungeonService;
 
@@ -57,7 +57,7 @@ public class DungeonController {
     /** 검색된 여행지를 포함하는 던전 리스트 */
     @PostMapping("/search")
     public ResponseEntity<List<Dungeon>> searchDungeonsByAttractions(
-            @RequestBody @Valid AttractionSearchCondition cond) {
+            @RequestBody @Valid DungeonSearchCondition cond) {
         return ResponseEntity.ok(
             dungeonService.findDungeonsByCondition(cond)
         );
