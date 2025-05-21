@@ -14,7 +14,6 @@ defineProps(['title', 'desc', 'currentMembers', 'maxMembers']);
 </script>
 
 <style scoped>
-@import "@/assets/styles/fonts.css";
 
 .party-card {
   background-color: #fff;

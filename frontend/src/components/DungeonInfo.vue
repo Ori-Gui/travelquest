@@ -51,7 +51,6 @@ defineProps({
   border-radius: 12px;
   padding: 1.5rem;
   margin-bottom: 1rem;
-  font-family: 'Noto Sans KR', sans-serif;
 }
 
 .info-header h2 {
