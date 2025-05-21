@@ -15,21 +15,21 @@
     </resultMap>
 
     <select id="findAll" resultMap="userResultMap">
-        SELECT * FROM users
+        SELECT * FROM user
     </select>
 
     <select id="findById" resultMap="userResultMap" parameterType="long">
-        SELECT * FROM users WHERE id = #{id}
+        SELECT * FROM user WHERE id = #{id}
     </select>
 
     <insert id="insert" parameterType="com.ssafy.travelquest.domain.user.entity.User"
             useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO users (user_name, email, mbti, job_class_code, birthday, created_at, role, regist_status)
+        INSERT INTO user (user_name, email, mbti, job_class_code, birthday, created_at, role, regist_status)
         VALUES (#{userName}, #{email}, #{mbti}, #{jobClassCode}, #{birthday}, #{createdAt}, #{role}, #{registStatus})
     </insert>
 
     <update id="update" parameterType="com.ssafy.travelquest.domain.user.entity.User">
-        UPDATE users
+        UPDATE user
         SET user_name = #{userName},
             email = #{email},
             mbti = #{mbti},
@@ -42,11 +42,11 @@
     </update>
 
     <delete id="delete" parameterType="long">
-        DELETE FROM users WHERE id = #{id}
+        DELETE FROM user WHERE id = #{id}
     </delete>
 
     <select id="findByUserNameAndEmail" resultMap="userResultMap" parameterType="map">
-        SELECT * FROM users
+        SELECT * FROM user
         WHERE user_name = #{userName}
           AND email = #{email}
     </select>

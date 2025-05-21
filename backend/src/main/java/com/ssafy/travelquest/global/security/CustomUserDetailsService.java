@@ -21,8 +21,12 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
         var user = userService.getUser(Long.parseLong(userId));
-        return new User(
-                Long.toString(user.getId()), "", List.of(new SimpleGrantedAuthority(user.getRole().name()))
+        return new CustomUserDetails(
+                user.getId(),
+                user.getEmail(),          // 또는 사용자 이름
+                "",                       // 비밀번호를 쓰지 않는다면 빈 문자열
+                user.getJobClassCode(),
+                List.of(new SimpleGrantedAuthority(user.getRole().name()))
         );
     }
 }
