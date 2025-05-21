@@ -8,7 +8,7 @@
     <div class="party-list">
       <PartyCard
         v-for="party in parties"
-        :id="party.id"
+        :partyId="party.id"
         :title="party.title"
         :desc="party.desc"
         :currentMembers="party.currentMembers"
@@ -42,8 +42,10 @@ const showModal = ref(false)
 const fetchParties = async () => {
   try {
     const data = await getPartiesByDungeonId(props.dungeonId)
+    console.log("🔥 API 응답 확인:", data) // 여기서 구조 확인
+
     parties.value = data.map(p => ({
-      id: p.partyId,
+      id: p.id ?? p.partyId, // ✅ 안전하게 둘 다 체크
       title: p.title,
       desc: p.description,
       currentMembers: p.currentMembers,
@@ -54,7 +56,6 @@ const fetchParties = async () => {
         max: r.maxCount
       }))
     }))
-    console.log(data)
   } catch (err) {
     console.error('파티 불러오기 실패', err)
   }
