@@ -19,7 +19,7 @@
   <select id="findDungeonsByAttractionIds"
           parameterType="java.util.List"
           resultType="Dungeon">
-    SELECT d.*
+    SELECT DISTINCT d.*
       FROM dungeon d
       JOIN dungeon_attraction da ON d.id = da.dungeon_id
      WHERE da.attraction_id IN
