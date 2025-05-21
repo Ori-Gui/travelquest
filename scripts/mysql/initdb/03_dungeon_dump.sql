@@ -73,21 +73,21 @@ END;
 DELIMITER ;
 
 CALL create_dungeon_with_attractions(
-  '던전 테스트 1', '2025-07-01', '2025-07-01', 4, 'OPEND'
+  '던전 테스트 1', '2025-07-01', '2025-07-01', 4, 'OPENED'
 );  -- duration=0 → difficulty=1, 1~2개 명소
 
 CALL create_dungeon_with_attractions(
-  '던전 테스트 2', '2025-07-10', '2025-07-12', 3, 'OPEND'
+  '던전 테스트 2', '2025-07-10', '2025-07-12', 3, 'OPENED'
 );  -- duration=2 → difficulty=2, 3~4개 명소
 
 CALL create_dungeon_with_attractions(
-  '던전 테스트 3', '2025-08-01', '2025-08-05', 5, 'OPEND'
+  '던전 테스트 3', '2025-08-01', '2025-08-05', 5, 'OPENED'
 );  -- duration=4 → difficulty=3, 5~6개 명소
 
 CALL create_dungeon_with_attractions(
-  '던전 테스트 4', '2025-06-20', '2025-06-27', 6, 'OPEND'
+  '던전 테스트 4', '2025-06-20', '2025-06-27', 6, 'OPENED'
 );  -- duration=7 → difficulty=4, 6~7개 명소
 
 CALL create_dungeon_with_attractions(
-  '던전 테스트 5', '2025-09-01', '2025-09-09', 8, 'OPEND'
+  '던전 테스트 5', '2025-09-01', '2025-09-09', 8, 'OPENED'
 ); 
