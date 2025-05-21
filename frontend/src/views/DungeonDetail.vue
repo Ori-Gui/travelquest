@@ -14,12 +14,14 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
-import axios from '@/lib/axios'
 import Header from '../components/Header.vue'
 import DungeonInfo from '../components/DungeonInfo.vue'
 import PartySection from '../components/DungeonParty.vue'
+
+// 라우터로부터 dungeonId를 props로 전달받음
+import { ref, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
+import axios from '@/lib/axios'
 
 const route = useRoute()
 const dungeonId = Number(route.params.id)

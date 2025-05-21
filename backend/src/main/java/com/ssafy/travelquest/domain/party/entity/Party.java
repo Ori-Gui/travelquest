@@ -16,15 +16,17 @@ public class Party {
     private Long dungeonId;
     private Long leaderId;
     private String title;
+    private String description;
     private PartyStatus status;
     private Integer maxMember;
     private LocalDateTime createdAt;
 
-    public static Party of(Long dungeonId, Long leaderId, String title, Integer maxMember) {
+    public static Party of(Long dungeonId, Long leaderId, String title, String description, Integer maxMember) {
         return Party.builder()
                 .dungeonId(dungeonId)
                 .leaderId(leaderId)
                 .title(title)
+                .description(description)
                 .status(PartyStatus.MATCHING)
                 .maxMember(maxMember)
                 .createdAt(LocalDateTime.now())

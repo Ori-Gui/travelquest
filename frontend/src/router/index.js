@@ -17,7 +17,7 @@ const router = createRouter({
     {
       path: '/login',
       name: 'Login',
-      component: () => import('@/views/UserLogin.vue')  // Lazy loading
+      component: () => import('@/views/UserLogin.vue')
     },
     {
       path: '/oauth/callback',

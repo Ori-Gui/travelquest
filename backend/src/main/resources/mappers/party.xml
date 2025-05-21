@@ -10,6 +10,7 @@
         <result property="dungeonId" column="dungeon_id" />
         <result property="leaderId" column="leader_id" />
         <result property="title" column="title" />
+        <result property="description" column="description" />
         <result property="status" column="status" javaType="com.ssafy.travelquest.domain.party.entity.PartyStatus" />
         <result property="maxMember" column="max_members" />
         <result property="createdAt" column="created_at" />
@@ -18,14 +19,14 @@
     <!-- INSERT -->
     <insert id="insert" parameterType="com.ssafy.travelquest.domain.party.entity.Party"
             useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO party (dungeon_id, leader_id, title, status, max_members, created_at)
-        VALUES (#{dungeonId}, #{leaderId}, #{title}, #{status}, #{maxMember}, #{createdAt})
+        INSERT INTO party (dungeon_id, leader_id, title, description, status, max_members, created_at)
+        VALUES (#{dungeonId}, #{leaderId}, #{title}, #{description}, #{status}, #{maxMember}, #{createdAt})
     </insert>
 
 
     <!-- SELECT -->
     <select id="findById" resultMap="partyResultMap">
-        SELECT id, dungeon_id, leader_id, title, status, max_members, created_at
+        SELECT id, dungeon_id, leader_id, title, description, status, max_members, created_at
         FROM party
         WHERE id = #{id}
     </select>
@@ -36,6 +37,7 @@
         SET dungeon_id = #{dungeonId},
             leader_id = #{leaderId},
             title = #{title},
+            description = #{description},
             status = #{status},
             max_members = #{maxMember}
         WHERE id = #{id}
@@ -46,5 +48,12 @@
         DELETE FROM party
         WHERE id = #{id}
     </delete>
+
+    <!-- 던전 ID로 파티 리스트 조회 -->
+    <select id="findByDungeonId" resultMap="partyResultMap">
+        SELECT id, dungeon_id, leader_id, title, description, status, max_members, created_at
+        FROM party
+        WHERE dungeon_id = #{dungeonId}
+    </select>
 
 </mapper>

@@ -13,14 +13,14 @@ public class ChatMessageDocument {
 
     @Id
     private String id;
-    private Long partyId;
+    private Long chatRoomId;
     private Long userId;
     private String message;
     private String sentAt;
 
-    public static ChatMessageDocument of(Long partyId, Long userId, String message, String sentAt) {
+    public static ChatMessageDocument of(Long chatRoomId, Long userId, String message, String sentAt) {
         return ChatMessageDocument.builder()
-                .partyId(partyId)
+                .chatRoomId(chatRoomId)
                 .userId(userId)
                 .message(message)
                 .sentAt(sentAt)
