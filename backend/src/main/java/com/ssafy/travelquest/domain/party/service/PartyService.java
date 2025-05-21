@@ -84,6 +84,7 @@ public class PartyService {
         );
     }
 
+    @Transactional(readOnly = true)
     public List<PartyResponse> getPartyListByDungeonId(Long dungeonId) {
         List<Party> parties = partyRepository.findByDungeonId(dungeonId);
         return parties.stream()
@@ -97,6 +98,19 @@ public class PartyService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
+    public PartyResponse getPartyInfo(Long partyId) {
+        Party party = partyRepository.findById(partyId);
+        return PartyResponse.of(
+                party.getId(),
+                party.getTitle(),
+                party.getDescription(),
+                party.getStatus(),
+                party.getMaxMember()
+        );
+    }
+
+    @Transactional(readOnly = true)
     public List<PartyInfoResponse> getPartyDetailsByDungeonId(Long dungeonId) {
         return partyRepository.findPartyDetailsByDungeonId(dungeonId);
     }

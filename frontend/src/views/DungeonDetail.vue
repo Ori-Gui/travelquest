@@ -6,7 +6,7 @@
       <div v-else>
         <!-- ✅ dungeon이 null이면 렌더링 안되도록 -->
         <DungeonInfo v-if="dungeon" :dungeon="dungeon" :attractions="attractions" />
-        <PartySection :dungeonId="dungeonId" />
+        <PartyList :dungeonId="dungeonId" />
       </div>
     </main>
     <AppFooter />
@@ -18,7 +18,7 @@
 import AppHeader from '@/components/AppHeader.vue'
 import AppFooter from '@/components/AppFooter.vue'
 import DungeonInfo from '@/components/DungeonInfo.vue'
-import PartySection from '@/components/DungeonParty.vue'
+import PartyList from '@/components/DungeonParty.vue'
 
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'

@@ -34,7 +34,7 @@ const { partyId, title, desc, currentMembers, maxMembers, roles } = defineProps(
 })
 
 const joinParty = () => {
-  console.log("✅ partyId 확인:", partyId)  // 여기에 로그 찍어보세요
+  console.log("✅ partyId 확인:", partyId)
   router.push(`/party/${partyId}`)
 }
 </script>

@@ -46,6 +46,7 @@ public class User {
     public static User updateMbti(User user, MBTI mbti) {
         return user.toBuilder()
                 .mbti(mbti)
+                .jobClassCode(JobCode.valueOf(mbti.getJobClassCode()))
                 .registStatus(RegistStatus.REGISTERED)
                 .build();
     }
