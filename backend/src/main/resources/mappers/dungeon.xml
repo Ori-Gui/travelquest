@@ -34,10 +34,10 @@
     JOIN attractions a ON da.attraction_id = a.no
    WHERE 1=1
      <if test="sidoCode != null and sidoCode &gt; 0">
-       AND a.sido_code = #{sidoCode}
+       AND a.area_code = #{sidoCode}
      </if>
      <if test="gugunCode != null and gugunCode &gt; 0">
-       AND a.gugun_code = #{gugunCode}
+       AND a.si_gun_gu_code = #{gugunCode}
      </if>
      <if test="contentTypeId != null and contentTypeId &gt; 0">
        AND a.content_type_id = #{contentTypeId}
