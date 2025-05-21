@@ -8,7 +8,7 @@
   <!-- 단일 던전 기본 정보 조회 -->
   <select id="getDungeonById"
           parameterType="int"
-          resultType="com.ssafy.travelquest.domain.dungeon.entity.Dungeon">
+          resultType="Dungeon">
     SELECT *
     FROM dungeon d
     WHERE d.id = #{dungeonId}
@@ -51,6 +51,18 @@
      <if test="endDate != null">
        AND d.end_date &lt;= #{endDate}
      </if>
-</select>
+  </select>
+	<!-- 던전 & 퀘스트 생성 프로시저 호출 매핑 -->
+  <select id="createDungeonViaProcedure" 
+          parameterType="DungeonCreateDto"
+          resultType="int">
+    {CALL create_dungeon_with_attractions(
+      #{title,        jdbcType=VARCHAR},
+      #{startDate,    jdbcType=DATE},
+      #{endDate,      jdbcType=DATE},
+      #{maxPartySize, jdbcType=INTEGER},
+      #{status,       jdbcType=VARCHAR}
+    )}
+  </select>
 
 </mapper>

@@ -3,11 +3,14 @@
     <AppHeader />
     <main class="main">
       <div class="filters">
-        <label>
-          탐험기간
-          <input type="date" v-model="startDate" /> ~
-          <input type="date" v-model="endDate" />
-        </label>
+        <div class="field date-field">
+          <label class="label">탐험기간</label>
+          <div class="date-range">
+            <input type="date" v-model="startDate" />
+            <span class="separator">~</span>
+            <input type="date" v-model="endDate" />
+          </div>
+        </div>
 
         <!-- 시도 선택 -->
         <select v-model="selectedSido">
@@ -171,21 +174,83 @@ const searchDungeon = async () => {
 </script>
 
 <style scoped>
-.main { padding: 1rem; }
+.main {
+  padding: 1rem;
+}
+
 .filters {
   display: flex;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
-  min-width: 140px;
-  flex-shrink: 0;
+  flex-direction: column;
+  gap: 0.75rem;
 }
-.menu-button {
-  background-color: #6cd395;
-  border: 2px solid #2d2d2d;
-  padding: 0.4rem 0.8rem;
-  border-radius: 8px;
-  font-size: 0.6rem;
+
+.field {
+  display: flex;
+  flex-direction: column;
+}
+.field .label {
+  margin-bottom: 0.25rem;
+  font-size: 0.85rem;
+  color: #555;
+}
+
+.date-field .date-range {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.date-field .date-range input[type="date"] {
+  flex: 1;
+  height: 40px;
+  padding: 0 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.date-pickers {
+  display: flex;
+  align-items: center;
+}
+.date-pickers input[type="date"] {
+  flex: 1;
+  height: 40px;
+  font-size: 0.9rem;
+  padding: 0 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+.date-pickers span {
+  margin: 0 0.25rem;
+  font-size: 1rem;
+}
+
+.filters select,
+.filters input[type="text"] {
+  height: 40px;
+  font-size: 0.9rem;
+  padding: 0 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.btn-search {
+  margin-top: 0.75rem;
+  height: 44px;
+  background: #6cd395;
   color: #fff;
+  font-size: 1rem;
+  border: none;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
+}
+
+.map-container {
+  margin-top: 1rem;
+  height: 500px;
 }
 </style>
