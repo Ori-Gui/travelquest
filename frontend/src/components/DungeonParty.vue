@@ -32,7 +32,7 @@ import PartyModal from './PartyCreateModal.vue'
 import { getPartiesByDungeonId } from '@/api/party'
 
 const props = defineProps({
-  dungeonId: String
+  dungeonId: Number
 })
 
 const parties = ref([])
@@ -53,7 +53,10 @@ const fetchParties = async () => {
   }
 }
 
-onMounted(fetchParties)
+onMounted(() => {
+  console.log("📦 파티 조회용 dungeonId:", props.dungeonId)
+  fetchParties()
+})
 </script>
 
 <style scoped>

@@ -4,14 +4,14 @@
     <main class="detail-container">
       <div v-if="loading" class="loading">로딩 중...</div>
       <div v-else>
-        <!-- 던전 정보 + 연결된 여행지 목록 -->
-        <DungeonInfo :dungeon="dungeon" :attractions="attractions" />
-        <!-- 파티 모집 섹션 -->
+        <!-- ✅ dungeon이 null이면 렌더링 안되도록 -->
+        <DungeonInfo v-if="dungeon" :dungeon="dungeon" :attractions="attractions" />
         <PartySection :dungeonId="dungeonId" />
       </div>
     </main>
   </div>
 </template>
+
 
 <script setup>
 import Header from '../components/Header.vue'
