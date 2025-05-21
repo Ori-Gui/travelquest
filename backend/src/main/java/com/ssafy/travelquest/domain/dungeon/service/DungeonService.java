@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ssafy.travelquest.domain.attraction.dto.AttractionSearchCondition;
 import com.ssafy.travelquest.domain.attraction.entity.Attraction;
 import com.ssafy.travelquest.domain.attraction.service.AttractionService;
+import com.ssafy.travelquest.domain.dungeon.dto.DungeonSearchCondition;
 import com.ssafy.travelquest.domain.dungeon.entity.Dungeon;
 import com.ssafy.travelquest.domain.dungeon.repository.DungeonRepository;
 
@@ -45,15 +46,9 @@ public class DungeonService {
     }
 
     /** 검색된 여행지 중 하나라도 포함하는 던전 리스트 */
-    @Transactional
-    public List<Dungeon> findDungeonsByCondition(AttractionSearchCondition cond) {
-        var attractions = attractionService.searchAttractions(cond);
-        var ids = attractions.stream()
-                             .map(Attraction::getNo)
-                             .collect(Collectors.toList());
-        if (ids.isEmpty()) {
-            return List.of();
-        }
-        return dungeonRepo.findDungeonsByAttractionIds(ids);
+    @Transactional(readOnly = true)
+    public List<Dungeon> findDungeonsByCondition(DungeonSearchCondition cond) {
+    	var list = dungeonRepo.findDungeonsByCondition(cond);
+        return list;
     }
 }
