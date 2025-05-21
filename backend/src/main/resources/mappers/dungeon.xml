@@ -4,12 +4,21 @@
          "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.ssafy.travelquest.domain.dungeon.repository.DungeonRepository">
-
+	
+  <!-- 단일 던전 기본 정보 조회 -->
+  <select id="getDungeonById"
+          parameterType="int"
+          resultType="com.ssafy.travelquest.domain.dungeon.entity.Dungeon">
+    SELECT *
+    FROM dungeon d
+    WHERE d.id = #{dungeonId}
+  </select>
+  
   <!-- 특정 던전에 연결된 여행지 리스트 조회 -->
   <select id="getAttractionsByDungeonId"
           parameterType="int"
           resultType="Attraction">
-    SELECT a.*
+    SELECT DISTINCT a.*
       FROM attractions a
       JOIN dungeon_attraction da ON a.no = da.attraction_id
      WHERE da.dungeon_id = #{dungeonId}

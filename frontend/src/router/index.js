@@ -9,9 +9,10 @@ const router = createRouter({
       component: () => import('@/views/DungeonExplorer.vue') // Lazy loaded
     },
     {
-      path: '/dungeon',
+      path: '/dungeon/:id',
       name: 'DungeonDetail',
-      component: () => import('@/views/DungeonDetail.vue') // Lazy loaded
+      component: () => import('@/views/DungeonDetail.vue'), // Lazy loaded
+      props: true
     },
     {
       path: '/login',

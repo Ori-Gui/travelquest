@@ -21,13 +21,21 @@ public class DungeonService {
 
     private final DungeonRepository dungeonRepo;
     private final AttractionService attractionService;
+    
+    /** 던전 기본 정보 단일 조회 */
+    @Transactional(readOnly = true)
+    public Dungeon getDungeonById(Integer dungeonId) {
+        return dungeonRepo.getDungeonById(dungeonId);
+    }
 
     /** 던전의 여행지 리스트 */
+    @Transactional(readOnly = true)
     public List<Attraction> getAttractions(Integer dungeonId) {
         return dungeonRepo.getAttractionsByDungeonId(dungeonId);
     }
 
     /** 던전의 대표 여행지  */
+    @Transactional(readOnly = true)
     public Attraction getFirstAttraction(Integer dungeonId) {
         var list = getAttractions(dungeonId);
         if (list.isEmpty()) {

@@ -117,16 +117,17 @@ function updateMarkers(list) {
         if (infoWindow) infoWindow.close()
         // InfoWindow 콘텐츠
         const content = `
-          <div style="padding:8px; font-size:0.9rem;">
+          <div style="padding:8px; width:14rem; font-size:0.8rem;">
             <strong>${item.title}</strong><br/>
+            주여행지: <strong>${item.first}</strong><br/>
             시작: ${item.startDate}<br/>
             종료: ${item.endDate}<br/>
             난이도: Lv.${item.difficulty}<br/>
             최대 파티: ${item.maxPartySize}<br/>
             상태: ${item.status}<br/>
             <button id="detail-btn-${item.id}" style="margin-top:6px; padding:4px 8px; font-size:0.8rem; cursor:pointer;">상세보기</button>
-             <button id="close-btn-${item.id}" style="top:4px; right:4px; border:none; background:transparent; font-size:1rem; cursor:pointer">❌</button>
-            </div>
+            <button id="close-btn-${item.id}" style="top:4px; right:4px; border:none; background:transparent; font-size:1rem; cursor:pointer">❌</button>
+          </div>
         `
         infoWindow = new kakaoInstance.maps.InfoWindow({ content })
         infoWindow.open(mapInstance, marker)

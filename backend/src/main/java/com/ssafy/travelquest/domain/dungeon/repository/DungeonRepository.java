@@ -11,4 +11,5 @@ import com.ssafy.travelquest.domain.dungeon.entity.Dungeon;
 public interface DungeonRepository {
 	List<Attraction> getAttractionsByDungeonId(Integer dungeonId);
 	List<Dungeon> findDungeonsByAttractionIds(List<Integer> ids);
+	Dungeon getDungeonById(Integer dungeonId);
 }

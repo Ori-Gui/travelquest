@@ -46,6 +46,14 @@
           </option>
         </select>
 
+        <!-- 키워드 입력 -->
+        <input
+          type="text"
+          v-model="keyword"
+          placeholder="키워드 입력"
+          class="keyword-input"
+        />
+
         <button class="menu-button" @click="searchDungeon">
           🔍 던전탐색
         </button>
@@ -65,9 +73,10 @@ import Header from '../components/Header.vue'
 import Footer from '../components/Footer.vue'
 import MapView from '../components/MapView.vue'
 
-// 날짜·필터 모델
+// 날짜, 키워드
 const startDate = ref('')
 const endDate = ref('')
+const keyword = ref('')
 
 // API로부터 받아올 목록들
 const sidos = ref([])
@@ -121,7 +130,8 @@ const searchDungeon = async () => {
     endDate: endDate.value,
     sidoCode: selectedSido.value,
     gugunCode: selectedGugun.value,
-    contentTypeId: selectedContentType.value
+    contentTypeId: selectedContentType.value,
+    keyword: keyword.value
   }
   console.log('검색 조건:', condition)
   try {
@@ -146,6 +156,7 @@ const searchDungeon = async () => {
     dungeonMarkers.value = dungeons.map((d, i) => ({
       id: d.id,
       title: d.title,
+      first: attractions[i]?.title,
       lat: attractions[i]?.latitude,
       lng: attractions[i]?.longitude,
       startDate: d.startDate,

@@ -22,6 +22,17 @@ import lombok.RequiredArgsConstructor;
 public class DungeonController {
 
     private final DungeonService dungeonService;
+    
+    /** 특정 던전 기본 정보 조회 */
+    @GetMapping("/{dungeonId}")
+    public ResponseEntity<Dungeon> getDungeonById(
+            @PathVariable Integer dungeonId) {
+        Dungeon dungeon = dungeonService.getDungeonById(dungeonId);
+        if (dungeon == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(dungeon);
+    }
 
     /** 특정 던전의 여행지 리스트 */
     @GetMapping("/{dungeonId}/attractions")
