@@ -207,6 +207,7 @@ CREATE TABLE IF NOT EXISTS `party` (
                                        dungeon_id INT NOT NULL,
                                        leader_id BIGINT NOT NULL,
                                        title VARCHAR(100) NOT NULL COMMENT '파티 이름',
+    description TEXT COMMENT '파티 설명',
     status VARCHAR(20) COMMENT 'matching, active, completed, failed',
     max_members INT DEFAULT 5 COMMENT '파티 최대 인원 수',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

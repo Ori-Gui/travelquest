@@ -2,7 +2,7 @@
   <div>
     <div class="party-controls">
       <span>파티 목록</span>
-      <button @click="createParty">+ 파티 만들기</button>
+      <button @click="showModal = true">+ 파티 만들기</button>
     </div>
 
     <div class="party-list">
@@ -15,22 +15,45 @@
         :maxMembers="party.maxMembers"
       />
     </div>
+
+    <PartyModal
+      v-if="showModal"
+      :dungeonId="dungeonId"
+      @created="fetchParties"
+      @close="showModal = false"
+    />
   </div>
 </template>
 
 <script setup>
-import PartyCard from './PartyCard.vue';
+import { ref, onMounted } from 'vue'
+import PartyCard from './PartyCard.vue'
+import PartyModal from './PartyCreateModal.vue'
+import { getPartiesByDungeonId } from '@/api/party'
 
-const parties = [
-  { id: 1, title: "부산 한바퀴", desc: "전사 2/2, 힐러 0/3", currentMembers: 2, maxMembers: 5 },
-  { id: 2, title: "학과동기 ㅋㅋㅋ", desc: "전사 1/1, 마법사 0/2, 힐러 1/2", currentMembers: 2, maxMembers: 5 },
-  { id: 3, title: "같이 걷자", desc: "직업 자유모집", currentMembers: 1, maxMembers: 2 },
-  { id: 4, title: "힐링파티", desc: "직업 자유모집", currentMembers: 2, maxMembers: 3 },
-];
+const props = defineProps({
+  dungeonId: String
+})
 
-const createParty = () => {
-  console.log("파티 만들기 클릭됨");
-};
+const parties = ref([])
+const showModal = ref(false)
+
+const fetchParties = async () => {
+  try {
+    const data = await getPartiesByDungeonId(props.dungeonId)
+    parties.value = data.map(p => ({
+      id: p.partyId,
+      title: p.title,
+      desc: p.description,
+      currentMembers: 0,
+      maxMembers: p.maxMember
+    }))
+  } catch (err) {
+    console.error('파티 불러오기 실패', err)
+  }
+}
+
+onMounted(fetchParties)
 </script>
 
 <style scoped>
@@ -48,5 +71,11 @@ const createParty = () => {
   padding: 0.4rem 0.8rem;
   font-size: 0.8rem;
   cursor: pointer;
+}
+
+.party-list {
+  max-height: 500px; /* 스크롤 높이 */
+  overflow-y: auto;
+  padding-right: 0.5rem;
 }
 </style>

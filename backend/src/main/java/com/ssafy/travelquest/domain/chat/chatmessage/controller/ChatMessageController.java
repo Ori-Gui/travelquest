@@ -16,14 +16,14 @@ public class ChatMessageController {
 
     private final ChatMessageService chatMessageService;
 
-    @MessageMapping("/chat.send.{partyId}")
-    @SendTo("/topic/chat/{partyId}")
+    @MessageMapping("/chat.send.{chatRoomId}")
+    @SendTo("/topic/chat/{chatRoomId}")
     public ChatMessageDto sendMessage(
-            @DestinationVariable Long partyId,
+            @DestinationVariable Long chatRoomId,
             ChatMessageDto message
     ) {
         log.info("Received message: {}", message);
-        chatMessageService.saveChatMessage(message, partyId);
+        chatMessageService.saveChatMessage(message, chatRoomId);
         return message;
     }
 }

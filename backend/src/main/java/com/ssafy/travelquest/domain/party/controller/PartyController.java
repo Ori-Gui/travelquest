@@ -1,6 +1,7 @@
 package com.ssafy.travelquest.domain.party.controller;
 
 import com.ssafy.travelquest.domain.party.dto.CreatePartyRequest;
+import com.ssafy.travelquest.domain.party.dto.PartyResponse;
 import com.ssafy.travelquest.domain.party.service.PartyService;
 import com.ssafy.travelquest.global.security.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -34,5 +37,11 @@ public class PartyController {
                 partyId
         );
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{dungeonId}")
+    public ResponseEntity<List<PartyResponse>> getPartyListByDungeonId(@PathVariable Long dungeonId) {
+        List<PartyResponse> partyResponses = partyService.getPartyListByDungeonId(dungeonId);
+        return ResponseEntity.ok(partyResponses);
     }
 }

@@ -1,6 +1,7 @@
 package com.ssafy.travelquest.domain.party.service;
 
 import com.ssafy.travelquest.domain.party.dto.CreatePartyRequest;
+import com.ssafy.travelquest.domain.party.dto.PartyResponse;
 import com.ssafy.travelquest.domain.party.entity.Party;
 import com.ssafy.travelquest.domain.party.entity.PartyMember;
 import com.ssafy.travelquest.domain.party.entity.PartyRoleRequirement;
@@ -30,6 +31,7 @@ public class PartyService {
                 dungeonId,
                 userDetails.getId(),
                 request.title(),
+                request.description(),
                 request.maxMember()
         );
 
@@ -79,5 +81,18 @@ public class PartyService {
                         userDetails.getJobCode()
                 )
         );
+    }
+
+    public List<PartyResponse> getPartyListByDungeonId(Long dungeonId) {
+        List<Party> parties = partyRepository.findByDungeonId(dungeonId);
+        return parties.stream()
+                .map(party -> PartyResponse.of(
+                        party.getId(),
+                        party.getTitle(),
+                        party.getDescription(),
+                        party.getStatus(),
+                        party.getMaxMember()
+                ))
+                .toList();
     }
 }
