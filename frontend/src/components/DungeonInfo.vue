@@ -1,43 +1,111 @@
 <template>
   <section class="dungeon-info">
-    <div>📅 기간: 5/25 ~ 5/27</div>
-    <div>📍 던전명: No.37, 강화섬 비밀의 숲</div>
-    <div class="tag-box">
-      <div v-for="tag in tags" :key="tag" class="tag">{{ tag }}</div>
+    <!-- 던전 기본 정보 -->
+    <div class="info-header">
+      <h2>{{ dungeon.title }}</h2>
+      <div class="period">📅 {{ dungeon.startDate }} ~ {{ dungeon.endDate }}</div>
+    </div>
+
+    <div class="info-details">
+      <div>난이도: Lv.{{ dungeon.difficulty }}</div>
+      <div>최대 파티: {{ dungeon.maxPartySize }}명</div>
+      <div>상태: <span :class="`status ${dungeon.status.toLowerCase()}`">{{ dungeon.status }}</span></div>
+    </div>
+
+    <!-- 여행지 목록 -->
+    <div class="attraction-list">
+      <h3>탐험할 여행지</h3>
+      <ul>
+        <li v-for="attr in attractions" :key="attr.contentId" class="attraction-item">
+          <img :src="attr.firstImage1 || defaultImage" alt="{{ attr.title }} 대표 이미지" />
+          <div class="attr-info">
+            <strong>{{ attr.title }}</strong>
+            <div class="attr-address">{{ attr.addr1 }}</div>
+          </div>
+        </li>
+      </ul>
     </div>
   </section>
 </template>
 
 <script setup>
-const tags = ["자연", "식도락", "사진", "강화문화재"];
+import { defineProps } from 'vue'
+import defaultImage from '@/assets/placeholder.png'
+
+defineProps({
+  dungeon: {
+    type: Object,
+    required: true
+  },
+  attractions: {
+    type: Array,
+    default: () => []
+  }
+})
 </script>
 
 <style scoped>
-@import "@/assets/styles/fonts.css";
-
 .dungeon-info {
   background-color: #fff;
   border: 2px solid #2d2d2d;
-  padding: 1.5rem;
   border-radius: 12px;
+  padding: 1.5rem;
   margin-bottom: 1rem;
-  font-size: 1rem;
-  line-height: 1.5;
-  overflow-x: auto;
+  font-family: 'Noto Sans KR', sans-serif;
 }
 
-.tag-box {
-  display: flex;
-  gap: 0.5rem;
+.info-header h2 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+.period {
   margin-top: 0.5rem;
-  flex-wrap: wrap;
+  color: #555;
 }
 
-.tag {
-  background-color: #ffe599;
-  border: 1px solid #2d2d2d;
-  border-radius: 6px;
-  padding: 0.3rem 0.6rem;
-  font-size: 0.8rem;
+.info-details {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 1rem;
+  font-size: 0.95rem;
+}
+.status.open { color: green; }
+.status.closed { color: red; }
+
+.attraction-list {
+  margin-top: 1.5rem;
+}
+.attraction-list h3 {
+  margin-bottom: 0.75rem;
+  font-size: 1rem;
+}
+.attraction-list ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.attraction-item {
+  width: 120px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fafafa;
+  cursor: pointer;
+}
+.attraction-item img {
+  width: 100%;
+  height: 80px;
+  object-fit: cover;
+}
+.attr-info {
+  padding: 0.5rem;
+  font-size: 0.85rem;
+}
+.attr-address {
+  margin-top: 0.25rem;
+  color: #777;
 }
 </style>

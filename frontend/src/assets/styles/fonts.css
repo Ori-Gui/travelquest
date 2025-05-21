@@ -17,6 +17,14 @@ button {
   font-family: 'Dalmoori', 'DotGothic16', 'Press Start 2P', sans-serif;
 }
 
+input {
+  font-family: 'Dalmoori', 'DotGothic16', 'Press Start 2P', sans-serif;
+}
+
+select {
+  font-family: 'Dalmoori', 'DotGothic16', 'Press Start 2P', sans-serif;
+}
+
 .container {
   overflow-x: auto;
 }
