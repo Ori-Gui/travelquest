@@ -8,11 +8,12 @@
     <div class="party-list">
       <PartyCard
         v-for="party in parties"
-        :key="party.id"
+        :id="party.id"
         :title="party.title"
         :desc="party.desc"
         :currentMembers="party.currentMembers"
         :maxMembers="party.maxMembers"
+        :roles="party.roles"
       />
     </div>
 
@@ -45,9 +46,15 @@ const fetchParties = async () => {
       id: p.partyId,
       title: p.title,
       desc: p.description,
-      currentMembers: 0,
-      maxMembers: p.maxMember
+      currentMembers: p.currentMembers,
+      maxMembers: p.maxMember,
+      roles: p.jobRequirements.map(r => ({
+        job: r.jobClassCode,
+        current: r.currentCount,
+        max: r.maxCount
+      }))
     }))
+    console.log(data)
   } catch (err) {
     console.error('파티 불러오기 실패', err)
   }

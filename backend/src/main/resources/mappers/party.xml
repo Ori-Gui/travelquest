@@ -56,4 +56,52 @@
         WHERE dungeon_id = #{dungeonId}
     </select>
 
+    <select id="findPartyDetailsByDungeonId" resultMap="partyWithRolesResultMap">
+        SELECT
+            p.id AS party_id,
+            p.title,
+            p.description,
+            p.status,
+            p.max_members,
+            p.created_at,
+            IFNULL(pm_all.count, 0) AS current_members,
+            prr.job_class_code,
+            prr.max_count,
+            IFNULL(pm_by_role.count, 0) AS current_count
+        FROM party p
+
+                 LEFT JOIN (
+            SELECT party_id, COUNT(*) AS count
+            FROM party_member
+            GROUP BY party_id
+        ) pm_all ON p.id = pm_all.party_id
+
+                 LEFT JOIN party_role_requirement prr ON p.id = prr.party_id
+
+                 LEFT JOIN (
+            SELECT party_id, job_code, COUNT(*) AS count
+            FROM party_member
+            GROUP BY party_id, job_code
+        ) pm_by_role ON p.id = pm_by_role.party_id AND prr.job_class_code = pm_by_role.job_code
+
+        WHERE p.dungeon_id = #{dungeonId}
+          AND p.status = 'MATCHING'
+    </select>
+
+    <resultMap id="partyWithRolesResultMap" type="com.ssafy.travelquest.domain.party.dto.PartyInfoResponse">
+        <id property="partyId" column="party_id"/>
+        <result property="title" column="title"/>
+        <result property="description" column="description"/>
+        <result property="status" column="status"/>
+        <result property="maxMember" column="max_members"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="currentMembers" column="current_members"/>
+
+        <collection property="jobRequirements" ofType="com.ssafy.travelquest.domain.party.dto.JobRequirement">
+            <result property="jobClassCode" column="job_class_code"/>
+            <result property="maxCount" column="max_count"/>
+            <result property="currentCount" column="current_count"/>
+        </collection>
+    </resultMap>
+
 </mapper>
