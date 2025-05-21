@@ -1,5 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
+@font-face {
+  font-family: 'Dalmoori';
+  src: url('@/assets/styles/dalmoori.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -7,12 +14,18 @@
 }
 
 body {
-  font-family: 'Press Start 2P', cursive;
+  font-family: 'Dalmoori', 'DotGothic16', 'Press Start 2P', sans-serif;
+  font-size: 16px;
+  overflow-x: hidden;
   background-color: #e9fff0;
   color: #2d2d2d;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+}
+
+button, input, select, div, li {
+  font-family: 'Dalmoori', 'DotGothic16', 'Press Start 2P', sans-serif;
 }
 
 header {
@@ -24,6 +37,13 @@ header {
   align-items: center;
   padding: 1rem;
   border-bottom: 2px solid #6cd395;
+}
+
+footer {
+  padding: 1rem;
+  text-align: center;
+  font-size: 0.5rem;
+  color: #888;
 }
 
 .logo {
@@ -53,9 +73,23 @@ header {
   border-radius: 6px;
 }
 
-footer {
-  padding: 1rem;
-  text-align: center;
-  font-size: 0.5rem;
-  color: #888;
+.container {
+  overflow-x: auto;
+}
+
+.container:hover {
+  overflow-x: scroll;
+}
+
+.container::-webkit-scrollbar {
+  height: 8px;
+}
+
+.container::-webkit-scrollbar-thumb {
+  background-color: #6cd395;
+  border-radius: 4px;
+}
+
+.container::-webkit-scrollbar-track {
+  background-color: #e9fff0;
 }

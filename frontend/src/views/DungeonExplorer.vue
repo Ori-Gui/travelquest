@@ -1,7 +1,6 @@
 <template>
   <div>
-    <Header />
-
+    <AppHeader />
     <main class="main">
       <div class="filters">
         <label>
@@ -62,16 +61,16 @@
       <MapView :markers="dungeonMarkers" />
     </main>
 
-    <Footer />
+    <AppFooter />
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted, watch } from 'vue'
 import axios from '@/lib/axios'
-import Header from '../components/Header.vue'
-import Footer from '../components/Footer.vue'
-import MapView from '../components/MapView.vue'
+import AppHeader from '@/components/AppHeader.vue'
+import AppFooter from '@/components/AppFooter.vue'
+import MapView from '@/components/MapView.vue'
 
 // 날짜, 키워드
 const startDate = ref('')

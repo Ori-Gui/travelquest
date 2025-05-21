@@ -39,7 +39,6 @@ const joinParty = () => {
 </script>
 
 <style scoped>
-@import "@/assets/styles/fonts.css";
 
 .party-card {
   background-color: #fff;

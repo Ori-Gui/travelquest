@@ -1,16 +1,16 @@
 <template>
   <div class="login-container">
-    <Header />
+    <AppHeader />
     <main class="flex-grow flex items-center justify-center w-full">
       <LoginForm />
     </main>
-    <Footer />
+    <AppFooter />
   </div>
 </template>
 
 <script setup>
-import Header from '@/components/Header.vue'
-import Footer from '@/components/Footer.vue'
+import AppHeader from '@/components/AppHeader.vue'
+import AppFooter from '@/components/AppFooter.vue'
 import LoginForm from '@/components/LoginForm.vue'
 </script>
 

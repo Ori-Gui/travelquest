@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Header />
+    <AppHeader />
     <main class="detail-container">
       <div v-if="loading" class="loading">로딩 중...</div>
       <div v-else>
@@ -9,16 +9,17 @@
         <PartySection :dungeonId="dungeonId" />
       </div>
     </main>
+    <AppFooter />
   </div>
 </template>
 
 
 <script setup>
-import Header from '../components/Header.vue'
-import DungeonInfo from '../components/DungeonInfo.vue'
-import PartySection from '../components/DungeonParty.vue'
+import AppHeader from '@/components/AppHeader.vue'
+import AppFooter from '@/components/AppFooter.vue'
+import DungeonInfo from '@/components/DungeonInfo.vue'
+import PartySection from '@/components/DungeonParty.vue'
 
-// 라우터로부터 dungeonId를 props로 전달받음
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import axios from '@/lib/axios'
@@ -52,8 +53,6 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-@import "@/assets/styles/fonts.css";
-
 .detail-container {
   max-width: 800px;
   margin: 1rem auto;

@@ -1,19 +1,19 @@
 <template>
   <div class="mbti-container">
-    <Header />
+    <AppHeader />
     <main class="question-wrapper" v-if="currentQuestion">
       <MbtiCheckForm
         :question="currentQuestion"
         @answered="handleAnswer"
       />
     </main>
-    <Footer />
+    <AppFooter />
   </div>
 </template>
 
 <script setup>
-import Header from '@/components/Header.vue'
-import Footer from '@/components/Footer.vue'
+import AppHeader from '@/components/AppHeader.vue'
+import AppFooter from '@/components/AppFooter.vue'
 import MbtiCheckForm from '@/components/MbtiCheckForm.vue'
 import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'

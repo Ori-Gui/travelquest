@@ -1,6 +1,6 @@
 <template>
   <div class="result-container">
-    <Header />
+    <AppHeader />
     <main class="result-box" v-if="result">
       <p class="welcome-text">
         <span class="highlight">{{ userName }}</span> 님,<br />
@@ -19,15 +19,15 @@
       </router-link>
     </main>
 
-    <Footer />
+    <AppFooter />
   </div>
 </template>
 
 <script setup>
 import { onMounted, ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
-import Header from '@/components/Header.vue'
-import Footer from '@/components/Footer.vue'
+import AppHeader from '@/components/AppHeader.vue'
+import AppFooter from '@/components/AppFooter.vue'
 import axios from '@/lib/axios'
 
 const route = useRoute()
