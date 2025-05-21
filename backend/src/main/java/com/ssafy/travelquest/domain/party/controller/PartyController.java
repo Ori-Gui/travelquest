@@ -1,6 +1,7 @@
 package com.ssafy.travelquest.domain.party.controller;
 
 import com.ssafy.travelquest.domain.party.dto.CreatePartyRequest;
+import com.ssafy.travelquest.domain.party.dto.PartyInfoResponse;
 import com.ssafy.travelquest.domain.party.dto.PartyResponse;
 import com.ssafy.travelquest.domain.party.service.PartyService;
 import com.ssafy.travelquest.global.security.CustomUserDetails;
@@ -40,8 +41,8 @@ public class PartyController {
     }
 
     @GetMapping("/{dungeonId}")
-    public ResponseEntity<List<PartyResponse>> getPartyListByDungeonId(@PathVariable Long dungeonId) {
-        List<PartyResponse> partyResponses = partyService.getPartyListByDungeonId(dungeonId);
+    public ResponseEntity<List<PartyInfoResponse>> getPartyListByDungeonId(@PathVariable Long dungeonId) {
+        List<PartyInfoResponse> partyResponses = partyService.getPartyDetailsByDungeonId(dungeonId);
         return ResponseEntity.ok(partyResponses);
     }
 }

@@ -1,6 +1,7 @@
 package com.ssafy.travelquest.domain.party.service;
 
 import com.ssafy.travelquest.domain.party.dto.CreatePartyRequest;
+import com.ssafy.travelquest.domain.party.dto.PartyInfoResponse;
 import com.ssafy.travelquest.domain.party.dto.PartyResponse;
 import com.ssafy.travelquest.domain.party.entity.Party;
 import com.ssafy.travelquest.domain.party.entity.PartyMember;
@@ -94,5 +95,9 @@ public class PartyService {
                         party.getMaxMember()
                 ))
                 .toList();
+    }
+
+    public List<PartyInfoResponse> getPartyDetailsByDungeonId(Long dungeonId) {
+        return partyRepository.findPartyDetailsByDungeonId(dungeonId);
     }
 }

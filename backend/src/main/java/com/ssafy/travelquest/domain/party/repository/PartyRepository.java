@@ -1,5 +1,6 @@
 package com.ssafy.travelquest.domain.party.repository;
 
+import com.ssafy.travelquest.domain.party.dto.PartyInfoResponse;
 import com.ssafy.travelquest.domain.party.entity.Party;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -13,4 +14,6 @@ public interface PartyRepository {
     void delete(Long id);
 
     List<Party> findByDungeonId(Long dungeonId);
+
+    List<PartyInfoResponse> findPartyDetailsByDungeonId(Long dungeonId);
 }

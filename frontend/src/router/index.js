@@ -38,6 +38,11 @@ const router = createRouter({
       path: '/mbti/result/:mbtiCode',
       name: 'MbtiResult',
       component: () => import('@/views/MbtiResult.vue')
+    },
+    {
+      path: '/party/:id',
+      name: 'PartyRoom',
+      component: () => import('@/views/PartyRoom.vue')
     }
   ],
 })
