@@ -1,6 +1,7 @@
 package com.ssafy.travelquest.domain.state.service;
 
 import com.ssafy.travelquest.domain.state.dao.RedisUserSessionDao;
+import com.ssafy.travelquest.domain.state.dto.ChatRoomUserDto;
 import com.ssafy.travelquest.domain.state.dto.PartyMemberResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,23 +15,27 @@ public class UserSessionService {
 
     private final RedisUserSessionDao redisDao;
 
-    public void onConnect(String userId, String partyId) {
-        redisDao.saveUserParty(userId, partyId);
+    public void onConnect(String userId, ChatRoomUserDto dto) {
+        redisDao.saveUserParty(Long.parseLong(userId), dto);
     }
 
-    public void onDisconnect(String userId) {
+    public void onDisconnect(Long userId) {
         redisDao.removeUserParty(userId);
     }
 
-    public List<PartyMemberResponse> getMembers(String partyId) {
-        Set<Object> result = redisDao.getPartyMembers(partyId);
+    public List<ChatRoomUserDto> getMembers(String partyId) {
+        Set<Object> result = redisDao.getPartyMembers(Long.parseLong(partyId));
         return result.stream()
-                .map(userId -> new PartyMemberResponse(Long.parseLong((String) userId)))
+                .map(o -> (ChatRoomUserDto) o)
                 .toList();
     }
 
-    public String getParty(String userId) {
-        return redisDao.getPartyByUser(userId);
+    public Long getParty(String userId) {
+        return redisDao.getPartyIdByUser(Long.parseLong(userId));
+    }
+
+    public ChatRoomUserDto getPartyMemberByPartyIdAndUserId(Long partyId, Long userId) {
+        return redisDao.getPartyMemberByPartyIdAndUserId(partyId, userId);
     }
 }
 

@@ -10,25 +10,31 @@
         <button :class="{ active: activeTab === 'chat' }" @click="activeTab = 'chat'">채팅</button>
       </nav>
       <ChatSection v-if="activeTab === 'chat'" />
-      <PartySection :partyId="partyId" v-if="activeTab === 'party'" />
+      <PartySection
+        v-if="activeTab === 'party' && userReady"
+        :partyId="partyId"
+      />
     </main>
     <AppFooter />
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import AppHeader from '@/components/AppHeader.vue';
 import AppFooter from '@/components/AppFooter.vue';
 import DungeonInfo from '@/components/InfoSection.vue';
 import ChatSection from '@/components/ChatSection.vue';
 import PartySection from '@/components/PartySection.vue';
 import { useRoute } from 'vue-router';
+import { useUserStore } from '@/stores/userStore';
 
 const route = useRoute();
 const partyId = Number(route.params.id);
+const activeTab = ref('info');
 
-const activeTab = ref('chat');
+const userStore = useUserStore();
+const userReady = computed(() => !!userStore.user?.id);
 </script>
 
 <style scoped>
