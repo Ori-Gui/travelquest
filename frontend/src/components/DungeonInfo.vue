@@ -17,11 +17,18 @@
       <h3>탐험할 여행지</h3>
       <ul>
         <li v-for="attr in attractions" :key="attr.contentId" class="attraction-item">
-          <img :src="attr.firstImage1 || defaultImage" alt="{{ attr.title }} 대표 이미지" />
-          <div class="attr-info">
-            <strong>{{ attr.title }}</strong>
-            <div class="attr-address">{{ attr.addr1 }}</div>
-          </div>
+          <component
+            :is="extractUrl(attr.homepage) ? 'a' : 'div'"
+            :href="extractUrl(attr.homepage)"
+            target="_blank"
+            class="attraction-link"
+          >
+            <img :src="attr.firstImage1 || defaultImage" alt="{{ attr.title }} 대표 이미지" />
+            <div class="attr-info">
+              <strong>{{ attr.title }}</strong>
+              <div class="attr-address">{{ attr.addr1 }}</div>
+            </div>
+          </component>
         </li>
       </ul>
     </div>
@@ -31,6 +38,7 @@
 <script setup>
 import { defineProps } from 'vue'
 import defaultImage from '@/assets/placeholder.png'
+import { extractUrl } from "@/utils/linkUtils";
 
 defineProps({
   dungeon: {
@@ -92,8 +100,33 @@ defineProps({
   border-radius: 8px;
   overflow: hidden;
   background: #fafafa;
-  cursor: pointer;
+  margin: 0;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
+
+.attraction-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.attraction-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  width: 100%;
+  height: 100%;
+}
+
+.attraction-link img {
+  width: 100%;
+  height: 80px;
+  object-fit: cover;
+}
+
+.attraction-link:hover {
+  text-decoration: none;
+}
+
 .attraction-item img {
   width: 100%;
   height: 80px;
