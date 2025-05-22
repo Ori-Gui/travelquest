@@ -29,3 +29,8 @@ export const getRequiredJobs = async (partyId) => {
   const response = await axios.get(`/api/v1/party/${partyId}/required`)
   return response.data
 }
+
+export const joinParty = async (partyId) => {
+  const response = await axios.post(`/api/v1/party/join/${partyId}`)
+  return response.data
+}

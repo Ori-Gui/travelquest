@@ -7,5 +7,5 @@ import lombok.Getter;
 @Builder
 public class MbtiAnswer {
     private String type;
-    private int score;
+    private int value;
 }

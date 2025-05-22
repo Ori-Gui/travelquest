@@ -12,7 +12,7 @@ public class MBTICalculator {
         Map<String, Integer> scoreMap = new HashMap<>();
 
         for (MbtiAnswer answer : answers) {
-            scoreMap.merge(answer.getType(), answer.getScore(), Integer::sum);
+            scoreMap.merge(answer.getType(), answer.getValue(), Integer::sum);
         }
 
         StringBuilder mbti = new StringBuilder();
