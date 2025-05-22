@@ -3,6 +3,7 @@ package com.ssafy.travelquest.global.config;
 import com.ssafy.travelquest.global.common.jwt.JwtProvider;
 import com.ssafy.travelquest.global.interceptor.JwtChannelInterceptor;
 import com.ssafy.travelquest.global.interceptor.PartySessionInterceptor;
+import com.ssafy.travelquest.global.interceptor.WebSocketAuthInterceptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.ChannelRegistration;
@@ -34,8 +35,9 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void configureClientInboundChannel(ChannelRegistration registration) {
         registration.interceptors(
-                new JwtChannelInterceptor(jwtProvider),
-                new PartySessionInterceptor()
+//                new JwtChannelInterceptor(jwtProvider),
+                new PartySessionInterceptor(),
+                new WebSocketAuthInterceptor(jwtProvider)
         );
     }
 }

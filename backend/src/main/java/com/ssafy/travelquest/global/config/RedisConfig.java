@@ -52,7 +52,7 @@ public class RedisConfig {
         template.setValueSerializer(serializer);
         template.setHashKeySerializer(new StringRedisSerializer());
         template.setHashValueSerializer(serializer);
-
+        template.setDefaultSerializer(serializer);
         return template;
     }
 }

@@ -6,14 +6,20 @@
         <div class="info">
           <div class="name">
             {{ member.nickname }}
-            <span class="role" v-if="member.isLeader">(리더)</span>
+            <span class="role" v-if="member.leader">(리더)</span>
           </div>
           <div class="meta">{{ member.jobName }} • {{ member.mbti }}</div>
         </div>
       </div>
     </div>
 
-    <button class="join-button" v-if="status === 'MATCHING'">파티에 참가하기</button>
+    <button
+    class="join-button"
+    v-if="status === 'MATCHING' && currentUserId && partyMembers.length > 0 && !isAlreadyMember"
+    @click="joinPartyEvent"
+    >
+    파티에 참가하기
+    </button>
 
     <div class="required-jobs" v-if="requiredJobs && requiredJobs.length">
       <div>필요한 직업군</div>
@@ -27,8 +33,9 @@
 </template>
 
 <script setup>
-import { ref, watchEffect } from 'vue';
-import { getPartyStatus, getPartyMembers, getRequiredJobs } from '@/api/party';
+import { ref, computed, watchEffect } from 'vue';
+import { getPartyStatus, getPartyMembers, getRequiredJobs, joinParty } from '@/api/party';
+import { useUserStore } from '@/stores/userStore';
 
 const props = defineProps({
   partyId: {
@@ -36,6 +43,9 @@ const props = defineProps({
     required: true
   }
 });
+
+const userStore = useUserStore();
+const currentUserId = computed(() => userStore.user?.id);
 
 const partyMembers = ref([]);
 const requiredJobs = ref([]);
@@ -57,9 +67,19 @@ function getJobEmoji(jobCode) {
   return jobEmojiMap[jobCode] || '🎯';
 }
 
-// 병렬 API 호출
+const isAlreadyMember = computed(() => {
+  const result = partyMembers.value.some(member => {
+    return String(member.id) === String(currentUserId.value);
+  });
+  return result;
+});
+
+
 watchEffect(async () => {
-  if (!props.partyId) return;
+  if (!props.partyId || !userStore.user?.id) {
+    console.log('⏳ user not ready yet');
+    return;
+  }
 
   try {
     const [info, members, jobs] = await Promise.all([
@@ -77,6 +97,16 @@ watchEffect(async () => {
     status.value = 'CLOSED';
   }
 });
+
+async function joinPartyEvent() {
+  try {
+    await joinParty(props.partyId);
+    window.location.reload();
+  } catch (error) {
+    console.error('파티 참가 실패:', error);
+    alert('파티 참가에 실패했습니다.');
+  }
+}
 </script>
 
 <style scoped>

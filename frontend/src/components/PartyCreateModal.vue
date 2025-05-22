@@ -64,20 +64,32 @@ const partyRoleRequireRequests = ref([
 ])
 
 const submit = async () => {
-  console.log('🔐 Token:', userStore.accessToken)
+  const totalAssigned = partyRoleRequireRequests.value.reduce((sum, role) => sum + role.maxCount, 0);
+  const jobCodeSet = new Set(partyRoleRequireRequests.value.map(role => role.jobCode));
+
+  if (jobCodeSet.size !== partyRoleRequireRequests.value.length) {
+    alert('같은 직업군을 중복해서 설정할 수 없습니다.');
+    return;
+  }
+
+  if (totalAssigned !== maxMember.value) {
+    alert(`직업군 인원의 총합 (${totalAssigned})이 최대 인원수 (${maxMember.value})와 같아야 합니다.`);
+    return;
+  }
+
   try {
     await createParty(props.dungeonId, {
       title: title.value,
       description: description.value,
       maxMember: maxMember.value,
       partyRoleRequireRequests: partyRoleRequireRequests.value
-    })
-    emit('created')
-    emit('close')
+    });
+    emit('created');
+    emit('close');
   } catch (e) {
-    console.error('파티 생성 실패', e)
+    console.error('파티 생성 실패', e);
   }
-}
+};
 
 const addRole = () => {
   partyRoleRequireRequests.value.push({ jobCode: 'WARRIOR', maxCount: 1 })

@@ -65,9 +65,15 @@ public class PartyService {
         if (partyMembers.size() >= target.getMaxMember()) {
             throw new IllegalArgumentException("파티가 꽉찼습니다.");
         }
+        for(PartyMember partyMember : partyMembers) {
+        	if(partyMember.getUserId() == userDetails.getId()) {
+        		throw new IllegalArgumentException("이미 참가되어 있는 사용자입니다.");
+        	}
+        }
         for (PartyRoleRequirement requirement : partyRoleRequirements) {
+        	if(!requirement.getJobCode().equals(userDetails.getJobCode())) continue;
             long currentCount = partyMembers.stream()
-                    .filter(member -> member.getJobCode() == requirement.getJobCode())
+                    .filter(member -> member.getJobCode().equals(requirement.getJobCode()))
                     .count();
 
             if (currentCount >= requirement.getMaxCount()) {
