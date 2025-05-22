@@ -23,7 +23,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         var user = userService.getUser(Long.parseLong(userId));
         return new CustomUserDetails(
                 user.getId(),
-                user.getEmail(),          // 또는 사용자 이름
+                user.getUserName(),          // 또는 사용자 이름
                 "",                       // 비밀번호를 쓰지 않는다면 빈 문자열
                 user.getJobClassCode(),
                 List.of(new SimpleGrantedAuthority(user.getRole().name()))

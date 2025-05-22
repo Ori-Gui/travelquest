@@ -8,13 +8,15 @@ export const useUserStore = defineStore('user', {
   }),
   actions: {
     setAccessToken(token) {
-      this.accessToken = token
-      const claims = jwtParser(token)
-      this.user = {
-        id: claims.sub,
-        role: claims.role,
-        registStatus: claims.registStatus,
-      }
+        this.accessToken = token
+        const claims = jwtParser(token)
+        console.log('📦 JWT Claims:', claims);
+
+        this.user = {
+            id: claims.sub,
+            role: claims.role,
+            registStatus: claims.registStatus,
+        }
     },
     logout() {
       this.accessToken = null

@@ -15,10 +15,8 @@ onMounted(() => {
   if (token) {
     const payload = jwtParser(token)
     const registStatus = payload.registStatus
-    
     userStore.setAccessToken(token)
 
-    console.log(payload)
 
     if (registStatus === 'NOT_YET') {
       router.push('/register')
@@ -34,5 +32,5 @@ onMounted(() => {
     console.error('❌ accessToken 쿠키가 존재하지 않습니다')
     router.push('/')
   }
-})
+});
 </script>

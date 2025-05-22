@@ -1,5 +1,6 @@
 package com.ssafy.travelquest.domain.state.controller;
 
+import com.ssafy.travelquest.domain.state.dto.ChatRoomUserDto;
 import com.ssafy.travelquest.domain.state.dto.PartyMemberResponse;
 import com.ssafy.travelquest.domain.state.service.UserSessionService;
 import lombok.RequiredArgsConstructor;
@@ -20,9 +21,9 @@ public class SessionController {
     private final UserSessionService userSessionService;
 
     @GetMapping("/party/member/{partyId}")
-    public ResponseEntity<List<PartyMemberResponse>> getPartyMembers(@PathVariable String partyId) {
+    public ResponseEntity<List<ChatRoomUserDto>> getPartyMembers(@PathVariable String partyId) {
         log.debug("partyId: {}", partyId);
-        List<PartyMemberResponse> members = userSessionService.getMembers(partyId);
+        List<ChatRoomUserDto> members = userSessionService.getMembers(partyId);
         return ResponseEntity.ok(members);
     }
 

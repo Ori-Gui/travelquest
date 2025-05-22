@@ -1,6 +1,7 @@
 package com.ssafy.travelquest.global.common.jwt;
 
 import com.ssafy.travelquest.domain.user.entity.RegistStatus;
+import com.ssafy.travelquest.global.security.CustomUserDetails;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -69,7 +70,7 @@ public class JwtProvider {
 
     public Authentication getAuthentication(String token) {
         String email = getClaims(token).getSubject();
-        UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+        CustomUserDetails userDetails = (CustomUserDetails) userDetailsService.loadUserByUsername(email);
         return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
     }
 
