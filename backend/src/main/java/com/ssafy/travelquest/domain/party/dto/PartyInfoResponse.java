@@ -1,5 +1,6 @@
 package com.ssafy.travelquest.domain.party.dto;
 
+import com.ssafy.travelquest.domain.party.entity.PartyStatus;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -14,7 +15,7 @@ public class PartyInfoResponse {
     private Long partyId;
     private String title;
     private String description;
-    private String status;
+    private PartyStatus status;
     private Integer maxMember;
     private LocalDateTime createdAt;
     private Integer currentMembers;

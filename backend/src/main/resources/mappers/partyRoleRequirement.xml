@@ -51,4 +51,12 @@
         WHERE party_id = #{partyId}
     </select>
 
+    <select id="findRequiredJobs" parameterType="long" resultType="com.ssafy.travelquest.domain.party.dto.RequiredJobResponse">
+        SELECT
+            prr.job_class_code AS job,
+            jc.name AS name
+        FROM party_role_requirement prr
+                 JOIN job_class jc ON prr.job_class_code = jc.code
+        WHERE prr.party_id = #{partyId}
+    </select>
 </mapper>

@@ -1,7 +1,9 @@
 package com.ssafy.travelquest.domain.party.repository;
 
+import com.ssafy.travelquest.domain.party.dto.PartyMemberDetailResponse;
 import com.ssafy.travelquest.domain.party.entity.PartyMember;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -14,4 +16,6 @@ public interface PartyMemberRepository {
     int deletePartyMemberByUserId(Long userId);
 
     List<PartyMember> getPartyMembersByPartyId(Long partyId);
+    List<PartyMemberDetailResponse> findMembersByPartyId(@Param("partyId") Long partyId);
+
 }
