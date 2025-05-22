@@ -13,7 +13,7 @@
       </div>
     </div>
 
-    <button class="join-button" v-if="status === 'MATCHING'">파티에 참가하기</button>
+    <button class="join-button" v-if="status === 'MATCHING'" @click="joinPartyEvent">파티에 참가하기</button>
 
     <div class="required-jobs" v-if="requiredJobs && requiredJobs.length">
       <div>필요한 직업군</div>
@@ -28,7 +28,7 @@
 
 <script setup>
 import { ref, watchEffect } from 'vue';
-import { getPartyStatus, getPartyMembers, getRequiredJobs } from '@/api/party';
+import { getPartyStatus, getPartyMembers, getRequiredJobs, joinParty } from '@/api/party';
 
 const props = defineProps({
   partyId: {
@@ -77,6 +77,18 @@ watchEffect(async () => {
     status.value = 'CLOSED';
   }
 });
+
+async function joinPartyEvent() {
+  try {
+    const result = await joinParty(props.partyId);
+    console.log('참가 성공:', result);
+
+    window.location.reload(); // 참가 후 새로고침
+  } catch (error) {
+    console.error('파티 참가 실패:', error);
+    alert('파티 참가에 실패했습니다.');
+  }
+}
 </script>
 
 <style scoped>

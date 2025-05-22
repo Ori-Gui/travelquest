@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-TravelQuestApplication<Travel-Quest>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.ssafy.travelquest.TravelQuestApplication",
+            "projectName": "Travel-Quest",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
