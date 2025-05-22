@@ -55,6 +55,7 @@
 	<!-- 던전 & 퀘스트 생성 프로시저 호출 매핑 -->
   <select id="createDungeonViaProcedure" 
           parameterType="DungeonCreateDto"
+          statementType="CALLABLE"
           resultType="int">
     {CALL create_dungeon_with_attractions(
       #{title,        jdbcType=VARCHAR},

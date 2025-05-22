@@ -64,10 +64,4 @@ public class DungeonController {
             dungeonService.findDungeonsByCondition(cond)
         );
     }
-    
-    @PostMapping
-    public ResponseEntity<Dungeon> createDungeon(@RequestBody @Valid DungeonCreateDto dto) {
-      Dungeon d = dungeonService.createDungeonAndQuests(dto);
-      return ResponseEntity.status(HttpStatus.CREATED).body(d);
-    }
 }
