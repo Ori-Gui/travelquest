@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
+import com.ssafy.travelquest.global.handler.exception.DungeonCreationException;
+import com.ssafy.travelquest.global.handler.exception.QuestGenerationException;
 import com.ssafy.travelquest.domain.user.exception.NoSuchUserException;
 
 import jakarta.validation.ConstraintViolationException;
@@ -54,6 +56,22 @@ public class GlobalExceptionHandler {
 	})
 	protected ResponseEntity<String> handleException(Exception e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+    }
+	
+	// 던전 생성 중 서버 오류
+    @ExceptionHandler(DungeonCreationException.class)
+    public ResponseEntity<String> handleDungeonCreation(DungeonCreationException e) {
+        return ResponseEntity
+            .status(HttpStatus.INTERNAL_SERVER_ERROR)
+            .body("던전 생성 실패: " + e.getMessage());
+    }
+
+    // 퀘스트 생성 중 서버 오류
+    @ExceptionHandler(QuestGenerationException.class)
+    public ResponseEntity<String> handleQuestGeneration(QuestGenerationException e) {
+        return ResponseEntity
+            .status(HttpStatus.INTERNAL_SERVER_ERROR)
+            .body("퀘스트 생성 실패: " + e.getMessage());
     }
 
 }

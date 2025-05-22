@@ -18,7 +18,7 @@
   <select id="getAttractionsByDungeonId"
           parameterType="int"
           resultType="Attraction">
-    SELECT DISTINCT a.*
+    SELECT a.*
       FROM attractions a
       JOIN dungeon_attraction da ON a.no = da.attraction_id
      WHERE da.dungeon_id = #{dungeonId}
@@ -55,6 +55,7 @@
 	<!-- 던전 & 퀘스트 생성 프로시저 호출 매핑 -->
   <select id="createDungeonViaProcedure" 
           parameterType="DungeonCreateDto"
+          statementType="CALLABLE"
           resultType="int">
     {CALL create_dungeon_with_attractions(
       #{title,        jdbcType=VARCHAR},
