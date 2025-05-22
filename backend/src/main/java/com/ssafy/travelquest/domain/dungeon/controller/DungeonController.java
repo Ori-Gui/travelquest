@@ -2,12 +2,14 @@ package com.ssafy.travelquest.domain.dungeon.controller;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import com.ssafy.travelquest.domain.attraction.dto.AttractionSearchCondition;
 import com.ssafy.travelquest.domain.attraction.entity.Attraction;
+import com.ssafy.travelquest.domain.dungeon.dto.DungeonCreateDto;
 import com.ssafy.travelquest.domain.dungeon.dto.DungeonSearchCondition;
 import com.ssafy.travelquest.domain.dungeon.entity.Dungeon;
 import com.ssafy.travelquest.domain.dungeon.service.DungeonService;
@@ -61,5 +63,11 @@ public class DungeonController {
         return ResponseEntity.ok(
             dungeonService.findDungeonsByCondition(cond)
         );
+    }
+    
+    @PostMapping
+    public ResponseEntity<Dungeon> createDungeon(@RequestBody @Valid DungeonCreateDto dto) {
+      Dungeon d = dungeonService.createDungeonAndQuests(dto);
+      return ResponseEntity.status(HttpStatus.CREATED).body(d);
     }
 }
