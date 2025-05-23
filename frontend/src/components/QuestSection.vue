@@ -14,13 +14,11 @@
           <div class="quest-desc">
             {{ q.description }}
           </div>
+          <button class="proof-btn" @click="writeProof">
+            인증 사진 업로드
+          </button>
         </li>
       </ul>
-
-      <button class="proof-btn" @click="writeProof">
-        인증글 작성하기
-      </button>
-
     </div>
   </section>
 </template>
@@ -93,6 +91,9 @@ function writeProof() {
 
 .quest-item {
   margin-bottom: 1.2rem;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.2rem;
 }
 
 .quest-title {
@@ -109,8 +110,6 @@ function writeProof() {
 }
 
 .proof-btn {
-  display: block;
-  width: fit-content;
   margin: 0 auto;
   padding: 0.6rem 1.2rem;
   background: #079929;
@@ -118,6 +117,7 @@ function writeProof() {
   border: none;
   border-radius: 6px;
   cursor: pointer;
+  align-self: flex-end;
 }
 
 .quest-footnote {
