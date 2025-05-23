@@ -24,4 +24,6 @@ public interface PartyMemberRepository {
             @Param("partyId") Long partyId
     );
 
+    List<PartyMember> findByUserId(@Param("userId") Long userId);
+
 }

@@ -14,7 +14,7 @@
       </p>
       <p class="job-desc">{{ result.mbtiDescription }}</p>
 
-      <router-link to="/dungeon" class="start-button">
+      <router-link to="/map" class="start-button">
         🗺 여정으로 가기
       </router-link>
     </main>

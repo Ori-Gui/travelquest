@@ -104,4 +104,14 @@
         </collection>
     </resultMap>
 
+    <select id="findByIds" resultMap="partyResultMap" parameterType="list">
+        SELECT id, dungeon_id, leader_id, title, description, status, max_members, created_at
+        FROM party
+        WHERE id IN
+        <foreach item="id" collection="list" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        AND status IN ('MATCHING', 'IN_PROGRESS')
+    </select>
+
 </mapper>

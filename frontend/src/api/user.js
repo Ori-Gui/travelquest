@@ -16,3 +16,7 @@ export function getUserProfile(userId) {
 export function getUserMissions(userId) {
   return axios.get(`/api/v1/user/${userId}/missions`);
 }
+
+export function getClearedDungeons(userId) {
+  return axios.get(`/api/v1/user/${userId}/clear/dungeon`)
+}

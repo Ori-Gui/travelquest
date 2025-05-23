@@ -66,4 +66,34 @@
             #{id}
         </foreach>
     </select>
+
+    <select id="selectClearedDungeonsByUserId" resultType="com.ssafy.travelquest.domain.user.dto.UserClearDungeonResponse">
+    <![CDATA[
+        WITH ranked_dungeons AS (
+        SELECT
+            d.id,
+            d.title,
+            s.sido_name AS region,
+            g.gugun_name AS city,
+            d.start_date,
+            d.end_date,
+            ROW_NUMBER() OVER (PARTITION BY d.id ORDER BY q.id) AS rn
+        FROM user u
+        JOIN party_member pm ON u.id = pm.user_id 
+        JOIN party p ON p.id = pm.party_id
+        JOIN dungeon d ON p.dungeon_id = d.id
+        LEFT JOIN quest q ON q.dungeon_id = d.id
+        LEFT JOIN attractions a ON a.no = q.attraction_id
+        LEFT JOIN sidos s ON a.area_code = s.sido_code
+        LEFT JOIN guguns g ON a.si_gun_gu_code = g.gugun_code AND a.area_code = g.sido_code
+        WHERE u.id = #{userId}
+            AND p.status = 'COMPLETED'  -- ✅ 파티 완료 상태 필터 추가
+        )
+        SELECT *
+        FROM ranked_dungeons
+        WHERE rn = 1
+    ]]>
+    </select>
+
+
 </mapper>

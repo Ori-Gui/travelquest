@@ -44,3 +44,8 @@ export const kickPartyMember = async (partyId, userId) => {
   const response = await axios.post(`/api/v1/party/${partyId}/kick/${userId}`)
   return response.data
 }
+
+export const getMyParties = async (userId) => {
+  const response = await axios.get(`/api/v1/party/my/${userId}`)
+  return response.data
+}
