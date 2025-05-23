@@ -1,18 +1,12 @@
 <template>
   <div class="register-container">
-    <AppHeader />
-
     <main class="form-wrapper">
       <RegisterForm @submitted="handleSubmit" />
     </main>
-
-    <AppFooter />
   </div>
 </template>
 
 <script setup>
-import AppHeader from '@/components/AppHeader.vue'
-import AppFooter from '@/components/AppFooter.vue'
 import RegisterForm from '@/components/RegisterForm.vue'
 import { useRouter } from 'vue-router'
 import { registerUser } from '@/api/user'

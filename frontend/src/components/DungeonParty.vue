@@ -6,8 +6,9 @@
     </div>
 
     <div class="party-list">
-      <PartyCard
+      <PartyCard :key="party.id"
         v-for="party in parties"
+        :dungeonId="dungeonId"
         :partyId="party.id"
         :title="party.title"
         :desc="party.desc"

@@ -1,8 +1,6 @@
 <template>
   <div class="travel-quest-container">
-    <AppHeader />
     <main class="main-wrapper">
-      <DungeonInfo />
       <nav class="tabs">
         <button :class="{ active: activeTab === 'info' }" @click="activeTab = 'info'">정보</button>
         <button :class="{ active: activeTab === 'quest' }" @click="activeTab = 'quest'">퀘스트</button>
@@ -11,37 +9,46 @@
           v-if="isMember"
           :class="{ active: activeTab === 'chat' }"
           @click="activeTab = 'chat'"
-        >채팅</button>      
+        >채팅</button>
       </nav>
+      <DungeonInfo v-if="activeTab === 'info' && dungeon"
+          :dungeon="dungeon"
+          :attractions="attractions"
+        />
+      <QuestSection v-if="activeTab === 'quest'"/>
       <ChatSection v-if="activeTab === 'chat' && isMember" :partyId="partyId"/>
       <PartySection
         v-if="activeTab === 'party' && userReady"
         :partyId="partyId"
       />
     </main>
-    <AppFooter />
   </div>
 </template>
 
 <script setup>
-import { ref, computed, watchEffect } from 'vue';
-import AppHeader from '@/components/AppHeader.vue';
-import AppFooter from '@/components/AppFooter.vue';
-import DungeonInfo from '@/components/InfoSection.vue';
+import { ref, computed, watchEffect, onMounted } from 'vue';
+import DungeonInfo from '@/components/DungeonInfo.vue';
 import ChatSection from '@/components/ChatSection.vue';
+import QuestSection from '@/components/QuestSection.vue'
 import PartySection from '@/components/PartySection.vue';
 import { useRoute } from 'vue-router';
 import { useUserStore } from '@/stores/userStore';
 import { getPartyMembers } from '@/api/party';
+import {
+  fetchDungeonDetail,
+  fetchDungeonAttractions
+} from '@/api/dungeon'
 
 const route = useRoute();
-const partyId = Number(route.params.id);
+const dungeonId = Number(route.params.dungeonId)
+const partyId   = Number(route.params.partyId)
 const activeTab = ref('info');
 
 const userStore = useUserStore();
 const userReady = computed(() => !!userStore.user?.id);
 
 const partyMembers = ref([]);
+
 watchEffect(async () => {
 if (partyId && userReady.value) {
     partyMembers.value = await getPartyMembers(partyId);
@@ -50,6 +57,23 @@ if (partyId && userReady.value) {
 const isMember = computed(() =>
   partyMembers.value.some(m => String(m.id) === String(userStore.user?.id))
 );
+
+const dungeon = ref(null)
+const attractions = ref([])
+
+onMounted(async () => {
+  try {
+    // 헬퍼 함수로 대체
+    const [d, at] = await Promise.all([
+      fetchDungeonDetail(dungeonId),
+      fetchDungeonAttractions(dungeonId)
+    ])
+    dungeon.value     = d
+    attractions.value = at
+  } catch (err) {
+    console.error('던전 정보 로드 실패', err)
+  }
+})
 </script>
 
 <style scoped>
