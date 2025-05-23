@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 @Mapper
 public interface PartyMemberRepository {
@@ -17,5 +18,10 @@ public interface PartyMemberRepository {
 
     List<PartyMember> getPartyMembersByPartyId(Long partyId);
     List<PartyMemberDetailResponse> findMembersByPartyId(@Param("partyId") Long partyId);
+
+    Optional<PartyMember> findByUserAndParty(
+            @Param("userId") Long userId,
+            @Param("partyId") Long partyId
+    );
 
 }

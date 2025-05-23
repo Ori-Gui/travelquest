@@ -34,3 +34,13 @@ export const joinParty = async (partyId) => {
   const response = await axios.post(`/api/v1/party/join/${partyId}`)
   return response.data
 }
+
+export const leaveParty = async (partyId) => {
+  const response = await axios.delete(`/api/v1/party/leave/${partyId}`)
+  return response.data
+}
+
+export const kickPartyMember = async (partyId, userId) => {
+  const response = await axios.post(`/api/v1/party/${partyId}/kick/${userId}`)
+  return response.data
+}

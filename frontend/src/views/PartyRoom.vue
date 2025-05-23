@@ -7,9 +7,13 @@
         <button :class="{ active: activeTab === 'info' }" @click="activeTab = 'info'">정보</button>
         <button :class="{ active: activeTab === 'quest' }" @click="activeTab = 'quest'">퀘스트</button>
         <button :class="{ active: activeTab === 'party' }" @click="activeTab = 'party'">파티</button>
-        <button :class="{ active: activeTab === 'chat' }" @click="activeTab = 'chat'">채팅</button>
+        <button
+          v-if="isMember"
+          :class="{ active: activeTab === 'chat' }"
+          @click="activeTab = 'chat'"
+        >채팅</button>      
       </nav>
-      <ChatSection v-if="activeTab === 'chat'" />
+      <ChatSection v-if="activeTab === 'chat' && isMember" />
       <PartySection
         v-if="activeTab === 'party' && userReady"
         :partyId="partyId"
@@ -20,7 +24,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, watchEffect } from 'vue';
 import AppHeader from '@/components/AppHeader.vue';
 import AppFooter from '@/components/AppFooter.vue';
 import DungeonInfo from '@/components/InfoSection.vue';
@@ -28,6 +32,7 @@ import ChatSection from '@/components/ChatSection.vue';
 import PartySection from '@/components/PartySection.vue';
 import { useRoute } from 'vue-router';
 import { useUserStore } from '@/stores/userStore';
+import { getPartyMembers } from '@/api/party';
 
 const route = useRoute();
 const partyId = Number(route.params.id);
@@ -35,6 +40,16 @@ const activeTab = ref('info');
 
 const userStore = useUserStore();
 const userReady = computed(() => !!userStore.user?.id);
+
+const partyMembers = ref([]);
+watchEffect(async () => {
+if (partyId && userReady.value) {
+    partyMembers.value = await getPartyMembers(partyId);
+}
+});
+const isMember = computed(() =>
+  partyMembers.value.some(m => String(m.id) === String(userStore.user?.id))
+);
 </script>
 
 <style scoped>

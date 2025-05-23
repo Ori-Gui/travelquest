@@ -49,8 +49,6 @@ services:
     restart: unless-stopped
     networks:
       - travelquest-network
-    volumes:
-      - mongo_data:/data/db
 
   travelquest-mongo-express:
     image: mongo-express:latest

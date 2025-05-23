@@ -10,15 +10,31 @@
           </div>
           <div class="meta">{{ member.jobName }} • {{ member.mbti }}</div>
         </div>
+        <!-- Kick button for leader to remove other members -->
+        <button
+          v-if="isCurrentUserLeader && !member.leader"
+          class="kick-button"
+          @click="kickMember(member.id)"
+        >
+          X
+        </button>
       </div>
     </div>
 
     <button
-    class="join-button"
-    v-if="status === 'MATCHING' && currentUserId && partyMembers.length > 0 && !isAlreadyMember"
-    @click="joinPartyEvent"
+      class="join-button"
+      v-if="status === 'MATCHING' && currentUserId && partyMembers.length > 0 && !isAlreadyMember"
+      @click="joinPartyEvent"
     >
-    파티에 참가하기
+      파티에 참가하기
+    </button>
+
+    <button
+      class="leave-button"
+      v-if="status === 'MATCHING' && currentUserId && partyMembers.length > 0 && isAlreadyMember"
+      @click="leavePartyEvent"
+    >
+      파티 떠나기
     </button>
 
     <div class="required-jobs" v-if="requiredJobs && requiredJobs.length">
@@ -34,7 +50,14 @@
 
 <script setup>
 import { ref, computed, watchEffect } from 'vue';
-import { getPartyStatus, getPartyMembers, getRequiredJobs, joinParty } from '@/api/party';
+import {
+  getPartyStatus,
+  getPartyMembers,
+  getRequiredJobs,
+  joinParty,
+  leaveParty,
+  kickPartyMember
+} from '@/api/party';
 import { useUserStore } from '@/stores/userStore';
 
 const props = defineProps({
@@ -50,6 +73,13 @@ const currentUserId = computed(() => userStore.user?.id);
 const partyMembers = ref([]);
 const requiredJobs = ref([]);
 const status = ref('');
+
+// Check if current user is the party leader
+const isCurrentUserLeader = computed(() => {
+  return partyMembers.value.some(
+    member => String(member.id) === String(currentUserId.value) && member.leader
+  );
+});
 
 const jobEmojiMap = {
   WARRIOR: '🛡️',
@@ -68,12 +98,10 @@ function getJobEmoji(jobCode) {
 }
 
 const isAlreadyMember = computed(() => {
-  const result = partyMembers.value.some(member => {
-    return String(member.id) === String(currentUserId.value);
-  });
-  return result;
+  return partyMembers.value.some(
+    member => String(member.id) === String(currentUserId.value)
+  );
 });
-
 
 watchEffect(async () => {
   if (!props.partyId || !userStore.user?.id) {
@@ -88,7 +116,13 @@ watchEffect(async () => {
       getRequiredJobs(props.partyId)
     ]);
     status.value = info.status;
-    partyMembers.value = members;
+    // sort members: leader on top
+    const sorted = members.sort((a, b) => {
+      if (a.leader && !b.leader) return -1;
+      if (!a.leader && b.leader) return 1;
+      return 0;
+    });
+    partyMembers.value = sorted;
     requiredJobs.value = jobs;
   } catch (e) {
     console.error('파티 정보 불러오기 오류:', e);
@@ -105,6 +139,43 @@ async function joinPartyEvent() {
   } catch (error) {
     console.error('파티 참가 실패:', error);
     alert('파티 참가에 실패했습니다.');
+  }
+}
+
+async function leavePartyEvent() {
+  try {
+    await leaveParty(props.partyId);
+    window.location.reload();
+  } catch (error) {
+    console.error('파티 떠나기 실패:', error);
+    alert('파티 떠나기에 실패했습니다.');
+  }
+  stompClient.publish({
+    destination: `/ws/chat.leave.${props.partyId}`,
+    body: JSON.stringify({
+      userId: currentUserId.value,
+      name: userStore.user?.nickname,
+      system: true,
+      content: `${userStore.user?.nickname}님이 파티에서 나가셨습니다.`
+    })
+  });
+}
+
+// Kick member function for leader
+async function kickMember(memberId) {
+  try {
+    await kickPartyMember(props.partyId, memberId);
+    const members = await getPartyMembers(props.partyId);
+    // sort after kick
+    const sorted = members.sort((a, b) => {
+      if (a.leader && !b.leader) return -1;
+      if (!a.leader && b.leader) return 1;
+      return 0;
+    });
+    partyMembers.value = sorted;
+  } catch (error) {
+    console.error('강퇴 실패:', error);
+    alert('멤버 강퇴에 실패했습니다.');
   }
 }
 </script>
@@ -129,6 +200,7 @@ async function joinPartyEvent() {
   border-radius: 10px;
   padding: 0.6rem;
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  position: relative;
 }
 
 .member-card .avatar {
@@ -151,9 +223,32 @@ async function joinPartyEvent() {
   color: #333;
 }
 
+.kick-button {
+  margin-left: auto;
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  padding: 0.25rem 0.5rem;
+  width: 2rem;
+  height: 2rem;
+  line-height: 1;
+  text-align: center;
+  cursor: pointer;
+  color: #ff0000;
+}
+
 .join-button {
   width: 100%;
   background-color: yellow;
+  padding: 0.5rem;
+  border: 1px solid black;
+  font-weight: bold;
+  margin: 1rem 0;
+}
+
+.leave-button {
+  width: 100%;
+  background-color: #ff6347;
   padding: 0.5rem;
   border: 1px solid black;
   font-weight: bold;

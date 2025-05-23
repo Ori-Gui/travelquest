@@ -18,4 +18,6 @@ public interface UserRepository {
     User findByUserIdAndNameAndEmail(@Param("userId") String userId,
             @Param("userName") String userName,
             @Param("email") String email);
+
+    List<User> findAllByIds(List<Long> allUserIds);
 }

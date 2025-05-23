@@ -1,17 +1,27 @@
 <template>
   <section class="chat-box">
     <div class="chat-title">💬 파티 채팅</div>
-    <div class="chat-messages">
-      <div
-        class="chat-message"
-        v-for="(msg, idx) in messages"
-        :key="msg.id"
-        :class="getMessageClass(msg)"
-        :ref="idx === messages.length - 1 ? setLastMessageRef : null"
-      >
-        <div class="nickname">{{ getJobEmoji(msg.job) }} {{ msg.name }}</div>
-        <div class="message">{{ msg.message }}</div>
-      </div>
+    <div class="chat-messages" ref="messagesContainer" @scroll.passive="onScrollTop">
+      <template v-for="(msg, idx) in messages" :key="msg.id">
+
+        <div
+          v-if="msg.system"
+          class="system-message"
+        >
+          {{ msg.content }}
+        </div>
+
+
+        <div
+          v-else
+          class="chat-message"
+          :class="{ me: Number(msg.userId) === currentUserId }"
+          :ref="idx === messages.length - 1 ? setLastMessageRef : null"
+        >
+          <div class="nickname">{{ getJobEmoji(msg.job) }} {{ msg.name }}</div>
+          <div class="message">{{ msg.message }}</div>
+        </div>
+      </template>
     </div>
     <div class="chat-input">
       <input
@@ -26,71 +36,102 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, onBeforeUnmount, nextTick } from 'vue'
+import { ref, computed, watch, onBeforeUnmount, onMounted, nextTick } from 'vue'
+import { getChatMessages } from '@/api/chat'
 import { useUserStore } from '@/stores/userStore'
 import { connect, disconnect, sendMessage as sendToServer } from '@/service/chatService'
 
 const input = ref('')
 const messages = ref([])
 const lastMessage = ref(null)
-const partyId = 1 // TODO: props or route에서 받아오도록 변경 가능
+const partyId = 1         // TODO: props 또는 route 파라미터로 변경
+const limit = 50          // 한 번에 불러올 메시지 개수
+const loadingMore = ref(false)
+const allLoaded = ref(false)
 
 const userStore = useUserStore()
-const currentUserId = computed(() => userStore.user?.id)
+const currentUserId = computed(() => Number(userStore.user?.id))
 const currentUserJob = computed(() => userStore.user?.jobClassCode)
 const currentUserName = computed(() => userStore.user?.userName || '익명')
 
 const jobEmojiMap = {
-  WARRIOR: '🛡️',
-  MAGE: '🪄',
-  HEALER: '💉',
-  RANGER: '🌾',
-  BARD: '🎶',
-  TRICKSTER: '💋',
-  WIZARD: '🔮',
-  THIEF: '🗡️',
-  MECHANIC: '🔧',
-  ROGUE: '🧙'
-}
-const getJobEmoji = (jobCode) => jobEmojiMap[jobCode] || '🌟'
+    WARRIOR: '🛡️',
+    MAGE: '🪄',
+    HEALER: '💉',
+    RANGER: '🌾',
+    BARD: '🎶',
+    TRICKSTER: '💋',
+    WIZARD: '🔮',
+    THIEF: '🗡️',
+    MECHANIC: '🔧',
+    ROGUE: '🧙'
+  }
+const getJobEmoji = job => jobEmojiMap[job] || '🌟'
 
-// ref setter (마지막 메시지에만 바인딩됨)
-function setLastMessageRef(el) {
-  lastMessage.value = el
+// 마지막 메시지 DOM에 scrollIntoView
+function setLastMessageRef(el) { lastMessage.value = el }
+
+// REST로 초기 메시지 불러오기
+async function fetchInitialMessages() {
+  try {
+    const before = new Date().toISOString()
+    console.log(before)
+    messages.value = await getChatMessages(partyId, before, limit)
+    await nextTick()
+    lastMessage.value?.scrollIntoView({ behavior: 'smooth' })
+  } catch (err) {
+    console.error('초기 메시지 로드 실패', err)
+  }
 }
 
+// 스크롤이 맨 위에 도달하면 이전 메시지(조인 시점 이후)를 더 불러오기
+async function onScrollTop(e) {
+  const el = e.target
+  if (el.scrollTop === 0 && !loadingMore.value && !allLoaded.value) {
+    loadingMore.value = true
+    const first = messages.value[0]
+    const before = first?.sentAt
+    const newMsgs = await getChatMessages(partyId, before, limit)
+    if (newMsgs.length < limit) allLoaded.value = true
+    messages.value.unshift(...newMsgs)
+    loadingMore.value = false
+  }
+}
+
+// WebSocket 메시지 수신 핸들러
 function handleMessage(message) {
-  console.log('[🔥 handleMessage 호출됨]', message) // ← 이거 먼저 확인
-
   messages.value.push(message)
-
-  nextTick(() => {
-    if (lastMessage.value) {
-      lastMessage.value.scrollIntoView({ behavior: 'smooth' })
-    }
-  })
+  nextTick(() => lastMessage.value?.scrollIntoView({ behavior: 'smooth' }))
 }
 
-
+// STOMP 연결
 function tryConnect() {
   connect(partyId, handleMessage)
 }
 
+// 로그인 토큰 감지 → 초기 메시지 + WS 연결
 watch(
   () => userStore.accessToken,
-  (token) => {
-    if (token) tryConnect()
+  async token => {
+    if (token) {
+      await fetchInitialMessages()
+      tryConnect()
+    }
   },
   { immediate: true }
 )
+
+onMounted(() => {
+  // 혹시 accessToken이 없을 때 대체 처리
+})
 
 onBeforeUnmount(() => {
   disconnect()
 })
 
+// 메시지 전송
 function sendMessage() {
   if (!input.value.trim() || !currentUserId.value) return
-
   const message = {
     id: Date.now(),
     userId: currentUserId.value,
@@ -99,17 +140,14 @@ function sendMessage() {
     message: input.value.trim(),
     sentAt: new Date().toISOString()
   }
-
   sendToServer(partyId, message)
   input.value = ''
 }
 
+// 내 메시지 클래스
 function getMessageClass(msg) {
-  return {
-    me: Number(msg.userId) === Number(currentUserId.value)
-  }
+  return { me: Number(msg.userId) === currentUserId.value }
 }
-
 </script>
 
 <style scoped>
