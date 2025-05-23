@@ -8,48 +8,64 @@
 
       <ul class="quest-list">
         <li v-for="(q, i) in quests" :key="q.id" class="quest-item">
-          <div class="quest-title">
-            QUEST {{ i + 1 }}: {{ q.title }}
-          </div>
-          <div class="quest-desc">
-            {{ q.description }}
-          </div>
-          <button class="proof-btn" @click="writeProof">
-            인증 사진 업로드
-          </button>
+          <div class="quest-title">QUEST {{ i + 1 }}: {{ q.title }}</div>
+          <div class="quest-desc">{{ q.description }}</div>
+          <button class="proof-btn" @click="openModal(q.id)">인증 사진 업로드</button>
         </li>
       </ul>
     </div>
+
+    <QuestVerificationModal
+      :visible="showModal"
+      :questId="currentQuestId"
+      :partyId="partyId"
+      @close="closeModal"
+      @submitted="onSubmitted"
+    />
   </section>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import axios from '@/lib/axios'
+import { ref, onMounted, defineProps } from 'vue'
+import QuestVerificationModal from '@/components/QuestVerificationModal.vue'
+import { fetchQuests } from '@/api/quest'
+import { useRoute } from 'vue-router'
+
+const props = defineProps({
+  partyId: {
+    type: Number,
+    required: true
+  }
+})
 
 const route = useRoute()
-const router = useRouter()
 const dungeonId = Number(route.params.dungeonId)
 
 const quests = ref([])
+const showModal = ref(false)
+const currentQuestId = ref(null)
+const partyId = props.partyId
 
 onMounted(async () => {
   try {
-    const { data } = await axios.get(
-      `/api/v1/dungeons/${dungeonId}/quests`
-    )
-    quests.value = data
+    quests.value = await fetchQuests(dungeonId)
   } catch (e) {
     console.error('퀘스트 로드 실패', e)
   }
 })
 
-function writeProof() {
-  router.push({
-    name: 'QuestProof',
-    params: { dungeonId }
-  })
+function openModal(questId) {
+  currentQuestId.value = questId
+  showModal.value = true
+}
+
+function closeModal() {
+  showModal.value = false
+}
+
+function onSubmitted() {
+  alert('인증이 제출되었습니다!')
+  // 필요시 목록 다시 로드
 }
 </script>
 

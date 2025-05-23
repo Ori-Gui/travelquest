@@ -38,7 +38,8 @@
           <p>탐험이 시작되었습니다!</p>
           <p>퀘스트 탭을 눌러 수행할 퀘스트를 확인하세요!</p>
         </section>
-      <QuestSection v-if="activeTab === 'quest'"/>
+      <QuestSection v-if="activeTab === 'quest'"
+        :partyId="partyId"/>
       <ChatSection v-if="activeTab === 'chat' && isMember" :partyId="partyId"/>
       <PartySection
         v-if="activeTab === 'party' && userReady"

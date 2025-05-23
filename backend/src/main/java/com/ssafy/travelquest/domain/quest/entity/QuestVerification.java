@@ -13,7 +13,7 @@ public class QuestVerification {
     private Integer partyId;
     private Long verifiedByUserId;
     private String photoUrl;
-    private QuestStatus status;
+    private QuestVerificationStatus status;
     private LocalDateTime verifiedAt;
 }
 
