@@ -43,7 +43,12 @@ const router = createRouter({
       path: '/party/:id',
       name: 'PartyRoom',
       component: () => import('@/views/PartyRoom.vue')
-    }
+    },
+    {
+      path: '/me',
+      name: 'MyPage',
+      component: () => import('@/views/MyPage.vue')
+    },
   ],
 })
 

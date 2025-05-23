@@ -8,3 +8,11 @@ export const registerUser = async (userData) => {
     birthday: userData.birthdate,
   })
 }
+
+export function getUserProfile(userId) {
+  return axios.get(`/api/v1/user/${userId}`);
+}
+
+export function getUserMissions(userId) {
+  return axios.get(`/api/v1/user/${userId}/missions`);
+}
