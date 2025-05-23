@@ -56,4 +56,17 @@
         WHERE pm.party_id = #{partyId}
     </select>
 
+    <select id="findByUserAndParty"
+            parameterType="map"
+            resultMap="partyMemberResultMap">
+        SELECT
+            id,
+            party_id,
+            user_id,
+            job_code,
+            joined_at
+        FROM party_member
+        WHERE user_id  = #{userId}
+          AND party_id = #{partyId}
+    </select>
 </mapper>

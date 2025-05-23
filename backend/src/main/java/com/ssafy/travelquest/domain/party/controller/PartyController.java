@@ -43,6 +43,28 @@ public class PartyController {
         return ResponseEntity.ok().build();
     }
 
+    @DeleteMapping("/leave/{partyId}")
+    public ResponseEntity<Void> leaveParty(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                           @PathVariable Long partyId) {
+        partyService.leaveParty(
+                userDetails,
+                partyId
+        );
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/{partyId}/kick/{userId}")
+    public ResponseEntity<Void> kickUser(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                         @PathVariable Long partyId,
+                                         @PathVariable Long userId) {
+        partyService.kickUser(
+                userDetails,
+                partyId,
+                userId
+        );
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping("/{partyId}/info")
     public ResponseEntity<PartyResponse> getPartyInfo(@PathVariable Long partyId) {
         PartyResponse response = partyService.getPartyInfo(partyId);
