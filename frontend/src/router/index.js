@@ -9,12 +9,6 @@ const router = createRouter({
       component: () => import('@/views/DungeonExplorer.vue') // Lazy loaded
     },
     {
-      path: '/dungeon/:id',
-      name: 'DungeonDetail',
-      component: () => import('@/views/DungeonDetail.vue'), // Lazy loaded
-      props: true
-    },
-    {
       path: '/login',
       name: 'Login',
       component: () => import('@/views/UserLogin.vue')
@@ -40,10 +34,24 @@ const router = createRouter({
       component: () => import('@/views/MbtiResult.vue')
     },
     {
-      path: '/party/:id',
-      name: 'PartyRoom',
-      component: () => import('@/views/PartyRoom.vue')
-    }
+      path: '/dungeon/:dungeonId',
+      component: () => import('@/views/DungeonLayout.vue'),
+      props: true,
+      children: [
+        {
+          path: '',
+          name: 'DungeonDetail',
+          component: () => import('@/views/DungeonDetail.vue'),
+          props: true
+        },
+        {
+          path: 'party/:partyId',
+          name: 'PartyRoom',
+          component: () => import('@/views/PartyRoom.vue'),
+          props: true
+        }
+      ]
+    },
   ],
 })
 

@@ -1,6 +1,5 @@
 <template>
   <div>
-    <AppHeader />
     <main class="main">
       <form class="filters" @submit.prevent="searchDungeon">
         <div class="field date-field">
@@ -63,16 +62,17 @@
 
       <MapView :markers="dungeonMarkers" />
     </main>
-
-    <AppFooter />
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted, watch } from 'vue'
-import axios from '@/lib/axios'
-import AppHeader from '@/components/AppHeader.vue'
-import AppFooter from '@/components/AppFooter.vue'
+import {
+  fetchSidos,
+  fetchGuguns,
+  fetchContentTypes
+} from '@/api/attraction'
+import { searchDungeons, fetchFirstAttraction } from '@/api/dungeon'
 import MapView from '@/components/MapView.vue'
 
 // 날짜, 키워드
@@ -98,11 +98,11 @@ const dungeonMarkers = ref([])
 onMounted(async () => {
   try {
     const [sidoRes, ctRes] = await Promise.all([
-      axios.get('/api/v1/attractions/sidos'),
-      axios.get('/api/v1/attractions/content-types')
+      fetchSidos(),
+      fetchContentTypes()
     ])
-    sidos.value = sidoRes.data
-    contentTypes.value = ctRes.data
+    sidos.value = sidoRes
+    contentTypes.value = ctRes
   } catch (err) {
     console.error('초기 데이터 로드 실패', err)
   }
@@ -116,10 +116,7 @@ watch(selectedSido, async (newCode) => {
     return
   }
   try {
-    const res = await axios.get('/api/v1/attractions/guguns', {
-      params: { sidoCode: newCode }
-    })
-    guguns.value = res.data
+    guguns.value = await fetchGuguns(newCode)
   } catch (err) {
     console.error('구군 로드 실패', err)
   }
@@ -138,24 +135,16 @@ const searchDungeon = async () => {
   console.log('검색 조건:', condition)
   try {
     // 1) 던전 검색
-    const { data: dungeons } = await axios.post(
-      '/api/v1/dungeons/search',
-      condition
-    )
-    dungeonList.value = dungeons
+    dungeonList.value = await searchDungeons(condition)
     console.log('검색 결과:', dungeonList)
 
     // 2) 던전별 대표 여행지 호출
-    const firstCalls = dungeonList.value.map(d =>
-      axios
-        .get(`/api/v1/dungeons/${d.id}/attractions/first`)
-        .then(r => r.data)
-        .catch(() => null)
+    const attractions = await Promise.all(
+      dungeonList.value.map(d => fetchFirstAttraction(d.id))
     )
-    const attractions = await Promise.all(firstCalls)
 
     // 3) dungeonList 와 attractions 를 합쳐 마커 데이터 생성
-    dungeonMarkers.value = dungeons.map((d, i) => ({
+    dungeonMarkers.value = dungeonList.value.map((d, i) => ({
       id: d.id,
       title: d.title,
       first: attractions[i]?.title,

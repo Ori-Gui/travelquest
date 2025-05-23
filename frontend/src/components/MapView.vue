@@ -137,7 +137,7 @@ function updateMarkers(list) {
           closeBtn?.addEventListener('click', () => infoWindow.close())
           const detailBtn = document.getElementById(`detail-btn-${item.id}`)
           detailBtn?.addEventListener('click', () => {
-            router.push({ name: 'DungeonDetail', params: { id: item.id } })
+            router.push({ name: 'DungeonDetail', params: { dungeonId: item.id } })
           })
         }, 0)
       })

@@ -32,7 +32,7 @@ import axios from '@/lib/axios'
 
 const route = useRoute()
 const router = useRouter()
-const dungeonId = Number(route.params.id)
+const dungeonId = Number(route.params.dungeonId)
 
 const quests = ref([])
 
