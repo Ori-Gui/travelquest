@@ -2,13 +2,14 @@
   <div class="travel-quest-container">
     <AppHeader />
     <main class="main-wrapper">
-      <DungeonInfo />
+      <!-- <DungeonInfo /> -->
       <nav class="tabs">
         <button :class="{ active: activeTab === 'info' }" @click="activeTab = 'info'">정보</button>
         <button :class="{ active: activeTab === 'quest' }" @click="activeTab = 'quest'">퀘스트</button>
         <button :class="{ active: activeTab === 'party' }" @click="activeTab = 'party'">파티</button>
         <button :class="{ active: activeTab === 'chat' }" @click="activeTab = 'chat'">채팅</button>
       </nav>
+      <QuestSection v-if="activeTab === 'quest'"/>
       <ChatSection v-if="activeTab === 'chat'" />
       <PartySection
         v-if="activeTab === 'party' && userReady"
@@ -23,8 +24,9 @@
 import { ref, computed } from 'vue';
 import AppHeader from '@/components/AppHeader.vue';
 import AppFooter from '@/components/AppFooter.vue';
-import DungeonInfo from '@/components/InfoSection.vue';
+// import DungeonInfo from '@/components/DungeonInfo.vue';
 import ChatSection from '@/components/ChatSection.vue';
+import QuestSection from '@/components/QuestSection.vue'
 import PartySection from '@/components/PartySection.vue';
 import { useRoute } from 'vue-router';
 import { useUserStore } from '@/stores/userStore';

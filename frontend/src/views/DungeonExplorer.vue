@@ -2,7 +2,7 @@
   <div>
     <AppHeader />
     <main class="main">
-      <div class="filters">
+      <form class="filters" @submit.prevent="searchDungeon">
         <div class="field date-field">
           <label class="label">탐험기간</label>
           <div class="date-range">
@@ -56,10 +56,10 @@
           class="keyword-input"
         />
 
-        <button class="menu-button" @click="searchDungeon">
+        <button type="submit" class="menu-button">
           🔍 던전탐색
         </button>
-      </div>
+      </form>
 
       <MapView :markers="dungeonMarkers" />
     </main>
