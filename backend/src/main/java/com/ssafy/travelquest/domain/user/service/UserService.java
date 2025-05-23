@@ -23,6 +23,7 @@ import com.ssafy.travelquest.global.common.event.CreateUserEvent;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -123,5 +124,9 @@ public class UserService {
                 .jobDisplayName(jobClass.getCode().getDisplayName())
                 .mbtiDescription(jobClass.getDescription())
                 .build();
+    }
+
+    public List<User> getUsersByIds(List<Long> allUserIds) {
+        return userRepository.findAllByIds(allUserIds);
     }
 }

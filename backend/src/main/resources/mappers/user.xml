@@ -51,4 +51,19 @@
           AND email = #{email}
     </select>
 
+    <!-- 여러 userId 목록으로 한 번에 조회 -->
+    <select id="findAllByIds"
+            resultMap="userResultMap"
+            parameterType="java.util.List">
+        SELECT *
+        FROM user
+        WHERE id IN
+        <foreach item="id"
+                 collection="list"
+                 open="("
+                 separator=","
+                 close=")">
+            #{id}
+        </foreach>
+    </select>
 </mapper>

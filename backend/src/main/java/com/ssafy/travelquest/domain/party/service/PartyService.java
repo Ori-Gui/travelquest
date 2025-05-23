@@ -12,6 +12,7 @@ import com.ssafy.travelquest.domain.party.repository.PartyRoleRequirementReposit
 import com.ssafy.travelquest.global.security.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -120,4 +121,60 @@ public class PartyService {
     public List<PartyInfoResponse> getPartyDetailsByDungeonId(Long dungeonId) {
         return partyRepository.findPartyDetailsByDungeonId(dungeonId);
     }
+
+    @Transactional
+    public void leaveParty(CustomUserDetails userDetails, Long partyId) {
+        Party party = partyRepository.findById(partyId);
+        if (party == null) {
+            throw new IllegalArgumentException("Party not found");
+        }
+
+        List<PartyMember> partyMembers = partyMemberRepository.getPartyMembersByPartyId(partyId);
+        boolean isMember = false;
+        for (PartyMember member : partyMembers) {
+            if (member.getUserId().equals(userDetails.getId())) {
+                isMember = true;
+                break;
+            }
+        }
+
+        if (!isMember) {
+            throw new IllegalArgumentException("You are not a member of this party");
+        }
+
+        partyMemberRepository.deletePartyMember(partyId, userDetails.getId());
+    }
+
+    @Transactional
+    public void kickUser(CustomUserDetails userDetails, Long partyId, Long targetUserId) {
+        // 1. 요청자 정보 가져오기
+        Long requesterId = userDetails.getId();
+
+        // 2. 파티 존재 여부 확인
+        Party party = partyRepository.findById(partyId);
+        if (party == null) {
+            throw new IllegalArgumentException("해당 파티를 찾을 수 없습니다.");
+        }
+
+        // 3. 권한 체크: 요청자가 파티 리더인지 확인
+        if (!party.getLeaderId().equals(requesterId)) {
+            throw new AccessDeniedException("파티 리더만 강퇴할 수 있습니다.");
+        }
+
+        // 4. 자기 자신 강퇴 방지
+        if (targetUserId.equals(requesterId)) {
+            throw new IllegalArgumentException("파티 리더는 스스로 강퇴할 수 없습니다.");
+        }
+
+        // 5. 대상 멤버 존재 여부 확인
+        PartyMember member = partyMemberRepository.findByUserAndParty(targetUserId, partyId)
+                .orElseThrow(() -> new IllegalArgumentException("강퇴 대상이 파티에 존재하지 않습니다."));
+        if (member == null) {
+            throw new IllegalArgumentException("강퇴 대상이 파티에 존재하지 않습니다.");
+        }
+
+        // 6. 강퇴 처리 (삭제 혹은 상태 업데이트)
+        partyMemberRepository.deletePartyMember(partyId, targetUserId);
+    }
+
 }

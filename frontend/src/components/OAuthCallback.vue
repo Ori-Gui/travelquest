@@ -15,7 +15,7 @@ onMounted(() => {
   if (token) {
     const payload = jwtParser(token)
     const registStatus = payload.registStatus
-    userStore.setAccessToken(token)
+    userStore.setAccessToken(token)    
 
 
     if (registStatus === 'NOT_YET') {
@@ -23,7 +23,7 @@ onMounted(() => {
     } else if(registStatus === 'IN_PROGRESS'){
       router.push('/mbti')
     } else if (registStatus === 'REGISTERED') {
-      router.push('/main')
+      router.push('/map')
     } else {
       console.warn('⚠️ 알 수 없는 registStatus:', registStatus)
       router.push('/')
