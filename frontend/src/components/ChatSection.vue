@@ -61,17 +61,15 @@ const currentUserJob = computed(() => userStore.user?.jobClassCode)
 const currentUserName = computed(() => userStore.user?.userName || '익명')
 
 const jobEmojiMap = {
-    WARRIOR: '🛡️',
-    MAGE: '🪄',
-    HEALER: '💉',
-    RANGER: '🌾',
-    BARD: '🎶',
-    TRICKSTER: '💋',
-    WIZARD: '🔮',
-    THIEF: '🗡️',
-    MECHANIC: '🔧',
-    ROGUE: '🧙'
-  }
+  WARRIOR: '🛡️',
+  MAGE: '🪄',
+  HEALER: '💉',
+  RANGER: '🏹',
+  BARD: '🎵',
+  TRICKSTER: '🃏',
+  THIEF: '🗡️',
+  MECHANIC: '🔧'
+};
 const getJobEmoji = job => jobEmojiMap[job] || '🌟'
 
 // 마지막 메시지 DOM에 scrollIntoView
@@ -151,9 +149,9 @@ function sendMessage() {
 }
 
 // 내 메시지 클래스
-function getMessageClass(msg) {
-  return { me: Number(msg.userId) === currentUserId.value }
-}
+// function getMessageClass(msg) {
+//   return { me: Number(msg.userId) === currentUserId.value }
+// }
 </script>
 
 <style scoped>

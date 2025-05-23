@@ -3,11 +3,23 @@
     <router-link to="/map">
       <img src="@/assets/travelquest_logo2.png" alt="Travel Quest" class="logo" />
     </router-link>
-    <button class="btn-hamburger" @click="toggleMenu">
-      ☰
-    </button>
+    <div class="header-actions">
+      <router-link
+        v-if="!isLoggedIn"
+        to="/login"
+        class="btn-login"
+      >
+        로그인
+      </router-link>
+      <div v-else class="welcome">
+        {{ userEmoji }} {{ userName }}님 환영합니다
+      </div>
 
-    <!-- Side menu panel -->
+      <button class="btn-hamburger" @click="toggleMenu">
+        ☰
+      </button>
+    </div>
+
     <aside v-if="isMenuOpen" class="side-menu">
       <ul>
         <li @click="navigateTo('me')">마이페이지</li>
@@ -18,14 +30,46 @@
       </ul>
     </aside>
 
-    <!-- Optional overlay to close menu when clicking outside -->
     <div v-if="isMenuOpen" class="menu-overlay" @click="closeMenu"></div>
   </header>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, computed, watch } from 'vue'
+import { useUserStore } from '@/stores/userStore'
 import { useRouter } from 'vue-router';
+import { getUserProfile }  from '@/api/user'
+
+const userStore  = useUserStore()
+const isLoggedIn = computed(() => !!userStore.user?.id)
+const userName   = ref('')
+const userJob    = ref('')
+
+const jobEmojiMap = {
+  WARRIOR:   '🛡️',
+  MAGE:      '🪄',
+  HEALER:    '💉',
+  RANGER:    '🏹',
+  BARD:      '🎵',
+  TRICKSTER: '🃏',
+  THIEF:     '🗡️',
+  MECHANIC:  '🔧'
+}
+
+const userEmoji = computed(() =>
+  jobEmojiMap[userJob.value] || '🎲'
+)
+
+watch(isLoggedIn, async logged => {
+  if (!logged) return
+  try {
+    const res = await getUserProfile(userStore.user.id)
+    userName.value = res.data.userName
+    userJob.value  = res.data.jobClassCode
+  } catch (e) {
+    console.error(e)
+  }
+})
 
 const router = useRouter();
 const isMenuOpen = ref(false);
@@ -45,6 +89,7 @@ function navigateTo(tab) {
   else if (tab === 'party') router.push('/party');
   else if (tab === 'chat') router.push('/chat');
   closeMenu();
+
 }
 </script>
 
@@ -61,6 +106,28 @@ function navigateTo(tab) {
   border-bottom: 2px solid #6cd395;
   z-index: 1000;
 }
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-login {
+  padding: 0.3rem 0.8rem;
+  background: #8cf8a0e5;
+  border: 2px solid #444;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  color: #444;
+  text-decoration: none;
+}
+
+.welcome {
+  font-size: 0.95rem;
+  color: #333;
+}
+
 .logo {
   height: 32px;
   object-fit: contain;

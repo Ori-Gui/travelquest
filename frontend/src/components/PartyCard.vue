@@ -21,7 +21,8 @@ import { useRouter } from 'vue-router'
 
 const router = useRouter()
 
-const { partyId, title, desc, currentMembers, maxMembers, roles } = defineProps({
+const props = defineProps({
+  dungeonId: Number,
   partyId: Number,
   title: String,
   desc: String,
@@ -34,8 +35,13 @@ const { partyId, title, desc, currentMembers, maxMembers, roles } = defineProps(
 })
 
 const joinParty = () => {
-  console.log("✅ partyId 확인:", partyId)
-  router.push(`/party/${partyId}`)
+  router.push({
+    name: 'PartyRoom',
+    params: {
+      dungeonId: props.dungeonId,
+      partyId:   props.partyId
+    }
+  })
 }
 </script>
 
