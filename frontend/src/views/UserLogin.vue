@@ -1,6 +1,7 @@
 <template>
   <div class="login-container">
     <AppHeader />
+    <br>
     <main class="flex-grow flex items-center justify-center w-full">
       <LoginForm />
     </main>

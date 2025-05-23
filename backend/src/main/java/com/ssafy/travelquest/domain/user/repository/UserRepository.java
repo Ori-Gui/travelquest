@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import com.ssafy.travelquest.domain.user.dto.UserClearDungeonResponse;
 import com.ssafy.travelquest.domain.user.entity.User;
 
 @Mapper
@@ -20,4 +21,5 @@ public interface UserRepository {
             @Param("email") String email);
 
     List<User> findAllByIds(List<Long> allUserIds);
+    List<UserClearDungeonResponse> selectClearedDungeonsByUserId(@Param("userId") Long userId);
 }

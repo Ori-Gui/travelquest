@@ -17,7 +17,7 @@
         <div class="nickname">{{ profile?.userName }}</div>
         <div class="explorer-badge">{{ explorerTitle }}</div>
         <div class="progress-bar">
-          <div class="progress-fill" :style="{ width: progressPercent + '%' }"></div>
+          <div class="progress-fill" :style="{ width: animatedWidth }"></div>
         </div>
       </div>
       <button class="btn-edit" @click="onEditProfile">프로필 수정</button>
@@ -38,19 +38,11 @@
 
     <!-- 탭 내용 -->
     <section class="tab-content">
-      <div v-if="activeTab === 'missions'">
-        <ul class="missions-list">
-          <li v-for="(m, i) in missions" :key="m.id">
-            <span class="mission-index">{{ i + 1 }}.</span>
-            <span class="mission-title">{{ m.title }}</span>
-          </li>
-        </ul>
-      </div>
-      <div v-else-if="activeTab === 'achievements'">
-        <!-- 달성 기록 섹션 -->
+      <div v-if="activeTab === 'achievements'">
+        <Achivements />
       </div>
       <div v-else-if="activeTab === 'partyChat'">
-        <!-- 파티 채팅 링크 -->
+        <PartyList />
       </div>
       <div v-else-if="activeTab === 'quests'">
         <!-- 퀘스트 목록 섹션 -->
@@ -67,13 +59,30 @@
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue';
+import { ref, computed, watch, onMounted } from 'vue';
 import { useUserStore } from '@/stores/userStore';
 import AppHeader from '@/components/AppHeader.vue';
 import { getUserProfile } from '@/api/user';
+import Achivements from '@/components/AchievementsSection.vue'
+import PartyList from '@/components/PartyLinkSection.vue'
+
 
 // 기본 아바타 URL 생성 (Vite asset import)
 const defaultAvatar = new URL('../assets/default-avatar.png', import.meta.url).href;
+
+// 칭호 배열
+const titles = [
+  "침묵의 나침반",
+  "세상의 경계선에 선 자",
+  "끝없는 여로의 시인",
+  "지도 밖의 탐험가",
+  "바람을 걷는 자",
+  "낯선 풍경의 수집가",
+  "노을의 연금술사",
+  "구름 위의 표류자",
+  "천천히 걷는 전설",
+  "낯섦에 사랑받는 자",
+]
 
 // 로그인된 유저의 기본 정보 (store)
 const userStore = useUserStore();
@@ -91,7 +100,7 @@ const fetchProfile = async () => {
     const response = await getUserProfile(rawUser.id)
     console.log('profile data:', response.data);
     profile.value = response.data;
-    missions.value = data.missions || [];
+    console.log("디버깅 : " + titles[Number(rawUser.id) % 10]);
   } catch (err) {
     console.error('프로필 불러오기 실패', err);
   }
@@ -104,17 +113,16 @@ watch(userReady, (ready) => {
 
 // 탭 설정
 const tabs = [
-  { name: 'missions', label: '미션 포트', icon: '🏅' },
   { name: 'achievements', label: '달성 기록', icon: '🏆' },
-  { name: 'partyChat', label: '파티 채팅', icon: '💬' },
+  { name: 'partyChat', label: '파티', icon: '🪅' },
   { name: 'quests', label: '퀘스트', icon: '🗺️' },
   { name: 'settings', label: '정보 변경', icon: '⚙️' }
 ];
-const activeTab = ref('missions');
+const activeTab = ref('achievements');
 
 // 탐험가 칭호 및 경험치 바
-const explorerTitle = computed(() => profile.value ? `${profile.value.userName}의 탐험가` : '');
-const progressPercent = computed(() => profile.value ? Math.min((profile.value.exp / profile.value.nextLevelExp) * 100, 100) : 0);
+const explorerTitle = computed(() => titles[Number(rawUser.id) % 10]);
+const progressPercent = computed(() => Math.floor(Math.random() * 100));
 
 // 직업 매핑
 const jobNameMap = {
@@ -129,26 +137,154 @@ function getJobEmoji(job) { return jobEmojiMap[job] || '🎯'; }
 
 // 프로필 수정 탭 이동
 function onEditProfile() { activeTab.value = 'settings'; }
+
+const animatedWidth = ref("0%");
+
+onMounted(() => {
+  setTimeout(() => {
+    animatedWidth.value = `${progressPercent.value}%`;
+  }, 100);
+});
+
 </script>
 
 <style scoped>
 /* 스타일은 변경되지 않음 */
-.my-page-container { background-color: #e6fff2; min-height: 100vh; }
-.profile-section { display: flex; align-items: center; padding: 1rem; gap: 1rem; background: #fff; border-bottom: 2px solid #a0d8a0; }
-.avatar img { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; border: 2px solid #6cd395; }
-.profile-details { flex: 1; }
-.role-level { display: flex; align-items: center; gap: 0.5rem; font-weight: bold; font-size: 1.1rem; }
-.nickname { margin-top: 0.25rem; font-size: 1rem; color: #333; }
-.explorer-badge { display: inline-block; margin-top: 0.5rem; background: #ffecb3; padding: 0.25rem 0.75rem; border-radius: 12px; font-size: 0.85rem; color: #6b4f01; }
-.progress-bar { margin-top: 0.5rem; background: #f0f0f0; height: 8px; border-radius: 4px; overflow: hidden; }
-.progress-fill { height: 100%; background: #6cd395; transition: width 0.3s; }
-.btn-edit { background: white; border: 1px solid #6cd395; border-radius: 8px; padding: 0.5rem 1rem; cursor: pointer; font-weight: bold;	color: #6cd395; }
-.mypage-tabs { display: flex; gap: 0.5rem; padding: 0.75rem 1rem; background: #fff; border-bottom: 1px solid #ccc; flex-wrap: nowrap; overflow: hidden; }
-.mypage-tabs button { flex: 1 1 auto; min-width: 0; white-space: nowrap; font-size: 0.8rem; padding: 0.4rem; display: flex; align-items: center; justify-content: center; gap: 0.25rem; background: transparent; border: none; cursor: pointer; color: #666; }
-.mypage-tabs button.active { color: #2d5f2e; font-weight: bold; border-bottom: 2px solid #2d5f2e; }
-.tab-content { padding: 1rem; }
-.missions-list { list-style: none; padding: 0; margin: 0; }
-.missions-list li { display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 0; border-bottom: 1px dashed #ddd; }
-.mission-index { font-weight: bold; }
-.loading-container { display: flex; justify-content: center; align-items: center; height: 100vh; color: #666; }
+.my-page-container {
+  background-color: #e6fff2; min-height: 100vh; 
+}
+
+.profile-section {
+  display: flex; 
+  align-items: center;
+  padding: 1rem; gap: 1rem; 
+  background: #fff; 
+  border-bottom: 2px solid #a0d8a0; 
+}
+
+.avatar img { 
+  width: 64px; 
+  height: 64px; 
+  border-radius: 50%; 
+  object-fit: cover; 
+  border: 2px solid #6cd395; 
+}
+
+.profile-details {
+  flex: 1; 
+}
+.role-level { 
+  display: flex; 
+  align-items: center; 
+  gap: 0.5rem; 
+  font-weight: bold; 
+  font-size: 1.1rem; 
+}
+
+.nickname { 
+  margin-top: 0.25rem; 
+  font-size: 1rem; 
+  color: #333; 
+}
+
+.explorer-badge { 
+  display: inline-block; 
+  margin-top: 0.5rem; 
+  background: #ffecb3; 
+  padding: 0.25rem 0.75rem; 
+  border-radius: 12px; 
+  font-size: 0.85rem; 
+  color: #6b4f01;
+  white-space: nowrap;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 10px;
+  background: #e0e0e0;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 5px;
+}
+
+.progress-fill { 
+  height: 100%; 
+  background: #6cd395; 
+  width: 0%; /* ← 시작은 0% */
+  transition: width 1s ease-out; 
+}
+
+
+.btn-edit { 
+  background: white; 
+  border: 1px solid #6cd395; 
+  border-radius: 8px; 
+  padding: 0.5rem 1rem; 
+  cursor: pointer; 
+  font-weight: bold;	
+  color: #6cd395; 
+  white-space: nowrap;
+}
+
+.mypage-tabs { 
+  display: flex; 
+  gap: 0.5rem; 
+  padding: 0.75rem 1rem; 
+  background: #fff; 
+  border-bottom: 1px solid #ccc; 
+  flex-wrap: nowrap; 
+  overflow: hidden; 
+}
+
+.mypage-tabs button { 
+  flex: 1 1 auto; 
+  min-width: 0; 
+  white-space: nowrap; 
+  font-size: 0.8rem; 
+  padding: 0.4rem; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  gap: 0.25rem; 
+  background: transparent; 
+  border: none; 
+  cursor: pointer; 
+  color: #666; 
+}
+
+.mypage-tabs button.active { 
+  color: #2d5f2e; 
+  font-weight: bold; 
+  border-bottom: 2px solid #2d5f2e; 
+}
+
+.tab-content { 
+  padding: 1rem; 
+}
+
+.missions-list { 
+  list-style: none; 
+  padding: 0; 
+  margin: 0; 
+}
+
+.missions-list li { 
+  display: flex; 
+  align-items: center; 
+  gap: 0.5rem; 
+  padding: 0.5rem 0; 
+  border-bottom: 1px dashed #ddd; 
+}
+
+.mission-index { 
+  font-weight: bold; 
+}
+
+.loading-container { 
+  display: flex; 
+  justify-content: center; 
+  align-items: center; 
+  height: 100vh; 
+  color: #666; 
+  }
 </style>

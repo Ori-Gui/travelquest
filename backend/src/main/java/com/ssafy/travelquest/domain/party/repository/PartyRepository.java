@@ -16,4 +16,5 @@ public interface PartyRepository {
     List<Party> findByDungeonId(Long dungeonId);
 
     List<PartyInfoResponse> findPartyDetailsByDungeonId(Long dungeonId);
+    List<Party> findByIds(List<Long> partyIds);
 }
