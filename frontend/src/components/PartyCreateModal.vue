@@ -44,13 +44,10 @@
 
 <script setup>
 import { ref } from 'vue'
-import { useUserStore } from '@/stores/userStore'
 import { createParty } from '@/api/party'
 
-const userStore = useUserStore()
-
 const props = defineProps({
-  dungeonId: String
+  dungeonId: Number
 })
 const emit = defineEmits(['created', 'close'])
 

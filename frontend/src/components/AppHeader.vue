@@ -3,13 +3,36 @@
     <router-link to="/map">
       <img src="@/assets/travelquest_logo2.png" alt="Travel Quest" class="logo" />
     </router-link>
-    <button class="btn-hamburger" @click="onMenu">
-      ☰
-    </button>
+    <div class="header-actions">
+      <router-link
+        v-if="!isLoggedIn"
+        to="/login"
+        class="btn-login"
+      >
+        로그인
+      </router-link>
+      <router-link
+        v-else
+        to="/mypage"
+        class="btn-mypage"
+      >
+        👤
+      </router-link>
+
+      <button class="btn-hamburger" @click="onMenu">
+        ☰
+      </button>
+    </div>
   </header>
 </template>
 
 <script setup>
+import { computed } from 'vue'
+import { useUserStore } from '@/stores/userStore'
+
+const userStore  = useUserStore()
+const isLoggedIn = computed(() => !!userStore.user?.id)
+
 function onMenu() {
   // 메뉴 열기 로직
 }
