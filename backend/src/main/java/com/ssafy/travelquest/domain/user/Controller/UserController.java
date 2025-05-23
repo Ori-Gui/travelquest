@@ -3,6 +3,9 @@ package com.ssafy.travelquest.domain.user.Controller;
 import com.ssafy.travelquest.domain.user.dto.MbtiAnswer;
 import com.ssafy.travelquest.domain.user.dto.MbtiResultResponse;
 import com.ssafy.travelquest.domain.user.dto.UserProfileEditRequest;
+import com.ssafy.travelquest.domain.user.dto.UserProfileResponse;
+import com.ssafy.travelquest.domain.user.entity.User;
+import com.ssafy.travelquest.domain.user.exception.NoSuchUserException;
 import com.ssafy.travelquest.domain.user.service.UserService;
 import com.ssafy.travelquest.global.security.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
@@ -36,4 +39,28 @@ public class UserController {
     public ResponseEntity<MbtiResultResponse> getMbti(@PathVariable String mbtiType) {
         return ResponseEntity.ok(userService.getMbti(mbtiType));
     }
+
+    @GetMapping("/{userId}")
+    public ResponseEntity<UserProfileResponse> getUser(@PathVariable Long userId) {
+        User user = userService.getUser(userId);
+        if (user == null) {
+            throw new NoSuchUserException("User not found");
+        }
+
+        return ResponseEntity.ok(
+                UserProfileResponse.of(
+                        user.getId(),
+                        user.getUserName(),
+                        user.getEmail(),
+                        user.getMbti(),
+                        user.getJobClassCode(),
+                        user.getRole(),
+                        user.getRegistStatus(),
+                        user.getBirthday(),
+                        user.getCreatedAt()
+                )
+        );
+    }
+
+
 }
