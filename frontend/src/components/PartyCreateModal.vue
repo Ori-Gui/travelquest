@@ -16,12 +16,12 @@
         >
           <select v-model="role.jobCode">
             <option value="WARRIOR">🛡️ 전사</option>
-            <option value="MAGE">🧙 마법사</option>
-            <option value="ROGUE">🧝 도적</option>
-            <option value="HEALER">🧚 힐러</option>
-            <option value="BARD">🎭 바드</option>
+            <option value="MAGE">🪄 마법사</option>
+            <option value="ROGUE">🗡️ 도적</option>
+            <option value="HEALER">💉 힐러</option>
+            <option value="BARD">🃏 바드</option>
             <option value="RANGER">🏹 레인저</option>
-            <option value="MECHANIC">🛠 메카닉</option>
+            <option value="MECHANIC">🔧 메카닉</option>
             <option value="TRICKSTER">🦊 트릭스터</option>
           </select>
 
@@ -44,13 +44,10 @@
 
 <script setup>
 import { ref } from 'vue'
-import { useUserStore } from '@/stores/userStore'
 import { createParty } from '@/api/party'
 
-const userStore = useUserStore()
-
 const props = defineProps({
-  dungeonId: String
+  dungeonId: Number
 })
 const emit = defineEmits(['created', 'close'])
 
