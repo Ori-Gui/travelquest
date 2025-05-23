@@ -88,7 +88,6 @@ const jobEmojiMap = {
   RANGER: '🏹',
   BARD: '🎵',
   TRICKSTER: '🃏',
-  WIZARD: '🔮',
   THIEF: '🗡️',
   MECHANIC: '🔧'
 };
