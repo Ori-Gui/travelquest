@@ -2,6 +2,7 @@ package com.ssafy.travelquest.domain.user.service;
 
 import com.ssafy.travelquest.domain.user.dto.MbtiAnswer;
 import com.ssafy.travelquest.domain.user.dto.MbtiResultResponse;
+import com.ssafy.travelquest.domain.user.dto.UserClearDungeonResponse;
 import com.ssafy.travelquest.domain.user.dto.UserProfileEditRequest;
 import com.ssafy.travelquest.domain.user.entity.JobClass;
 import com.ssafy.travelquest.domain.user.entity.MBTI;
@@ -128,5 +129,9 @@ public class UserService {
 
     public List<User> getUsersByIds(List<Long> allUserIds) {
         return userRepository.findAllByIds(allUserIds);
+    }
+
+    public List<UserClearDungeonResponse> getClearDungeonResponsesByUserId(Long userId){
+        return userRepository.selectClearedDungeonsByUserId(userId);
     }
 }

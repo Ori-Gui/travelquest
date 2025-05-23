@@ -16,7 +16,9 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -175,6 +177,22 @@ public class PartyService {
 
         // 6. 강퇴 처리 (삭제 혹은 상태 업데이트)
         partyMemberRepository.deletePartyMember(partyId, targetUserId);
+    }
+
+    @Transactional(readOnly = true)
+    public List<PartyResponse> getPartiesByUserId(Long userId) {
+        List<PartyMember> memberList = partyMemberRepository.findByUserId(userId);
+
+        List<Long> partyIds = memberList.stream()
+                .map(PartyMember::getPartyId)
+                .collect(Collectors.toList());
+
+        List<Party> result = partyRepository.findByIds(partyIds);
+
+        // TODO: Party → PartyResponse 변환 후 반환
+        return result.stream()
+                .map(PartyResponse::from) // PartyResponse.from(Party party) 정적 팩토리 메서드가 있다고 가정
+                .collect(Collectors.toList());
     }
 
 }

@@ -2,6 +2,7 @@ package com.ssafy.travelquest.domain.user.Controller;
 
 import com.ssafy.travelquest.domain.user.dto.MbtiAnswer;
 import com.ssafy.travelquest.domain.user.dto.MbtiResultResponse;
+import com.ssafy.travelquest.domain.user.dto.UserClearDungeonResponse;
 import com.ssafy.travelquest.domain.user.dto.UserProfileEditRequest;
 import com.ssafy.travelquest.domain.user.dto.UserProfileResponse;
 import com.ssafy.travelquest.domain.user.entity.User;
@@ -15,6 +16,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RequiredArgsConstructor
 @RestController
@@ -62,5 +66,11 @@ public class UserController {
         );
     }
 
-
+    @GetMapping("/{userId}/clear/dungeon")
+    public ResponseEntity<List<UserClearDungeonResponse>> getMethodName(@PathVariable Long userId) {
+        return ResponseEntity.ok(
+            userService.getClearDungeonResponsesByUserId(userId)
+        );
+    }
+    
 }
