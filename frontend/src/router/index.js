@@ -57,6 +57,11 @@ const router = createRouter({
         }
       ]
     },
+    {
+      path: '/me',
+      name: 'MyPage',
+      component: () => import('@/views/MyPage.vue')
+    },
   ],
 })
 
