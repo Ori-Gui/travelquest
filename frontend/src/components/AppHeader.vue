@@ -1,6 +1,8 @@
 <template>
   <header class="app-header">
-    <img src="@/assets/travelquest_logo2.png" alt="Travel Quest" class="logo" />
+    <router-link to="/map">
+      <img src="@/assets/travelquest_logo2.png" alt="Travel Quest" class="logo" />
+    </router-link>
     <button class="btn-hamburger" @click="onMenu">
       ☰
     </button>

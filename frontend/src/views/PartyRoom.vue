@@ -13,7 +13,7 @@
           @click="activeTab = 'chat'"
         >채팅</button>      
       </nav>
-      <ChatSection v-if="activeTab === 'chat' && isMember" />
+      <ChatSection v-if="activeTab === 'chat' && isMember" :partyId="partyId"/>
       <PartySection
         v-if="activeTab === 'party' && userReady"
         :partyId="partyId"

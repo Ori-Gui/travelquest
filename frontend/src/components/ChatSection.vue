@@ -36,7 +36,7 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, onBeforeUnmount, onMounted, nextTick } from 'vue'
+import { ref, computed, watch, onBeforeUnmount, onMounted, nextTick, defineProps } from 'vue'
 import { getChatMessages } from '@/api/chat'
 import { useUserStore } from '@/stores/userStore'
 import { connect, disconnect, sendMessage as sendToServer } from '@/service/chatService'
@@ -44,7 +44,13 @@ import { connect, disconnect, sendMessage as sendToServer } from '@/service/chat
 const input = ref('')
 const messages = ref([])
 const lastMessage = ref(null)
-const partyId = 1         // TODO: props 또는 route 파라미터로 변경
+const props = defineProps({
+  partyId: {
+    type: [String, Number],
+    required: true
+  }
+})
+const partyId = props.partyId
 const limit = 50          // 한 번에 불러올 메시지 개수
 const loadingMore = ref(false)
 const allLoaded = ref(false)
