@@ -18,6 +18,7 @@ public class UserProfileResponse {
     private String email;
     private MBTI mbti;
     private JobCode jobClassCode;
+    private String profileImageUrl;
     private UserRole role;
     private RegistStatus registStatus;
     private LocalDate birthday;
@@ -29,6 +30,7 @@ public class UserProfileResponse {
             String email,
             MBTI mbti,
             JobCode jobClassCode,
+            String profileImageUrl,
             UserRole role,
             RegistStatus registStatus,
             LocalDate birthday,
@@ -40,6 +42,7 @@ public class UserProfileResponse {
                 .email(email)
                 .mbti(mbti)
                 .jobClassCode(jobClassCode)
+                .profileImageUrl(profileImageUrl)
                 .role(role)
                 .registStatus(registStatus)
                 .birthday(birthday)

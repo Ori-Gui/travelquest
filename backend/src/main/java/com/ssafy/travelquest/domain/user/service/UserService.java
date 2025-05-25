@@ -24,7 +24,6 @@ import com.ssafy.travelquest.global.common.event.CreateUserEvent;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -35,7 +34,7 @@ public class UserService {
     private final JobClassRepository jobClassRepository;
     private final OAuthService oAuthService;
     private final ApplicationEventPublisher publisher;
-    
+
     @Transactional
     public void createUser(String sub, OAuthProvider provider) {
         // sub와 provider를 이용하여 유저가 존재하는지 확인
@@ -134,4 +133,6 @@ public class UserService {
     public List<UserClearDungeonResponse> getClearDungeonResponsesByUserId(Long userId){
         return userRepository.selectClearedDungeonsByUserId(userId);
     }
+
+
 }

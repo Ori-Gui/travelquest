@@ -53,6 +53,7 @@ public class ChatMessageService {
         if (chatRoomUserDto != null) {
             return ChatUserDto.builder()
                     .name(chatRoomUserDto.getName())
+                    .profileImage(chatRoomUserDto.getProfileImage())
                     .job(chatRoomUserDto.getJob())
                     .build();
         }

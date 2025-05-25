@@ -12,13 +12,15 @@ import java.io.Serializable;
 public class ChatRoomUserDto implements Serializable {
     private Long userId;
     private Long partyId;
+    private String profileImage;
     private String name;
     private JobCode job;
 
-    public static ChatRoomUserDto of(Long userId, Long partyId, String name, JobCode job) {
+    public static ChatRoomUserDto of(Long userId, Long partyId, String profileImage, String name, JobCode job) {
         return ChatRoomUserDto.builder()
                 .userId(userId)
                 .partyId(partyId)
+                .profileImage(profileImage)
                 .name(name)
                 .job(job)
                 .build();

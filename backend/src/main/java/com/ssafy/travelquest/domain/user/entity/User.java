@@ -16,6 +16,7 @@ public class User {
     private String userName;
     private String email;
     private MBTI mbti;
+    private String profileImage;
     private JobCode jobClassCode;
     private UserRole role;
     private RegistStatus registStatus;
@@ -27,6 +28,7 @@ public class User {
                 .userName("익명")
                 .mbti(MBTI.NONE)
                 .jobClassCode(JobCode.NONE)
+                .profileImage("")
                 .role(UserRole.USER)
                 .registStatus(RegistStatus.NOT_YET)
                 .birthday(null)
@@ -38,6 +40,7 @@ public class User {
         return user.toBuilder()
                 .userName(request.userName())
                 .email(request.email())
+                .profileImage(request.profileImageUrl())
                 .birthday(request.birthday())
                 .registStatus(RegistStatus.IN_PROGRESS)
                 .build();

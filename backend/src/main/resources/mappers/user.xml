@@ -9,6 +9,7 @@
         <result property="mbti" column="mbti" javaType="com.ssafy.travelquest.domain.user.entity.MBTI"/>
         <result property="jobClassCode" column="job_class_code" javaType="com.ssafy.travelquest.domain.user.entity.JobCode"/>
         <result property="birthday" column="birthday"/>
+        <result property="profileImage" column="profile_image"/>
         <result property="createdAt" column="created_at"/>
         <result property="role" column="role" javaType="com.ssafy.travelquest.domain.user.entity.UserRole"/>
         <result property="registStatus" column="regist_status" javaType="com.ssafy.travelquest.domain.user.entity.RegistStatus"/>
@@ -24,8 +25,8 @@
 
     <insert id="insert" parameterType="com.ssafy.travelquest.domain.user.entity.User"
             useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO user (user_name, email, mbti, job_class_code, birthday, created_at, role, regist_status)
-        VALUES (#{userName}, #{email}, #{mbti}, #{jobClassCode}, #{birthday}, #{createdAt}, #{role}, #{registStatus})
+        INSERT INTO user (user_name, email, mbti, job_class_code, birthday, profile_image, created_at, role, regist_status)
+        VALUES (#{userName}, #{email}, #{mbti}, #{jobClassCode}, #{birthday}, #{profileImage} , #{createdAt}, #{role}, #{registStatus})
     </insert>
 
     <update id="update" parameterType="com.ssafy.travelquest.domain.user.entity.User">
@@ -35,6 +36,7 @@
             mbti = #{mbti},
             job_class_code = #{jobClassCode},
             birthday = #{birthday},
+            profile_image = #{profileImage},
             created_at = #{createdAt},
             role = #{role},
             regist_status = #{registStatus}

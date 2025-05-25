@@ -26,6 +26,7 @@ public class CustomUserDetailsService implements UserDetailsService {
                 user.getUserName(),          // 또는 사용자 이름
                 "",                       // 비밀번호를 쓰지 않는다면 빈 문자열
                 user.getJobClassCode(),
+                user.getProfileImage(),
                 List.of(new SimpleGrantedAuthority(user.getRole().name()))
         );
     }

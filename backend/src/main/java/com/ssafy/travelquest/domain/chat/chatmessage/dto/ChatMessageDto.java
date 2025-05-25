@@ -15,6 +15,7 @@ public class ChatMessageDto {
     private Long chatRoomId;
     private Long userId;
     private String name;
+    private String profileImage;
     private JobCode job;
     private String message;
     private String sentAt;
@@ -33,6 +34,7 @@ public class ChatMessageDto {
                 .chatRoomId(chatMessageDto.getChatRoomId())
                 .userId(chatMessageDto.getUserId())
                 .name(chatMessageDto.getName())
+                .profileImage(chatMessageDto.getProfileImage())
                 .job(chatMessageDto.getJob())
                 .message(chatMessageDto.getMessage())
                 .sentAt(chatMessageDto.getSentAt())

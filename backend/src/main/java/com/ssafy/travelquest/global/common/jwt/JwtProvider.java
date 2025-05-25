@@ -8,6 +8,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -34,7 +35,7 @@ public class JwtProvider {
     @Value("${jwt.secret}")
     private String SECRET_KEY;
 
-    private final UserDetailsService userDetailsService;
+    private final @Lazy UserDetailsService userDetailsService;
 
     public JwtToken provideTokens(Long sub, UserRole role, RegistStatus registStatus) {
         Claims claims = makeAccessClaims(sub, role, registStatus);

@@ -9,15 +9,20 @@ import com.ssafy.travelquest.domain.user.entity.User;
 import com.ssafy.travelquest.domain.user.exception.NoSuchUserException;
 import com.ssafy.travelquest.domain.user.service.UserService;
 import com.ssafy.travelquest.global.security.CustomUserDetails;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
+
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.util.WebUtils;
 
 
 @RequiredArgsConstructor
@@ -58,6 +63,7 @@ public class UserController {
                         user.getEmail(),
                         user.getMbti(),
                         user.getJobClassCode(),
+                        user.getProfileImage(),
                         user.getRole(),
                         user.getRegistStatus(),
                         user.getBirthday(),
@@ -72,5 +78,16 @@ public class UserController {
             userService.getClearDungeonResponsesByUserId(userId)
         );
     }
-    
+
+    @PutMapping("/{userId}")
+    public ResponseEntity<Void> editUserProfile(
+            @PathVariable Long userId,
+            @RequestBody UserProfileEditRequest userProfileEditRequest,
+            @AuthenticationPrincipal CustomUserDetails userDetails) {
+        if (!Objects.equals(userDetails.getId(), userId)) {
+            return ResponseEntity.status(403).build();
+        }
+        userService.editUserProfile(userId, userProfileEditRequest);
+        return ResponseEntity.ok().build();
+    }
 }

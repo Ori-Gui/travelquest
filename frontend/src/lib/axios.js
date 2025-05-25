@@ -1,20 +1,90 @@
+// lib/axios.js
 import axios from 'axios'
 import { useUserStore } from '@/stores/userStore'
+import Cookies from 'js-cookie'
 
 const axiosInstance = axios.create({
   baseURL: 'http://localhost:8080',
   withCredentials: true
 })
 
+// 요청 인터셉터: accessToken 헤더에 추가
 axiosInstance.interceptors.request.use(config => {
-  const userStore = useUserStore()
-  const token = userStore.accessToken
-  if (token) {
-    config.headers['Authorization'] = `Bearer ${token}`
-  }
+// ── 리프레시 전용 요청이면 Authorization 헤더를 완전히 지운다
+if (config.url?.endsWith('/auth/refresh')) {
+  delete config.headers['Authorization']
+  return config
+}
+
+// 그 외 요청엔 정상적으로 accessToken 헤더 추가
+const userStore = useUserStore()
+const token = userStore.accessToken
+if (token) {
+  config.headers['Authorization'] = `Bearer ${token}`
+}
   return config
 }, error => {
   return Promise.reject(error)
 })
+
+let isRefreshing = false
+let failedQueue = []
+
+const processQueue = (error, token = null) => {
+  failedQueue.forEach(prom => {
+    if (error) {
+      prom.reject(error)
+    } else {
+      prom.resolve(token)
+    }
+  })
+  failedQueue = []
+}
+
+// 응답 인터셉터: 401 나오면 refreshToken으로 재발급
+axiosInstance.interceptors.response.use(
+  res => res,
+  err => {
+    const { config, response } = err
+    if (response?.status === 401 && !config._retry) {
+      if (isRefreshing) {
+        return new Promise((resolve, reject) => {
+          failedQueue.push({ resolve, reject })
+        }).then(token => {
+          config.headers['Authorization'] = `Bearer ${token}`
+          return axiosInstance(config)
+        })
+      }
+
+      config._retry = true
+      isRefreshing = true
+
+      const userStore = useUserStore()
+      return new Promise(async (resolve, reject) => {
+        try {
+          // refreshToken을 쿠키로 보내는 경우라면 body가 비어있어도 됩니다
+          const { data } = await axiosInstance.post(
+            '/auth/refresh'
+          )
+          const newToken = data.accessToken
+          userStore.setAccessToken(newToken)
+
+          processQueue(null, newToken)
+
+          config.headers['Authorization'] = `Bearer ${newToken}`
+          resolve(axiosInstance(config))
+        } catch (refreshError) {
+          processQueue(refreshError, null)
+          userStore.logout()  // 로그아웃 처리
+          reject(refreshError)
+        } finally {
+          isRefreshing = false
+        }
+      })
+    }
+
+    return Promise.reject(err)
+  }
+)
 
 export default axiosInstance
