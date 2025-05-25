@@ -77,6 +77,7 @@ CREATE TABLE IF NOT EXISTS `ssafytrip`.`user` (
     `mbti` VARCHAR(10) DEFAULT NULL COMMENT 'MBTI 성향',
     `job_class_code` VARCHAR(50) NOT NULL COMMENT '직업 코드',
     `birthday` DATE DEFAULT NULL COMMENT '생년월일',
+    `profile_image` VARCHAR(1000) DEFAULT NULL COMMENT '프로필 이미지 URL',
     `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '가입일시',
     `role` VARCHAR(20) DEFAULT 'USER' COMMENT '권한 (USER, ADMIN)',
     `regist_status` VARCHAR(20) DEFAULT 'NOT_YET' COMMENT '가입 진행 상태 (NOT_YET, IN_PROGRESS, REGISTERED)',

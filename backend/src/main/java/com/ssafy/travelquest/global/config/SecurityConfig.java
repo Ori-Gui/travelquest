@@ -17,8 +17,13 @@ import com.ssafy.travelquest.global.security.Oauth2AuthenticationSuccessHandler;
 import com.ssafy.travelquest.global.security.filter.JwtAuthenticationFilter;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-@Configuration(proxyBeanMethods = false)
+import java.util.List;
+
+@Configuration(proxyBeanMethods = true)
 @RequiredArgsConstructor
 @EnableMethodSecurity
 public class SecurityConfig {
@@ -29,6 +34,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(
@@ -38,7 +44,8 @@ public class SecurityConfig {
                                 "/oauth2/**",          // OAuth 콜백
                                 "/swagger-ui/**",      // swagger 문서 접근 허용
                                 "/v3/api-docs/**",
-                                "/swagger-ui.html"
+                                "/swagger-ui.html",
+                                "/auth/refresh"
                         ).permitAll()
                         .requestMatchers("/ws/**").authenticated()
                         .anyRequest().authenticated()
@@ -58,5 +65,18 @@ public class SecurityConfig {
         return web -> web.ignoring().requestMatchers(HttpMethod.OPTIONS, "/**");
     }
 
+    CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowedOrigins(List.of(
+                "http://localhost:5173",
+                "http://localhost:8082"
+        ));
+        config.setAllowedMethods(List.of("GET","POST","PUT","DELETE","OPTIONS"));
+        config.setAllowedHeaders(List.of("*"));
+        config.setAllowCredentials(true);
 
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+        return source;
+    }
 }

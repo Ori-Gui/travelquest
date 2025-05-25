@@ -15,7 +15,7 @@ onMounted(() => {
   if (token) {
     const payload = jwtParser(token)
     const registStatus = payload.registStatus
-    userStore.setAccessToken(token)    
+    userStore.setAccessToken(token)
 
 
     if (registStatus === 'NOT_YET') {

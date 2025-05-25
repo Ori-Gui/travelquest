@@ -15,13 +15,15 @@ public class CustomUserDetails implements UserDetails, Principal {
     private final String username;
     private final String password;
     private final JobCode jobCode;
+    private final String profileImage;
     private final Collection<? extends GrantedAuthority> authorities;
 
-    public CustomUserDetails(Long id, String username, String password, JobCode jobCode, List<GrantedAuthority> authorities) {
+    public CustomUserDetails(Long id, String username, String password, JobCode jobCode, String profileImage, List<GrantedAuthority> authorities) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.jobCode = jobCode;
+        this.profileImage = profileImage;
         this.authorities = authorities;
     }
 

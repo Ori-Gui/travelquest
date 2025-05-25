@@ -18,4 +18,8 @@ public class QuestService {
     public List<Quest> getQuestsByDungeonId(Integer dungeonId) {
         return questRepository.findByDungeonId(dungeonId);
     }
+
+    public List<Quest> getCompletedDungeonQuestsByUserId(long userId, int offset, int size) {
+        return questRepository.findCompletedDungeonQuestsByUserId(userId, offset, size);
+    }
 }

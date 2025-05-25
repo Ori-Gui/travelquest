@@ -20,3 +20,7 @@ export function getUserMissions(userId) {
 export function getClearedDungeons(userId) {
   return axios.get(`/api/v1/user/${userId}/clear/dungeon`)
 }
+
+export function updateUserProfile(userId, payload) {
+  return axios.put(`/api/v1/user/${userId}`, payload);
+}

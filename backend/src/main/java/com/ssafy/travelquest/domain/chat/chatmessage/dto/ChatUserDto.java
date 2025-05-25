@@ -10,12 +10,14 @@ import lombok.*;
 public class ChatUserDto {
     private Long userId;
     private String name;
+    private String profileImage;
     private JobCode job;
 
-    public static ChatUserDto of(Long userId, String name, JobCode job) {
+    public static ChatUserDto of(Long userId, String name, String profileImage, JobCode job) {
         return ChatUserDto.builder()
                 .userId(userId)
                 .name(name)
+                .profileImage(profileImage) // Assuming profileImage is not provided in this context
                 .job(job)
                 .build();
     }

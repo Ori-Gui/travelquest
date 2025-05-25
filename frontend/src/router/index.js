@@ -62,6 +62,11 @@ const router = createRouter({
       name: 'MyPage',
       component: () => import('@/views/MyPage.vue')
     },
+    {
+      path: '/me/profile',
+      name: 'ProfileChange',
+      component: () => import('@/views/ProfileChange.vue')
+    },
   ],
 })
 

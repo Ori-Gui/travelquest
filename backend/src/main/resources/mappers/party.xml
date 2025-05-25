@@ -105,13 +105,28 @@
     </resultMap>
 
     <select id="findByIds" resultMap="partyResultMap" parameterType="list">
-        SELECT id, dungeon_id, leader_id, title, description, status, max_members, created_at
+        SELECT
+        id,
+        dungeon_id,
+        leader_id,
+        title,
+        description,
+        status,
+        max_members,
+        created_at
         FROM party
-        WHERE id IN
-        <foreach item="id" collection="list" open="(" separator="," close=")">
-            #{id}
-        </foreach>
-        AND status IN ('MATCHING', 'IN_PROGRESS')
+        <where>
+            <!-- 리스트가 비어있지 않을 때만 id IN 절을 포함 -->
+            <if test="list != null and list.size() > 0">
+                AND id IN
+                <foreach item="id" collection="list" open="(" separator="," close=")">
+                    #{id}
+                </foreach>
+            </if>
+
+            <!-- status 필터는 항상 적용 -->
+            AND status IN ('MATCHING','IN_PROGRESS')
+        </where>
     </select>
 
 </mapper>

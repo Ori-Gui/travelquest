@@ -37,6 +37,7 @@ public class ChatMessageController {
                 .userId(message.getUserId())
                 .name(profile.getName())
                 .job(profile.getJob())
+                .profileImage(profile.getProfileImage())
                 .message(message.getMessage())
                 .sentAt(message.getSentAt())
                 .build();

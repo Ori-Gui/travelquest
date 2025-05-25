@@ -22,4 +22,27 @@
 		(#{dungeonId}, #{attractionId}, #{title}, #{description}, #{orderIndex}, #{status},
 		NOW())
 	</insert>
+
+	<!-- mappers/party.xml -->
+	<select id="findCompletedDungeonQuestsByUserId"
+			parameterType="map"
+			resultType="com.ssafy.travelquest.domain.quest.entity.Quest">
+		SELECT
+			q.id,
+			q.title,
+			q.description,
+			q.dungeon_id
+		FROM quest q
+		WHERE q.dungeon_id IN (
+			SELECT p.dungeon_id
+			FROM party p
+					 JOIN party_member pm
+						  ON p.id = pm.party_id
+			WHERE pm.user_id = #{userId}
+			  AND p.status  = 'COMPLETED'
+			GROUP BY p.dungeon_id
+		)
+		ORDER BY q.created_at DESC
+			LIMIT #{offset}, #{size}
+	</select>
 </mapper>

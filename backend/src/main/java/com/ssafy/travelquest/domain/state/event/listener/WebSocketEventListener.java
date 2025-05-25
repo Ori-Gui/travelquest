@@ -30,6 +30,7 @@ public class WebSocketEventListener {
             Long userId = customUser.getId();
             String name = customUser.getUsername(); // or getNickname() 등
             JobCode jobCode = customUser.getJobCode();
+            String profileImage = customUser.getProfileImage();
 
             Message<?> connectMessage = (Message<?>) event.getMessage().getHeaders().get("simpConnectMessage");
             StompHeaderAccessor accessor = StompHeaderAccessor.wrap(connectMessage);
@@ -40,7 +41,7 @@ public class WebSocketEventListener {
 
             if (userId != null && partyId != null) {
                 userSessionService.onConnect(Long.toString(userId),
-                        ChatRoomUserDto.of(userId, Long.parseLong(partyId), name, jobCode)
+                        ChatRoomUserDto.of(userId, Long.parseLong(partyId), profileImage, name, jobCode)
                 );
             }
         }

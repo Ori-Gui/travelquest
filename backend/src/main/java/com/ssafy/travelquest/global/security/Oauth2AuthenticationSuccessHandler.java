@@ -5,6 +5,7 @@ import com.ssafy.travelquest.domain.oauth.entity.OAuthIdentity;
 import com.ssafy.travelquest.domain.oauth.entity.OAuthProvider;
 import com.ssafy.travelquest.domain.oauth.service.OAuthService;
 import com.ssafy.travelquest.domain.user.entity.User;
+import com.ssafy.travelquest.domain.user.repository.RefreshTokenRepository;
 import com.ssafy.travelquest.domain.user.service.UserService;
 import com.ssafy.travelquest.global.common.jwt.JwtProvider;
 import com.ssafy.travelquest.global.common.jwt.JwtToken;
@@ -34,6 +35,9 @@ public class Oauth2AuthenticationSuccessHandler implements AuthenticationSuccess
     private final UserService userService;
     @Value("${url.redirect.base}")
     private String REDIRECT_URL;
+    @Value("${jwt.refresh.time}")
+    private long REFRESH_TIME;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
@@ -58,6 +62,12 @@ public class Oauth2AuthenticationSuccessHandler implements AuthenticationSuccess
                 user.get().getId(),
                 user.get().getRole(),
                 user.get().getRegistStatus()
+        );
+
+        refreshTokenRepository.save(
+                Long.toString(user.get().getId()),
+                token.getRefreshToken(),
+                REFRESH_TIME
         );
 
         response.addCookie(createAccessTokenCookie(token.getAccessToken()));
