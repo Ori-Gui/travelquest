@@ -114,4 +114,10 @@
         AND status IN ('MATCHING', 'IN_PROGRESS')
     </select>
 
+    <update id="updateStatus" parameterType="map">
+        UPDATE party
+        SET status = #{status}
+        WHERE id = #{partyId}
+    </update>
+
 </mapper>
