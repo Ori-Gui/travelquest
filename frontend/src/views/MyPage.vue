@@ -1,9 +1,6 @@
 <template>
   <!-- user가 준비된 후에만 페이지 렌더링 -->
   <div v-if="userReady" class="my-page-container">
-    <!-- 공통 헤더 -->
-    <AppHeader />
-
     <!-- 프로필 섹션 -->
     <section class="profile-section">
       <div class="avatar">
@@ -61,7 +58,6 @@
 <script setup>
 import { ref, computed, watch, onMounted } from 'vue';
 import { useUserStore } from '@/stores/userStore';
-import AppHeader from '@/components/AppHeader.vue';
 import { getUserProfile } from '@/api/user';
 import Achivements from '@/components/AchievementsSection.vue'
 import PartyList from '@/components/PartyLinkSection.vue'

@@ -2,21 +2,13 @@
 import axios from '@/lib/axios'
 
 /**
- * 퀘스트 목록 조회
- * @param {Number} dungeonId
+ * 던전ID + 파티ID로 퀘스트 목록을 가져오되,
+ * 각 퀘스트에 verified 플래그를 포함해서 반환받는다.
  */
-export const fetchQuests = async (dungeonId) => {
-  const res = await axios.get(`/api/v1/dungeons/${dungeonId}/quests`)
-  return res.data
+export function fetchQuests(dungeonId, partyId) {
+  return axios
+    .get('/api/v1/dungeons/' + dungeonId + '/quests', {
+      params: { partyId }
+    })
+    .then(res => res.data)
 }
-
-// /**
-//  * 퀘스트 인증 제출
-//  * @param {FormData} formData - questId, partyId, photo 필드 포함
-//  */
-// export const submitQuestVerification = async (formData) => {
-//   const res = await axios.post(`/api/v1/quest-verifications`, formData, {
-//     headers: { 'Content-Type': 'multipart/form-data' }
-//   })
-//   return res.data
-// }

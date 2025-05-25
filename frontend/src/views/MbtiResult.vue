@@ -1,6 +1,5 @@
 <template>
   <div class="result-container">
-    <AppHeader />
     <main class="result-box" v-if="result">
       <p class="welcome-text">
         <span class="highlight">{{ userName }}</span> 님,<br />
@@ -18,8 +17,6 @@
         🗺 여정으로 가기
       </router-link>
     </main>
-
-    <AppFooter />
   </div>
 </template>
 
