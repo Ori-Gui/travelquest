@@ -6,6 +6,7 @@ import com.ssafy.travelquest.domain.party.dto.PartyResponse;
 import com.ssafy.travelquest.domain.party.entity.Party;
 import com.ssafy.travelquest.domain.party.entity.PartyMember;
 import com.ssafy.travelquest.domain.party.entity.PartyRoleRequirement;
+import com.ssafy.travelquest.domain.party.entity.PartyStatus;
 import com.ssafy.travelquest.domain.party.repository.PartyMemberRepository;
 import com.ssafy.travelquest.domain.party.repository.PartyRepository;
 import com.ssafy.travelquest.domain.party.repository.PartyRoleRequirementRepository;
@@ -195,4 +196,11 @@ public class PartyService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
+    public void updatePartyStatus(Long partyId, String statusStr) {
+        // enum 으로 변환해 주고
+        PartyStatus newStatus = PartyStatus.valueOf(statusStr);
+        // repository 로 SQL 실행
+        partyRepository.updateStatus(partyId, newStatus);
+    }
 }

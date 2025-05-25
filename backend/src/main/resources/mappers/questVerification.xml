@@ -11,4 +11,10 @@
           (#{questId}, #{partyId}, #{verifiedByUserId}, #{photoUrl}, #{status}, #{verifiedAt})
     </insert>
 
+    <select id="selectVerificationsByParty"
+            resultType="QuestVerification">
+        SELECT *
+        FROM quest_verification
+        WHERE party_id = #{partyId}
+    </select>
 </mapper>
