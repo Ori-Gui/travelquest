@@ -1,9 +1,6 @@
 package com.ssafy.travelquest.domain.party.controller;
 
-import com.ssafy.travelquest.domain.party.dto.CreatePartyRequest;
-import com.ssafy.travelquest.domain.party.dto.PartyInfoResponse;
-import com.ssafy.travelquest.domain.party.dto.PartyResponse;
-import com.ssafy.travelquest.domain.party.dto.RequiredJobResponse;
+import com.ssafy.travelquest.domain.party.dto.*;
 import com.ssafy.travelquest.domain.party.service.PartyRoleRequirementService;
 import com.ssafy.travelquest.domain.party.service.PartyService;
 import com.ssafy.travelquest.global.security.CustomUserDetails;
@@ -90,5 +87,13 @@ public class PartyController {
     public ResponseEntity<List<PartyResponse>> getPartiesByUserId(@PathVariable Long userId) {
         return ResponseEntity.ok(partyService.getPartiesByUserId(userId));
     }
-    
+
+    @PatchMapping("/{partyId}/status")
+    public ResponseEntity<Void> updateStatus(
+            @PathVariable Long partyId,
+            @RequestBody PartyStatusUpdateRequest req
+    ) {
+        partyService.updatePartyStatus(partyId, req.getStatus());
+        return ResponseEntity.ok().build();
+    }
 }

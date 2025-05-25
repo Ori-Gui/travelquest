@@ -2,7 +2,9 @@ package com.ssafy.travelquest.domain.party.repository;
 
 import com.ssafy.travelquest.domain.party.dto.PartyInfoResponse;
 import com.ssafy.travelquest.domain.party.entity.Party;
+import com.ssafy.travelquest.domain.party.entity.PartyStatus;
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -17,4 +19,8 @@ public interface PartyRepository {
 
     List<PartyInfoResponse> findPartyDetailsByDungeonId(Long dungeonId);
     List<Party> findByIds(List<Long> partyIds);
+    void updateStatus(
+            @Param("partyId") Long partyId,
+            @Param("status") PartyStatus status
+    );
 }

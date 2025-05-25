@@ -97,7 +97,7 @@ const fetchProfile = async () => {
     const response = await getUserProfile(rawUser.id);
     profile.value = response.data;
     console.log(response.data);
-    
+
   } catch (err) {
     console.error('프로필 불러오기 실패', err);
   }
