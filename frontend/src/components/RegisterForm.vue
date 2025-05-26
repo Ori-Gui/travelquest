@@ -30,7 +30,7 @@
       placeholder="이름"
       required
     />
-    <input
+    생년월일 <input
       type="date"
       v-model="form.birthdate"
       placeholder="생년월일"
@@ -74,7 +74,7 @@ async function onSubmit() {
       const { data: uploadRes } = await uploadImage(imageForm)
       avatarUrl = uploadRes.url
       console.log(uploadRes);
-      
+
     }
 
     // 2) 회원가입 API 호출
@@ -85,7 +85,7 @@ async function onSubmit() {
       profileImageUrl: avatarUrl
     }
     console.log(payload);
-    
+
     await registerUser(payload)
 
     // 3) 다음 단계로 이동

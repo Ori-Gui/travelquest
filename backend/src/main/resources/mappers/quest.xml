@@ -7,7 +7,7 @@
 	namespace="com.ssafy.travelquest.domain.quest.repository.QuestRepository">
 	<!-- 던전 ID로 퀘스트 목록 조회 -->
 	<select id="findByDungeonId" parameterType="int"
-		resultType="com.ssafy.travelquest.domain.quest.entity.Quest">
+		resultType="Quest">
 		SELECT *
 		FROM quest
 		WHERE dungeon_id = #{dungeonId}
@@ -26,7 +26,7 @@
 	<!-- mappers/party.xml -->
 	<select id="findCompletedDungeonQuestsByUserId"
 			parameterType="map"
-			resultType="com.ssafy.travelquest.domain.quest.entity.Quest">
+			resultType="Quest">
 		SELECT
 			q.id,
 			q.title,
@@ -44,5 +44,11 @@
 		)
 		ORDER BY q.created_at DESC
 			LIMIT #{offset}, #{size}
+	</select>
+	
+	<select id="findById" parameterType="int" resultType="Quest">
+	  SELECT *
+	  FROM quest
+	  WHERE id = #{id}
 	</select>
 </mapper>

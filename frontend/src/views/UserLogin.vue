@@ -16,6 +16,7 @@ import LoginForm from '@/components/LoginForm.vue'
   background-color: #e6fff2;
 }
 .login-container {
+  padding-top: 3rem;
   min-height: 100vh;
 }
 </style>

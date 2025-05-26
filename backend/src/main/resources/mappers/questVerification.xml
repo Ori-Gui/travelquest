@@ -17,4 +17,19 @@
         FROM quest_verification
         WHERE party_id = #{partyId}
     </select>
-</mapper>
+    
+    <!-- findById -->
+	<select id="findById" parameterType="int" resultType="com.ssafy.travelquest.domain.quest.entity.QuestVerification">
+	  SELECT * FROM quest_verification WHERE id = #{id}
+	</select>
+	
+	<!-- deleteById -->
+	<delete id="deleteById" parameterType="int">
+	  DELETE FROM quest_verification WHERE id = #{id}
+	</delete>
+	<update id="updateStatus" parameterType="map">
+	    UPDATE quest_verification
+	    SET status = #{status}
+	    WHERE id = #{id}
+	  </update>
+	</mapper>

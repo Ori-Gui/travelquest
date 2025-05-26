@@ -19,7 +19,7 @@ export function connect(partyId, onMessageReceived) {
   }
 
   stompClient = new Client({
-    webSocketFactory: () => new SockJS('http://localhost:8080/ws/chat'),
+    webSocketFactory: () => new SockJS('http://192.168.205.51:8080/ws/chat'),
     connectHeaders: {
       Authorization: `Bearer ${token}`,
       partyId: partyId.toString(),

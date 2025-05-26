@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { useUserStore } from '@/stores/userStore'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -6,12 +7,12 @@ const router = createRouter({
     {
       path: '/',
       name: 'Main',
-      component: () => import('@/views/DungeonExplorer.vue') // Lazy loaded
+      component: () => import('@/views/DungeonExplorer.vue')
     },
     {
       path: '/map',
       name: 'DungeonExplorer',
-      component: () => import('@/views/DungeonExplorer.vue') // Lazy loaded
+      component: () => import('@/views/DungeonExplorer.vue')
     },
     {
       path: '/login',
@@ -72,7 +73,32 @@ const router = createRouter({
       name: 'PasswordChange',
       component: () => import('@/views/PasswordChange.vue')
     },
-  ],
+    {
+      path: '/admin/parties',
+      name: 'AdminPartyList',
+      component: () => import('@/views/AdminPartyList.vue'),
+      meta: { requiresAdmin: true }
+    },
+    {
+      path: '/admin/parties/:partyId/verification',
+      name: 'AdminPartyVerification',
+      component: () => import('@/components/AdminPartyVerification.vue'),
+      props: route => ({ partyId: Number(route.params.partyId) }),
+      meta: { requiresAdmin: true }
+    }
+  ]
+})
+
+router.beforeEach((to) => {
+  const userStore = useUserStore()
+
+  if (to.matched.some(r => r.meta?.requiresAdmin) && userStore.user?.role !== 'ADMIN') {
+    return { name: 'Login' }
+  }
+
+  if (to.name === 'DungeonExplorer' && userStore.user?.role === 'ADMIN') {
+    return { name: 'AdminPartyList' }
+  }
 })
 
 export default router

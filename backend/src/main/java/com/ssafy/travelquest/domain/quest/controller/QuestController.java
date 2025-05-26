@@ -12,7 +12,7 @@ import com.ssafy.travelquest.domain.quest.service.QuestService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/v1/dungeons/{dungeonId}/quests")
+@RequestMapping("/api/v1")
 @RequiredArgsConstructor
 @Validated
 public class QuestController {
@@ -20,13 +20,21 @@ public class QuestController {
     private final QuestService questService;
 
     /** 던전 ID에 속한 퀘스트 목록 조회 */
-    @GetMapping
+    @GetMapping("/dungeons/{dungeonId}/quests")
     public ResponseEntity<List<Quest>> getQuestsByDungeonId(
-            @PathVariable Integer dungeonId) {
-        List<Quest> quests = questService.getQuestsByDungeonId(dungeonId);
+            @PathVariable Integer dungeonId,
+            @RequestParam(required = false) Long partyId
+    ) {
+        List<Quest> quests = questService.getQuestsByDungeonId(dungeonId, partyId);
         if (quests.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(quests);
+    }
+    
+    @GetMapping("/quests/{questId}")
+    public ResponseEntity<Quest> getQuestById(@PathVariable Integer questId) {
+        Quest quest = questService.getQuestById(questId);
+        return ResponseEntity.ok(quest);
     }
 }

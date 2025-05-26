@@ -199,4 +199,8 @@ public class PartyService {
         // repository 로 SQL 실행
         partyRepository.updateStatus(partyId, newStatus);
     }
+    
+    public List<Party> getAllParties() {
+        return partyRepository.findAll();
+    }
 }

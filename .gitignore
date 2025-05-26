@@ -15,6 +15,7 @@ local.properties
 .recommenders
 
 uploads/images
+scripts/mysql/data/*.sock
 
 # External tool builders
 .externalToolBuilders/

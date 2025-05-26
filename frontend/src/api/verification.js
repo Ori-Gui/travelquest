@@ -12,3 +12,9 @@ export function fetchVerifications(partyId) {
     })
     .then(res => res.data)
 }
+
+export function updateVerificationStatus(id, status) {
+  return axios
+    .patch(`/api/v1/quest-verifications/${id}`, { status })
+    .then(res => res.data)
+}

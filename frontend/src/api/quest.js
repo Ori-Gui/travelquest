@@ -12,3 +12,21 @@ export function fetchQuests(dungeonId, partyId) {
     })
     .then(res => res.data)
 }
+
+/**
+ * 퀘스트 아이디로 퀘스트 상세 정보를 가져온다.
+ */
+export function fetchQuest(questId) {
+  return axios
+    .get(`/api/v1/quests/${questId}`)
+    .then(res => res.data)
+}
+
+/**
+ * 퀘스트 검증 글을 삭제한다.
+ * @param {number} verificationId
+ */
+export function deleteQuestVerification(verificationId) {
+  return axios
+    .delete(`/api/v1/quest-verifications/${verificationId}`)
+}

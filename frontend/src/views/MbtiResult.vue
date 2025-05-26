@@ -23,8 +23,6 @@
 <script setup>
 import { onMounted, ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
-import AppHeader from '@/components/AppHeader.vue'
-import AppFooter from '@/components/AppFooter.vue'
 import axios from '@/lib/axios'
 
 const route = useRoute()
@@ -35,7 +33,7 @@ const result = ref(null)
 
 const jobImagePath = computed(() => {
   if (!result.value) return ''
-  return `/public/images/jobs/${result.value.jobCode.toLowerCase()}.png`
+  return `../../public/images/jobs/${result.value.jobCode.toLowerCase()}.png`
 })
 
 onMounted(async () => {

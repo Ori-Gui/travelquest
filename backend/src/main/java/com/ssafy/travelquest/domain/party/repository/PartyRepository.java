@@ -24,4 +24,5 @@ public interface PartyRepository {
             @Param("partyId") Long partyId,
             @Param("status") PartyStatus status
     );
+    List<Party> findAll();
 }

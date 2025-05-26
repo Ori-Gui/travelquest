@@ -29,7 +29,7 @@ onMounted(() => {
       const kakaoLoginBtn = document.getElementById('kakao-login-btn')
       kakaoLoginBtn.addEventListener('click', () => {
         window.Kakao.Auth.authorize({
-          redirectUri: 'http://localhost:8080/oauth2/authorization/kakao'
+          redirectUri: 'http://192.168.205.51:8080/oauth2/authorization/kakao'
         })
       })
     }
@@ -42,7 +42,7 @@ onMounted(() => {
   naverScript.onload = () => {
     new window.naver.LoginWithNaverId({
       clientId: 'KmZoLWlEVZtPZNHcdUv5',
-      callbackUrl: 'http://localhost:8080/oauth2/authorization/naver',
+      callbackUrl: 'http://192.168.205.51:8080/oauth2/authorization/naver',
       isPopup: false,
       loginButton: {
         color: 'green',
