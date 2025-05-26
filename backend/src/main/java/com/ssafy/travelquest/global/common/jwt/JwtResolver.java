@@ -4,6 +4,7 @@ import java.nio.charset.StandardCharsets;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -21,5 +22,12 @@ public class JwtResolver {
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
+    }
+	
+	public String resolveToken(String header) {
+        if (StringUtils.hasText(header) && header.startsWith("Bearer ")) {
+            return header.substring(7);
+        }
+        return null;
     }
 }

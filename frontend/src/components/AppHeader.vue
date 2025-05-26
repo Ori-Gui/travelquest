@@ -88,8 +88,8 @@ async function navigateTo(tab) {
     if (window.confirm('정말 로그아웃 하시겠습니까?')) {
       try {
         // 로그아웃 액션 (동기/비동기 상관없이 호출)
-        await userStore.logout()
         await logout()
+        await userStore.logout()
         // 상태 초기화 후 로그인 페이지로 이동
         router.push('/login')
       } catch (err) {
