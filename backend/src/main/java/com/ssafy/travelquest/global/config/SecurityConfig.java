@@ -38,7 +38,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(
-                        		"/api/v1/**", // 테스트용 잠깐만
+//                        		"/api/v1/**", // 테스트용 잠깐만
                                 "/api/v1/oauth/**",
                                 "/auth/**",            // 로그인, 토큰 리프레시
                                 "/oauth2/**",          // OAuth 콜백
@@ -68,8 +68,8 @@ public class SecurityConfig {
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowedOrigins(List.of(
-                "http://localhost:5173",
-                "http://localhost:8082"
+                "http://192.168.205.51:5173",
+                "http://192.168.205.51:8080"
         ));
         config.setAllowedMethods(List.of("*"));
         config.setAllowedHeaders(List.of("*"));

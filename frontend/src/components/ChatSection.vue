@@ -52,7 +52,7 @@ const messages = ref([]);
 const messagesContainer = ref(null)
 const props = defineProps({ partyId: { type: [String, Number], required: true } });
 const partyId = props.partyId;
-const limit = 50;
+const limit = 200;
 const loadingMore = ref(false);
 const allLoaded = ref(false);
 

@@ -50,7 +50,7 @@ const jobEmojiMap = {
   RANGER:    '🏹',
   BARD:      '🎵',
   TRICKSTER: '🃏',
-  THIEF:     '🗡️',
+  ROGUE:     '🗡️',
   MECHANIC:  '🔧'
 }
 
@@ -65,7 +65,7 @@ watch(isLoggedIn, async logged => {
     userName.value = res.data.userName
     userJob.value  = res.data.jobClassCode
     console.log(res);
-    
+
   } catch (e) {
     console.error(e)
   }

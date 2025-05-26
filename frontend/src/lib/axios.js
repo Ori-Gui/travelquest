@@ -3,7 +3,7 @@ import axios from 'axios'
 import { useUserStore } from '@/stores/userStore'
 
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:8080',
+  baseURL: 'http://192.168.205.51:8080',
   withCredentials: true
 })
 

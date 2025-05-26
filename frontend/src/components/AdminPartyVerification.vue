@@ -109,7 +109,7 @@ const fullPhotoUrl = computed(() => {
   if (!viewPhotoUrl.value) return ''
   return viewPhotoUrl.value.startsWith('http')
     ? viewPhotoUrl.value
-    : `http://localhost:8080${viewPhotoUrl.value}`
+    : `http://192.168.205.51:8080${viewPhotoUrl.value}`
 })
 
 async function loadData() {

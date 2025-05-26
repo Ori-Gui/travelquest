@@ -19,7 +19,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/images': {
-        target: 'http://localhost:8080',
+        target: 'http://192.168.205.51:8080',
         changeOrigin: true,
         rewrite: (path) => path,
       },
