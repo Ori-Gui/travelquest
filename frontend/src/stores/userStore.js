@@ -14,6 +14,7 @@ export const useUserStore = defineStore('user', {
 
         this.user = {
             id: claims.sub,
+            userName: claims.username,
             role: claims.role,
             registStatus: claims.registStatus,
         }

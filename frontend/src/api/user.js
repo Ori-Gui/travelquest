@@ -3,10 +3,15 @@ import axios from '@/lib/axios'
 
 export const registerUser = async (userData) => {
   return axios.post('/api/v1/user/register', {
-    userName: userData.nickname,
+    userName: userData.userName,
     email: userData.email,
-    birthday: userData.birthdate,
+    birthday: userData.birthday,
+    profileImageUrl: userData.profileImageUrl
   })
+}
+
+export const logout = async() => {
+  return axios.post(`/api/v1/user/logout`);
 }
 
 export function getUserProfile(userId) {

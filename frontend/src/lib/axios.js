@@ -1,7 +1,6 @@
 // lib/axios.js
 import axios from 'axios'
 import { useUserStore } from '@/stores/userStore'
-import Cookies from 'js-cookie'
 
 const axiosInstance = axios.create({
   baseURL: 'http://localhost:8080',
@@ -45,46 +44,45 @@ const processQueue = (error, token = null) => {
 axiosInstance.interceptors.response.use(
   res => res,
   err => {
-    const { config, response } = err
+    const { config, response } = err;
     if (response?.status === 401 && !config._retry) {
       if (isRefreshing) {
         return new Promise((resolve, reject) => {
-          failedQueue.push({ resolve, reject })
+          failedQueue.push({ resolve, reject });
         }).then(token => {
-          config.headers['Authorization'] = `Bearer ${token}`
-          return axiosInstance(config)
-        })
+          config.headers['Authorization'] = `Bearer ${token}`;
+          return axiosInstance(config);
+        });
       }
 
-      config._retry = true
-      isRefreshing = true
+      config._retry = true;
+      isRefreshing = true;
+      const userStore = useUserStore();
 
-      const userStore = useUserStore()
-      return new Promise(async (resolve, reject) => {
-        try {
-          // refreshToken을 쿠키로 보내는 경우라면 body가 비어있어도 됩니다
-          const { data } = await axiosInstance.post(
-            '/auth/refresh'
-          )
-          const newToken = data.accessToken
-          userStore.setAccessToken(newToken)
+      return new Promise((resolve, reject) => {
+        axiosInstance.post('/auth/refresh')
+          .then(({ data }) => {
+            const newToken = data.accessToken;
+            userStore.setAccessToken(newToken);
+            processQueue(null, newToken);
 
-          processQueue(null, newToken)
-
-          config.headers['Authorization'] = `Bearer ${newToken}`
-          resolve(axiosInstance(config))
-        } catch (refreshError) {
-          processQueue(refreshError, null)
-          userStore.logout()  // 로그아웃 처리
-          reject(refreshError)
-        } finally {
-          isRefreshing = false
-        }
-      })
+            config.headers['Authorization'] = `Bearer ${newToken}`;
+            resolve(axiosInstance(config));
+          })
+          .catch(refreshError => {
+            processQueue(refreshError, null);
+            userStore.logout();
+            reject(refreshError);
+          })
+          .finally(() => {
+            isRefreshing = false;
+          });
+      });
     }
 
-    return Promise.reject(err)
+    return Promise.reject(err);
   }
-)
+);
+
 
 export default axiosInstance

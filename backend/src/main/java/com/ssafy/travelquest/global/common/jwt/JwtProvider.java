@@ -37,8 +37,8 @@ public class JwtProvider {
 
     private final @Lazy UserDetailsService userDetailsService;
 
-    public JwtToken provideTokens(Long sub, UserRole role, RegistStatus registStatus) {
-        Claims claims = makeAccessClaims(sub, role, registStatus);
+    public JwtToken provideTokens(Long sub, String username, UserRole role, RegistStatus registStatus) {
+        Claims claims = makeAccessClaims(sub, username, role, registStatus);
         Claims refresh_claims = makeRefreshClaims(sub);
         return JwtToken.builder()
                 .accessToken(generateToken(claims, ACCESS_TIME))
@@ -90,9 +90,10 @@ public class JwtProvider {
         return null;
     }
 
-    private Claims makeAccessClaims(Long sub, UserRole role, RegistStatus registStatus) {
+    private Claims makeAccessClaims(Long sub, String username, UserRole role, RegistStatus registStatus) {
         Claims claims = Jwts.claims();
         claims.setSubject(Long.toString(sub));
+        claims.put("username", username);
         claims.put("role", role.name());
         claims.put("registStatus", registStatus.name());
         return claims;

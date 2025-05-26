@@ -7,6 +7,7 @@ import com.ssafy.travelquest.domain.user.dto.UserProfileEditRequest;
 import com.ssafy.travelquest.domain.user.entity.JobClass;
 import com.ssafy.travelquest.domain.user.entity.MBTI;
 import com.ssafy.travelquest.domain.user.repository.JobClassRepository;
+import com.ssafy.travelquest.domain.user.repository.RefreshTokenRepository;
 import com.ssafy.travelquest.domain.user.utils.MBTICalculator;
 import lombok.RequiredArgsConstructor;
 
@@ -16,12 +17,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ssafy.travelquest.domain.oauth.entity.OAuthProvider;
+import com.ssafy.travelquest.domain.oauth.service.BlackListService;
 import com.ssafy.travelquest.domain.oauth.service.OAuthService;
 import com.ssafy.travelquest.domain.user.entity.User;
 import com.ssafy.travelquest.domain.user.exception.NoSuchUserException;
 import com.ssafy.travelquest.domain.user.repository.UserRepository;
 import com.ssafy.travelquest.global.common.event.CreateUserEvent;
+import com.ssafy.travelquest.global.common.jwt.JwtResolver;
 
+import io.jsonwebtoken.Claims;
+
+import java.time.Duration;
+import java.time.Instant;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,6 +42,9 @@ public class UserService {
     private final JobClassRepository jobClassRepository;
     private final OAuthService oAuthService;
     private final ApplicationEventPublisher publisher;
+    private final BlackListService blackListService;
+    private final JwtResolver jwtResolver;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     @Transactional
     public void createUser(String sub, OAuthProvider provider) {
@@ -134,5 +145,20 @@ public class UserService {
         return userRepository.selectClearedDungeonsByUserId(userId);
     }
 
+	public void logoutUser(String accessToken, String refreshToken) {
+		Claims claims = jwtResolver.getClaims(accessToken);
+		Date expiration = claims.getExpiration();
+
+		// 2) 지금과 만료 시각 간의 차이를 Duration으로 계산
+		Instant now = Instant.now();
+		Instant expInstant = expiration.toInstant();
+		Duration secondsUntilExpiry = Duration.between(now, expInstant);
+		if (secondsUntilExpiry.getSeconds() > 0) {
+		    blackListService.addToBlackList(accessToken, secondsUntilExpiry);
+		}
+		if(!refreshToken.isEmpty()) {
+			refreshTokenRepository.deleteByRefreshToken(refreshToken);
+		}
+	}
 
 }

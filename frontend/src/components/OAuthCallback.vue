@@ -17,6 +17,7 @@ onMounted(() => {
     const registStatus = payload.registStatus
     userStore.setAccessToken(token)
 
+    document.cookie = 'accessToken=; Max-Age=0; path=/;'
 
     if (registStatus === 'NOT_YET') {
       router.push('/register')
