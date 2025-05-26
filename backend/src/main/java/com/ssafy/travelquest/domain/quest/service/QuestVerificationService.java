@@ -49,7 +49,7 @@ public class QuestVerificationService {
                 Files.copy(in, target, StandardCopyOption.REPLACE_EXISTING);
             }
             log.info("▶▶ file saved to {}", target);
-            return "/uploads/" + filename;
+            return "/images/" + filename;
         } catch (IOException e) {
             log.error("파일 저장 실패", e);
             throw new RuntimeException("파일 저장 실패", e);

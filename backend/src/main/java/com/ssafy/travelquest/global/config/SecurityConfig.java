@@ -38,7 +38,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(
-                        		"/api/v1/**", // 테스트용 잠깐만
+//                        		"/api/v1/**", // 테스트용 잠깐만
                                 "/api/v1/oauth/**",
                                 "/auth/**",            // 로그인, 토큰 리프레시
                                 "/oauth2/**",          // OAuth 콜백
@@ -71,7 +71,7 @@ public class SecurityConfig {
                 "http://localhost:5173",
                 "http://localhost:8082"
         ));
-        config.setAllowedMethods(List.of("GET","POST","PUT","DELETE","OPTIONS"));
+        config.setAllowedMethods(List.of("GET","POST","PATCH","DELETE","OPTIONS","PATCH"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);
 

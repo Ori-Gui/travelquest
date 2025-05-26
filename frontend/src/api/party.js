@@ -53,7 +53,7 @@ export const getMyParties = async (userId) => {
 export async function updatePartyStatus(partyId, status) {
   const r = await axios.patch(
         `/api/v1/party/${partyId}/status`,
-        { status: 'IN_PROGRESS' }
+        { status }
     )
     return r.data
 }

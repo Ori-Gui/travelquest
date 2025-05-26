@@ -18,8 +18,7 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      // /uploads/** 요청을 백엔드 8080으로 포워딩
-      '/uploads': {
+      '/images': {
         target: 'http://localhost:8080',
         changeOrigin: true,
         rewrite: (path) => path,
