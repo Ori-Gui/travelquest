@@ -141,5 +141,10 @@
 	    JOIN party_member pm ON p.id = pm.party_id
 	    WHERE pm.user_id = #{userId}
 	</select>
+	
+	<select id="findAll" resultMap="partyResultMap">
+	    SELECT *
+	    FROM party
+	</select>
 
 </mapper>

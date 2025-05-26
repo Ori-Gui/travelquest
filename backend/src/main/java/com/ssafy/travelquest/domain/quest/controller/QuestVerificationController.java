@@ -13,6 +13,7 @@ import com.ssafy.travelquest.domain.quest.service.QuestVerificationService;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/quest-verifications")
@@ -58,5 +59,21 @@ public class QuestVerificationController {
     ) {
         List<QuestVerificationInfoDto> infos = service.getVerificationsByParty(partyId);
         return ResponseEntity.ok(infos);
+    }
+    
+    @DeleteMapping("/{verificationId}")
+    public ResponseEntity<Void> deleteVerification(@PathVariable Integer verificationId) {
+    	service.deleteVerification(verificationId);
+        return ResponseEntity.ok().build();
+    }
+    
+    @PatchMapping("/{verificationId}")
+    public ResponseEntity<Void> updateStatus(
+            @PathVariable Integer verificationId,
+            @RequestBody Map<String, String> body   // 또는 별도 DTO
+    ) {
+        String status = body.get("status");
+        service.updateVerificationStatus(verificationId, status);
+        return ResponseEntity.ok().build();
     }
 }

@@ -1,6 +1,7 @@
 package com.ssafy.travelquest.domain.quest.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -17,4 +18,5 @@ public interface QuestRepository {
             @Param("offset") int offset,
             @Param("size") int size
     );
+    Optional<Quest> findById(@Param("id") Integer id);
 }

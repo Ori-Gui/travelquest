@@ -1,6 +1,7 @@
 package com.ssafy.travelquest.domain.party.controller;
 
 import com.ssafy.travelquest.domain.party.dto.*;
+import com.ssafy.travelquest.domain.party.entity.Party;
 import com.ssafy.travelquest.domain.party.service.PartyRoleRequirementService;
 import com.ssafy.travelquest.domain.party.service.PartyService;
 import com.ssafy.travelquest.global.security.CustomUserDetails;
@@ -95,5 +96,14 @@ public class PartyController {
     ) {
         partyService.updatePartyStatus(partyId, req.getStatus());
         return ResponseEntity.ok().build();
+    }
+    
+    @GetMapping
+    public ResponseEntity<List<Party>> getAllParties() {
+        List<Party> list = partyService.getAllParties();
+        if (list.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(list);
     }
 }

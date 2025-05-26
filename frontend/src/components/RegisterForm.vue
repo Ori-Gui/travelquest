@@ -4,7 +4,7 @@
 
     <input type="text" v-model="form.email" placeholder="이메일" required />
     <input type="text" v-model="form.nickname" placeholder="이름" required />
-    <input type="date" v-model="form.birthdate" placeholder="생년월일" required />
+    생년월일 <input type="date" v-model="form.birthdate" placeholder="생년월일" required />
 
     <button type="submit" class="submit-button">직업 검사</button>
   </form>

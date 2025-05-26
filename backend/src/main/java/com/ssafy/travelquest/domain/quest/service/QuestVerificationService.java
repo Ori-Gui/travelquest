@@ -12,6 +12,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -78,6 +79,23 @@ public class QuestVerificationService {
                         v.getVerifiedAt()
                 ))
                 .collect(Collectors.toList());
+    }
+    
+    public void deleteVerification(Integer id) {
+        // 1) 존재 여부 체크(optional)
+        repo.findById(id)
+            .orElseThrow(() -> new NoSuchElementException("Verification not found: " + id));
+        // 2) 삭제
+        repo.deleteById(id);
+    }
+    
+    public void updateVerificationStatus(Integer id, String statusStr) {
+        QuestVerificationStatus status = QuestVerificationStatus.valueOf(statusStr);
+        // 1) 존재 확인(optional)
+        repo.findById(id)
+          .orElseThrow(() -> new NoSuchElementException("검증 글 없음: " + id));
+        // 2) 상태 변경
+        repo.updateStatus(id, status);
     }
 }
 

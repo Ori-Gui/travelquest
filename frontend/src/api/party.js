@@ -57,3 +57,8 @@ export async function updatePartyStatus(partyId, status) {
     )
     return r.data
 }
+
+export const getAllParties = async () => {
+  const response = await axios.get('/api/v1/party');
+  return response.data;
+}
