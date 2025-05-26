@@ -2,7 +2,7 @@
   <section class="chat-box">
     <div class="chat-title">파티 채팅</div>
     <div class="chat-messages" ref="messagesContainer" @scroll.passive="onScrollTop">
-      <template v-for="(msg, idx) in messages" :key="msg.id">
+      <template v-for="(msg) in messages" :key="msg.id">
         <!-- 시스템 메시지 -->
         <div v-if="msg.system" class="system-message">
           {{ msg.content }}
@@ -42,7 +42,7 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, onBeforeUnmount, onMounted, nextTick, defineProps } from 'vue';
+import { ref, computed, watch, onBeforeUnmount, nextTick, defineProps } from 'vue';
 import { getChatMessages } from '@/api/chat';
 import { useUserStore } from '@/stores/userStore';
 import { connect, disconnect, sendMessage as sendToServer } from '@/service/chatService';

@@ -62,8 +62,7 @@ import { getUserProfile } from '@/api/user';
 import Achivements from '@/components/AchievementsSection.vue';
 import PartyList from '@/components/PartyLinkSection.vue';
 import MyQuestion from '@/components/MyQuestion.vue';
-import Setting from '@/components/Setting.vue';
-import { getImageUrl } from '@/api/image';
+import Setting from '@/components/SettingSection.vue';
 
 // 기본 아바타 URL 생성 (Vite asset import)
 const defaultAvatar = new URL('../assets/default-avatar.png', import.meta.url).href;
@@ -89,7 +88,6 @@ const userReady = computed(() => Boolean(rawUser && rawUser.id));
 
 // 서버에서 받아올 프로필 데이터
 const profile = ref(null);
-const missions = ref([]);
 
 // 프로필을 가져오는 함수 분리
 const fetchProfile = async () => {
@@ -130,9 +128,6 @@ const jobEmojiMap = {
   BARD: '🎵', TRICKSTER: '🃏', WIZARD: '🔮', THIEF: '🗡️', MECHANIC: '🔧'
 };
 function getJobEmoji(job) { return jobEmojiMap[job] || '🎯'; }
-
-// 프로필 수정 탭 이동
-function onEditProfile() { activeTab.value = 'settings'; }
 
 const animatedWidth = ref('0%');
 onMounted(() => {
