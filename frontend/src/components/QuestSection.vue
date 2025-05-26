@@ -85,6 +85,8 @@ async function loadData() {
     quests.value = qs
     // Map 생성
     submittedMap.value = new Map(vs.map(v => [v.questId, v.photoUrl]))
+    console.log(submittedMap);
+    
   } catch (e) {
     console.error('데이터 로드 실패', e)
   }

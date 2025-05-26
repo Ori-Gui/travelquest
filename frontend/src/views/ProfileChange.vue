@@ -2,6 +2,23 @@
   <div class="profile-change-container">
     <h2 class="title">프로필 수정</h2>
     <form @submit.prevent="onSubmit" class="profile-form">
+      <!-- 아바타 업로드 -->
+      <div class="form-group avatar-group">
+        <label>아바타</label>
+        <!-- 미리보기: 파일 선택 위에 표시 -->
+        <div v-if="previewUrl" class="avatar-preview">
+          <img :src="previewUrl" alt="Avatar Preview" />
+        </div>
+        <input
+          id="avatar"
+          type="file"
+          accept="image/*"
+          class="file-input"
+          @change="onFileChange"
+        />
+        <label for="avatar" class="file-btn">파일 선택</label>
+      </div>
+
       <!-- 닉네임 -->
       <div class="form-group">
         <label for="userName">닉네임</label>
@@ -33,23 +50,6 @@
           type="date"
           required
         />
-      </div>
-
-      <!-- 아바타 업로드 -->
-      <div class="form-group avatar-group">
-        <label>아바타</label>
-        <!-- 미리보기: 파일 선택 위에 표시 -->
-        <div v-if="previewUrl" class="avatar-preview">
-          <img :src="previewUrl" alt="Avatar Preview" />
-        </div>
-        <input
-          id="avatar"
-          type="file"
-          accept="image/*"
-          class="file-input"
-          @change="onFileChange"
-        />
-        <label for="avatar" class="file-btn">파일 선택</label>
       </div>
 
       <!-- 버튼 그룹 -->
