@@ -9,7 +9,7 @@
             <h3 class="party-title">{{ party.title }}</h3>
             <p class="party-status">상태: {{ party.status }}</p>
           </div>
-          <button class="btn-go" @click="goToParty(party.partyId)">이동</button>
+          <button class="btn-go" @click="goToParty(party.dungeonId, party.partyId)">이동</button>
         </li>
       </ul>
     </div>
@@ -46,8 +46,8 @@ async (userId) => {
 { immediate: true }
 );
 
-function goToParty(partyId) {
-  router.push(`/party/${partyId}`) // 이 경로는 실제 라우터에 맞게 조정
+function goToParty(dungeonId, partyId) {
+  router.push(`/dungeon/${dungeonId}/party/${partyId}`) // 이 경로는 실제 라우터에 맞게 조정
 }
 </script>
 

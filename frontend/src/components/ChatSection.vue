@@ -13,7 +13,6 @@
           v-else
           class="chat-message"
           :class="{ me: Number(msg.userId) === currentUserId }"
-          :ref="idx === messages.length - 1 ? setLastMessageRef : null"
         >
           <!-- 다른 사람 메시지에만 프로필 사진 표시 -->
           <img
@@ -50,7 +49,7 @@ import { connect, disconnect, sendMessage as sendToServer } from '@/service/chat
 
 const input = ref('');
 const messages = ref([]);
-const lastMessage = ref(null);
+const messagesContainer = ref(null)
 const props = defineProps({ partyId: { type: [String, Number], required: true } });
 const partyId = props.partyId;
 const limit = 50;
@@ -60,18 +59,17 @@ const allLoaded = ref(false);
 const userStore = useUserStore();
 const currentUserId = computed(() => Number(userStore.user?.id));
 
-// 마지막 메시지 요소에 scrollIntoView
-function setLastMessageRef(el) {
-  lastMessage.value = el;
-}
-
 // 초기 메시지 로드
 async function fetchInitialMessages() {
   try {
     const before = new Date().toISOString();
     messages.value = await getChatMessages(partyId, before, limit);
     await nextTick();
-    lastMessage.value?.scrollIntoView({ behavior: 'smooth' });
+    const el = messagesContainer.value
+    if (el) {
+      // 맨 아래로 부드럽게 스크롤
+      el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' })
+    }
   } catch (err) {
     console.error('초기 메시지 로드 실패', err);
   }
@@ -91,11 +89,16 @@ async function onScrollTop(e) {
   }
 }
 
-// WebSocket 메시지 핸들러
-function handleMessage(message) {
-  messages.value.push(message);
-  nextTick(() => lastMessage.value?.scrollIntoView({ behavior: 'smooth' }));
-}
+ // WebSocket 메시지 핸들러
+ function handleMessage(message) {
+   messages.value.push(message);
+   nextTick(() => {
+    const el = messagesContainer.value;
+    if (el) {
+      el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' });
+    }
+   });
+ }
 
 // STOMP 연결
 function tryConnect() {
@@ -231,6 +234,7 @@ function sendMessage() {
   border-radius: 8px;
   border: 1px solid #ccc;
   font-size: 0.9rem;
+  align-items: center;
 }
 
 .send-button {
@@ -243,6 +247,8 @@ function sendMessage() {
   color: white;
   cursor: pointer;
   transition: background 0.2s;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .send-button:hover {

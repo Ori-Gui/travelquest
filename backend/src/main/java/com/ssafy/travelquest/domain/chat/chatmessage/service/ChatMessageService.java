@@ -130,6 +130,7 @@ public class ChatMessageService {
                     User u = userMap.get(msg.getUserId());
                     if (u != null) {
                         builder.name(u.getUserName())
+                        .profileImage(u.getProfileImage())
                                 .job(u.getJobClassCode());
                     } else {
                         builder.name("알수없음")
