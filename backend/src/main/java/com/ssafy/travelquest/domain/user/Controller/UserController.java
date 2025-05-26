@@ -13,12 +13,16 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+
+import org.apache.hc.core5.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.web.authentication.rememberme.InvalidCookieException;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.http.HttpRequest;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -41,21 +45,37 @@ public class UserController {
     }
     
     @PostMapping("/logout")
-    public ResponseEntity<Void> logoutUser(HttpServletRequest request
-    		, @AuthenticationPrincipal CustomUserDetails userDetails) {
-    	String accessToken = Arrays.stream(Optional.ofNullable(request.getCookies()).orElse(new Cookie[0]))
-    	        .filter(c -> "accessToken".equals(c.getName()))
-    	        .findFirst()
-    	        .map(Cookie::getValue)
-    	        .orElseThrow(() -> new InvalidCookieException("올바르지 않은 쿠키입니다."));
-    	String refreshToken = Arrays.stream(Optional.ofNullable(request.getCookies()).orElse(new Cookie[0]))
-    	        .filter(c -> "refreshToken".equals(c.getName()))
-    	        .findFirst()
-    	        .map(Cookie::getValue)
-    	        .orElseThrow(() -> new InvalidCookieException("올바르지 않은 쿠키입니다."));
-    	userService.logoutUser(accessToken, refreshToken);
-    	return ResponseEntity.ok().build();
+    public ResponseEntity<Void> logoutUser(HttpServletRequest request,
+        @CookieValue(value = "refreshToken", required = false) String refreshToken,
+        @AuthenticationPrincipal CustomUserDetails userDetails
+    ) {
+    	
+    	String accessToken = request.getHeader(HttpHeaders.AUTHORIZATION);
+    	
+        if (accessToken == null || refreshToken == null) {
+            // 쿠키가 없으면 401 혹은 400으로 응답
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        userService.logoutUser(accessToken, refreshToken);
+
+        // 클라이언트 쿠키 만료용 Set-Cookie 헤더
+        ResponseCookie clearAccess = ResponseCookie.from("accessToken", "")
+            .path("/")
+            .httpOnly(true)
+            .maxAge(0)
+            .build();
+        ResponseCookie clearRefresh = ResponseCookie.from("refreshToken", "")
+            .path("/")
+            .httpOnly(true)
+            .maxAge(0)
+            .build();
+
+        return ResponseEntity.ok()
+            .header(HttpHeaders.SET_COOKIE, clearAccess.toString(), clearRefresh.toString())
+            .build();
     }
+
 
     @PostMapping("/mbti")
     public ResponseEntity<MbtiResultResponse> registMbti(@AuthenticationPrincipal CustomUserDetails userDetails, @RequestBody List<MbtiAnswer> answers) {
@@ -70,7 +90,7 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<UserProfileResponse> getUser(@PathVariable Long userId) {
+    public ResponseEntity<UserProfileResponse> getUser(@PathVariable Long userId, HttpServletRequest request) {
         User user = userService.getUser(userId);
         if (user == null) {
             throw new NoSuchUserException("User not found");

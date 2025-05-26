@@ -146,7 +146,7 @@ public class UserService {
     }
 
 	public void logoutUser(String accessToken, String refreshToken) {
-		Claims claims = jwtResolver.getClaims(accessToken);
+		Claims claims = jwtResolver.getClaims(jwtResolver.resolveToken(accessToken));
 		Date expiration = claims.getExpiration();
 
 		// 2) 지금과 만료 시각 간의 차이를 Duration으로 계산
