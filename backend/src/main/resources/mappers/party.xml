@@ -134,5 +134,12 @@
         SET status = #{status}
         WHERE id = #{partyId}
     </update>
+    
+    <select id="findByUserId" resultMap="partyResultMap" parameterType="long">
+	    SELECT p.*
+	    FROM party p
+	    JOIN party_member pm ON p.id = pm.party_id
+	    WHERE pm.user_id = #{userId}
+	</select>
 
 </mapper>

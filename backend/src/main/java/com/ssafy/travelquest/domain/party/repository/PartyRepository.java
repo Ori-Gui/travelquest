@@ -16,6 +16,7 @@ public interface PartyRepository {
     void delete(Long id);
 
     List<Party> findByDungeonId(Long dungeonId);
+    List<Party> findByUserId(Long userId);
 
     List<PartyInfoResponse> findPartyDetailsByDungeonId(Long dungeonId);
     List<Party> findByIds(List<Long> partyIds);

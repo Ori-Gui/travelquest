@@ -184,13 +184,7 @@ public class PartyService {
 
     @Transactional(readOnly = true)
     public List<PartyResponse> getPartiesByUserId(Long userId) {
-        List<PartyMember> memberList = partyMemberRepository.findByUserId(userId);
-
-        List<Long> partyIds = memberList.stream()
-                .map(PartyMember::getPartyId)
-                .collect(Collectors.toList());
-
-        List<Party> result = partyRepository.findByIds(partyIds);
+    	List<Party> result = partyRepository.findByUserId(userId);
 
         // TODO: Party → PartyResponse 변환 후 반환
         return result.stream()
