@@ -64,10 +64,12 @@ watch(isLoggedIn, async logged => {
     const res = await getUserProfile(userStore.user.id)
     userName.value = res.data.userName
     userJob.value  = res.data.jobClassCode
+    console.log(res);
+    
   } catch (e) {
     console.error(e)
   }
-})
+}, {immediate: true})
 
 const router = useRouter();
 const isMenuOpen = ref(false);
