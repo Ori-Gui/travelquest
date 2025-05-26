@@ -89,8 +89,8 @@ onMounted(async () => {
     form.userName = data.userName
     form.email = data.email
     form.birthday = data.birthday ? data.birthday.slice(0, 10) : ''
-    form.avatarUrl = data.avatarUrl
-    previewUrl.value = data.avatarUrl
+    form.avatarUrl = data.profileImageUrl
+    previewUrl.value = data.profileImageUrl
   } catch (err) {
     console.error('프로필 로드 실패', err)
   }

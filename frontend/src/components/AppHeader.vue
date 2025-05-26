@@ -23,9 +23,7 @@
     <aside v-if="isMenuOpen" class="side-menu">
       <ul>
         <li @click="navigateTo('me')">마이페이지</li>
-        <li @click="navigateTo('quest')">퀘스트</li>
-        <li @click="navigateTo('party')">파티</li>
-        <li @click="navigateTo('chat')">채팅</li>
+        <li @click="navigateTo('logout')">로그아웃</li>
         <li @click="closeMenu">닫기</li>
       </ul>
     </aside>
@@ -38,7 +36,7 @@
 import { ref, computed, watch } from 'vue'
 import { useUserStore } from '@/stores/userStore'
 import { useRouter } from 'vue-router';
-import { getUserProfile }  from '@/api/user'
+import { getUserProfile, logout }  from '@/api/user'
 
 const userStore  = useUserStore()
 const isLoggedIn = computed(() => !!userStore.user?.id)
@@ -82,12 +80,23 @@ function closeMenu() {
   isMenuOpen.value = false;
 }
 
-function navigateTo(tab) {
+async function navigateTo(tab) {
   // adjust routes as needed
   if (tab === 'me') router.push('/me');
-  else if (tab === 'quest') router.push('/quest');
-  else if (tab === 'party') router.push('/party');
-  else if (tab === 'chat') router.push('/chat');
+  else if (tab === 'logout') {
+    // 로그아웃 확인 대화상자
+    if (window.confirm('정말 로그아웃 하시겠습니까?')) {
+      try {
+        // 로그아웃 액션 (동기/비동기 상관없이 호출)
+        await userStore.logout()
+        await logout()
+        // 상태 초기화 후 로그인 페이지로 이동
+        router.push('/login')
+      } catch (err) {
+        console.error('로그아웃 실패:', err)
+      }
+    }
+  }
   closeMenu();
 
 }

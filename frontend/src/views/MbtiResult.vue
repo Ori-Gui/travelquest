@@ -35,7 +35,7 @@ const result = ref(null)
 
 const jobImagePath = computed(() => {
   if (!result.value) return ''
-  return `/images/jobs/${result.value.jobCode.toLowerCase()}.png`
+  return `/public/images/jobs/${result.value.jobCode.toLowerCase()}.png`
 })
 
 onMounted(async () => {
