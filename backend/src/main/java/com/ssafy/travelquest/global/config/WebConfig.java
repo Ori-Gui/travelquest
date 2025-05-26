@@ -14,13 +14,11 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        // 1) /static/** 은 classpath:/static/ 으로
         registry.addResourceHandler("/static/**")
                 .addResourceLocations("classpath:/static/");
 
-        // 2) /uploads/** 은 C:/travelquest/uploads 으로
-        registry.addResourceHandler("/uploads/**")
-                .addResourceLocations("file:///" + uploadDir.replace("\\","/") + "/");
+        registry.addResourceHandler("images/**")           // 클라이언트 요청 경로
+        .addResourceLocations("file:" + uploadDir + "/");  // 실제 파일 시스템 경로
     }
 
     @Override
