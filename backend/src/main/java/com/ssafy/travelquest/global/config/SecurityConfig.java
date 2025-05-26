@@ -71,7 +71,7 @@ public class SecurityConfig {
                 "http://localhost:5173",
                 "http://localhost:8082"
         ));
-        config.setAllowedMethods(List.of("GET","POST","PUT","DELETE","OPTIONS"));
+        config.setAllowedMethods(List.of("*"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);
 

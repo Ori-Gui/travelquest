@@ -75,4 +75,27 @@
         FROM party_member
         WHERE user_id = #{userId}
     </select>
+    
+    <!-- 결과 매핑 -->
+    <resultMap id="partyMemberWithUserResultMap" type="com.ssafy.travelquest.domain.party.dto.PartyMemberInfo">
+        <id property="id" column="id"/>
+        <result property="partyId" column="party_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="jobClassCode" column="job_class_code"/>
+        <result property="profileImage" column="profile_image"/>
+        <result property="joinedAt" column="joined_at"/>
+    </resultMap>
+
+    <!-- 조회 쿼리 -->
+    <select id="findPartyMembersWithUser" parameterType="long" resultMap="partyMemberWithUserResultMap">
+        SELECT pm.id AS id,
+               pm.party_id AS party_id,
+               pm.user_id AS user_id,
+               pm.job_code AS job_class_code,
+               u.profile_image AS profile_image,
+               pm.joined_at AS joined_at
+        FROM party_member pm
+        LEFT JOIN user u ON pm.user_id = u.id
+        WHERE pm.party_id = #{partyId}
+    </select>
 </mapper>

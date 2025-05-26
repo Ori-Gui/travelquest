@@ -99,6 +99,7 @@ public class PartyService {
         return parties.stream()
                 .map(party -> PartyResponse.of(
                         party.getId(),
+                        party.getDungeonId(),
                         party.getTitle(),
                         party.getDescription(),
                         party.getStatus(),
@@ -112,6 +113,7 @@ public class PartyService {
         Party party = partyRepository.findById(partyId);
         return PartyResponse.of(
                 party.getId(),
+                party.getDungeonId(),
                 party.getTitle(),
                 party.getDescription(),
                 party.getStatus(),
