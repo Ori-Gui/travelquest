@@ -5,6 +5,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.time.Duration;
+import java.util.Set;
 
 @Repository
 @RequiredArgsConstructor
@@ -31,4 +32,5 @@ public class RefreshTokenDao implements RefreshTokenRepository {
         String key = REFRESH_KEY + ":" + refreshToken;
         redisTemplate.delete(key);
     }
+
 }

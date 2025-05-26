@@ -16,10 +16,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.web.authentication.rememberme.InvalidCookieException;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.util.WebUtils;
@@ -35,6 +38,23 @@ public class UserController {
     public ResponseEntity<Void> registUser(@AuthenticationPrincipal CustomUserDetails userDetails, @RequestBody UserProfileEditRequest userProfileEditRequest) {
         userService.editUserProfile(userDetails.getId(), userProfileEditRequest);
         return ResponseEntity.ok().build();
+    }
+    
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logoutUser(HttpServletRequest request
+    		, @AuthenticationPrincipal CustomUserDetails userDetails) {
+    	String accessToken = Arrays.stream(Optional.ofNullable(request.getCookies()).orElse(new Cookie[0]))
+    	        .filter(c -> "accessToken".equals(c.getName()))
+    	        .findFirst()
+    	        .map(Cookie::getValue)
+    	        .orElseThrow(() -> new InvalidCookieException("올바르지 않은 쿠키입니다."));
+    	String refreshToken = Arrays.stream(Optional.ofNullable(request.getCookies()).orElse(new Cookie[0]))
+    	        .filter(c -> "refreshToken".equals(c.getName()))
+    	        .findFirst()
+    	        .map(Cookie::getValue)
+    	        .orElseThrow(() -> new InvalidCookieException("올바르지 않은 쿠키입니다."));
+    	userService.logoutUser(accessToken, refreshToken);
+    	return ResponseEntity.ok().build();
     }
 
     @PostMapping("/mbti")
