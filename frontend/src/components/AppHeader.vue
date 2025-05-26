@@ -124,11 +124,11 @@ async function navigateTo(tab) {
 
 .btn-login {
   padding: 0.3rem 0.8rem;
-  background: #8cf8a0e5;
-  border: 2px solid #444;
-  border-radius: 6px;
+  background: #6cd395;
+  border: 1px solid #ffffff;
+  border-radius: 9px;
   font-size: 0.9rem;
-  color: #444;
+  color: #ffffff;
   text-decoration: none;
 }
 

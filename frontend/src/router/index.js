@@ -89,14 +89,14 @@ const router = createRouter({
   ]
 })
 
-router.beforeEach((to, from) => {
+router.beforeEach((to) => {
   const userStore = useUserStore()
 
   if (to.matched.some(r => r.meta?.requiresAdmin) && userStore.user?.role !== 'ADMIN') {
     return { name: 'Login' }
   }
 
-  if (to.name === 'Main' && userStore.user?.role === 'ADMIN') {
+  if (to.name === 'DungeonExplorer' && userStore.user?.role === 'ADMIN') {
     return { name: 'AdminPartyList' }
   }
 })
