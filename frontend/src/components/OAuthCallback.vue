@@ -1,3 +1,6 @@
+<template>
+  로딩중..
+</template>
 <script setup>
 import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
