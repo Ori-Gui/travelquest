@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.travelquest.domain.quest.repository.QuestVerificationRepository">
+
+    <insert id="insertQuestVerification"
+            parameterType="QuestVerification"
+            useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO quest_verification
+          (quest_id, party_id, verified_by_user_id, photo_url, status, verified_at)
+        VALUES
+          (#{questId}, #{partyId}, #{verifiedByUserId}, #{photoUrl}, #{status}, #{verifiedAt})
+    </insert>
+
+    <select id="selectVerificationsByParty"
+            resultType="QuestVerification">
+        SELECT *
+        FROM quest_verification
+        WHERE party_id = #{partyId}
+    </select>
+</mapper>

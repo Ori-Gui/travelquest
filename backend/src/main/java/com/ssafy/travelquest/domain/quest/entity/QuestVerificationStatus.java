@@ -1,6 +1,7 @@
 package com.ssafy.travelquest.domain.quest.entity;
 
-public enum QuestStatus {
+public enum QuestVerificationStatus {
+	FAIL,
 	PENDING,
-	EXPIRATION
+	COMPLETED
 }
