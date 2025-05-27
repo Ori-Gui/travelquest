@@ -67,6 +67,7 @@ import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/userStore'
 import { getUserProfile, updateUserProfile } from '@/api/user'
 import { uploadImage } from '@/api/image'  // 이미지 업로드 API
+import { refreshToken } from '@/api/auth'
 
 const router = useRouter()
 const userStore = useUserStore()
@@ -124,7 +125,10 @@ async function onSubmit() {
       profileImageUrl: avatarPath
     }
     await updateUserProfile(userId, payload)
-    router.back()
+    await refreshToken()
+    router.push('/me').then(() => {
+    window.location.reload();
+  });
   } catch (err) {
     console.error('프로필 업데이트 실패', err)
     alert('프로필 수정에 실패했습니다. 다시 시도해주세요.')

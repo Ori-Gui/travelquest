@@ -40,7 +40,8 @@
         v-else-if="activeTab === 'info' && isInProgress"
         class="start-exploration started"
       >
-        <!-- ... -->
+        <div class="checkmark">✔️</div>
+        <p>던전 탐험이 시작되었습니다! 퀘스트 탭을 확인하여 퀘스트를 수행해주세요</p>
       </section>
 
       <!-- 완료 -->
@@ -48,7 +49,8 @@
         v-else-if="activeTab === 'info' && isCompleted"
         class="start-exploration completed"
       >
-        <!-- ... -->
+        <div class="checkmark">🏆</div>
+        <p>축하합니다! 던전 탐험을 성공하였습니다.</p>
       </section>
 
       <!-- 실패 -->
@@ -56,7 +58,8 @@
         v-else-if="activeTab === 'info' && isFailed"
         class="start-exploration failed"
       >
-        <!-- ... -->
+        <div class="checkmark">💀</div>
+        <p>아쉽지만 던전 탐험에 실패하였습니다.</p>
       </section>
 
       <!-- 퀘스트, 채팅, 파티 섹션 -->
@@ -226,5 +229,18 @@ onMounted(async () => {
 .start-exploration.started p {
   font-weight: bold;
   color: #27ae60;
+}
+
+.start-exploration.completed {
+  border-color: #f1c40f;
+}
+.start-exploration.completed .checkmark {
+  color: #f39c12;
+}
+.start-exploration.failed {
+  border-color: #e74c3c;
+}
+.start-exploration.failed .checkmark {
+  color: #c0392b;
 }
 </style>
