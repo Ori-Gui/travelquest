@@ -35,6 +35,16 @@ public class User {
                 .createdAt(LocalDateTime.now())
                 .build();
     }
+    
+    public static User regist(User user, UserProfileEditRequest request) {
+        return user.toBuilder()
+                .userName(request.userName())
+                .email(request.email())
+                .profileImage(request.profileImageUrl())
+                .birthday(request.birthday())
+                .registStatus(RegistStatus.IN_PROGRESS)
+                .build();
+    }
 
     public static User update(User user, UserProfileEditRequest request) {
         return user.toBuilder()
@@ -42,7 +52,6 @@ public class User {
                 .email(request.email())
                 .profileImage(request.profileImageUrl())
                 .birthday(request.birthday())
-                .registStatus(RegistStatus.IN_PROGRESS)
                 .build();
     }
 

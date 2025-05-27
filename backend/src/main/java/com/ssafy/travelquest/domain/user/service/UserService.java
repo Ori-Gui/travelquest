@@ -88,6 +88,18 @@ public class UserService {
     public List<User> list() {
         return userRepository.findAll();
     }
+    
+    @Transactional
+    public void registUser(Long userId, UserProfileEditRequest userProfileEditRequest) {
+        User user = userRepository.findById(userId);
+        if (user == null) {
+            throw new NoSuchUserException("사용자를 찾을 수 없음");
+        }
+
+        User updateUser = User.regist(user, userProfileEditRequest);
+
+        userRepository.update(updateUser);
+    }
 
     @Transactional
     public void editUserProfile(Long userId, UserProfileEditRequest userProfileEditRequest) {
