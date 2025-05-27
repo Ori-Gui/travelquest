@@ -120,8 +120,8 @@ const progressPercent = computed(() => Math.floor(Math.random() * 100));
 
 // 직업 매핑
 const jobNameMap = {
-  WARRIOR: '전사', MAGE: '마법사', HEALER: '치유사', RANGER: '궁수',
-  BARD: '음유시인', TRICKSTER: '트릭스터', WIZARD: '마법사', THIEF: '도적', MECHANIC: '기계공'
+  WARRIOR: '전사', MAGE: '마법사', HEALER: '힐러', RANGER: '궁수',
+  BARD: '바드', TRICKSTER: '트릭스터', WIZARD: '마법사', THIEF: '도적', MECHANIC: '메카닉'
 };
 const jobEmojiMap = {
   WARRIOR: '🛡️', MAGE: '🪄', HEALER: '💉', RANGER: '🏹',

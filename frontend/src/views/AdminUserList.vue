@@ -29,7 +29,7 @@
       </thead>
       <tbody>
         <tr
-          v-for="user in filteredUsers"
+          v-for="user in  filteredUsers.filter(u => u.role !== 'ADMIN')"
           :key="user.id"
         >
           <td>{{ user.id }}</td>
@@ -80,8 +80,8 @@ async function loadUsers() {
 const filteredUsers = computed(() => {
   const q = searchQuery.value.trim().toLowerCase()
   if (!q) return users.value
-  return users.value.filter(u =>
-    u.userName.toLowerCase().includes(q)
+  return users.value
+  .filter(u => u.userName.toLowerCase().includes(q)
   )
 })
 
