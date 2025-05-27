@@ -29,3 +29,14 @@ export function getClearedDungeons(userId) {
 export function updateUserProfile(userId, payload) {
   return axios.put(`/api/v1/user/${userId}`, payload);
 }
+
+// 전체 유저 조회 (관리자)
+export const getAllUsers = async () => {
+  const response = await axios.get('/api/v1/user')
+  return response.data
+}
+
+// 특정 유저 삭제 (관리자)
+export const deleteUser = async (userId) => {
+  await axios.delete(`/api/v1/user/${userId}`)
+}

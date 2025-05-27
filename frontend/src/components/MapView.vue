@@ -117,16 +117,36 @@ function updateMarkers(list) {
         if (infoWindow) infoWindow.close()
         // InfoWindow 콘텐츠
         const content = `
-          <div style="padding:8px; width:14rem; font-size:0.8rem;">
-            <strong>${item.title}</strong><br/>
-            주여행지: <strong>${item.first}</strong><br/>
-            시작: ${item.startDate}<br/>
-            종료: ${item.endDate}<br/>
-            난이도: Lv.${item.difficulty}<br/>
-            최대 파티: ${item.maxPartySize}<br/>
-            상태: ${item.status}<br/>
-            <button id="detail-btn-${item.id}" style="margin-top:6px; padding:4px 8px; font-size:0.8rem; cursor:pointer;">상세보기</button>
-            <button id="close-btn-${item.id}" style="top:4px; right:4px; border:none; background:transparent; font-size:1rem; cursor:pointer">❌</button>
+          <div class="custom-info-window">
+            <div class="iw-header">
+              <strong class="iw-title">${item.title}</strong>
+              <button id="close-btn-${item.id}" class="iw-close-btn">×</button>
+            </div>
+            <div class="iw-body">
+              <div class="iw-field">
+                <span class="iw-label">주여행지</span>
+                <span class="iw-value">${item.first}</span>
+              </div>
+              <div class="iw-field">
+                <span class="iw-label">기간</span>
+                <span class="iw-value">${item.startDate} ~ ${item.endDate}</span>
+              </div>
+              <div class="iw-field">
+                <span class="iw-label">난이도</span>
+                <span class="iw-value">Lv.${item.difficulty}</span>
+              </div>
+              <div class="iw-field">
+                <span class="iw-label">최대 파티</span>
+                <span class="iw-value">${item.maxPartySize}명</span>
+              </div>
+              <div class="iw-field">
+                <span class="iw-label">상태</span>
+                <span class="iw-value">${item.status}</span>
+              </div>
+            </div>
+            <div class="iw-footer">
+              <button id="detail-btn-${item.id}" class="btn-detail">상세보기</button>
+            </div>
           </div>
         `
         infoWindow = new kakaoInstance.maps.InfoWindow({ content })
@@ -154,7 +174,7 @@ function updateMarkers(list) {
 }
 </script>
 
-<style scoped>
+<style>
 .map-container {
   width: 100%;
   height: 500px;
@@ -164,5 +184,63 @@ function updateMarkers(list) {
 #map {
   width: 100%;
   height: 100%;
+}
+.custom-info-window {
+  width: 18rem;
+  padding: 0.75rem;
+  background: #fff;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  font-size: 0.9rem;
+  color: #333;
+}
+.iw-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+.iw-title {
+  font-size: 1rem;
+  font-weight: bold;
+}
+.iw-close-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.2rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.iw-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  margin-bottom: 0.5rem;
+}
+.iw-field {
+  display: flex;
+}
+.iw-label {
+  width: 5rem;
+  font-weight: 500;
+  color: #555;
+}
+.iw-value {
+  flex: 1;
+}
+.iw-footer {
+  text-align: right;
+}
+.btn-detail {
+  background: #6cd395;
+  color: #fff;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+.btn-detail:hover {
+  background: #5bbb84;
 }
 </style>

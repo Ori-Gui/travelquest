@@ -101,6 +101,7 @@ public class PartyService {
                 .map(party -> PartyResponse.of(
                         party.getId(),
                         party.getDungeonId(),
+                        party.getLeaderId(), 
                         party.getTitle(),
                         party.getDescription(),
                         party.getStatus(),
@@ -115,6 +116,7 @@ public class PartyService {
         return PartyResponse.of(
                 party.getId(),
                 party.getDungeonId(),
+                party.getLeaderId(), 
                 party.getTitle(),
                 party.getDescription(),
                 party.getStatus(),

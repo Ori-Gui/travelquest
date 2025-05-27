@@ -4,6 +4,7 @@ import com.ssafy.travelquest.domain.user.dto.MbtiAnswer;
 import com.ssafy.travelquest.domain.user.dto.MbtiResultResponse;
 import com.ssafy.travelquest.domain.user.dto.UserClearDungeonResponse;
 import com.ssafy.travelquest.domain.user.dto.UserProfileEditRequest;
+import com.ssafy.travelquest.domain.user.dto.UserProfileResponse;
 import com.ssafy.travelquest.domain.user.entity.JobClass;
 import com.ssafy.travelquest.domain.user.entity.MBTI;
 import com.ssafy.travelquest.domain.user.repository.JobClassRepository;
@@ -32,6 +33,7 @@ import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -45,7 +47,34 @@ public class UserService {
     private final BlackListService blackListService;
     private final JwtResolver jwtResolver;
     private final RefreshTokenRepository refreshTokenRepository;
-
+    
+    @Transactional(readOnly = true)
+    public List<UserProfileResponse> getAllUsers() {
+        return userRepository.findAll().stream()
+            .map(u -> UserProfileResponse.of(
+                    u.getId(),
+                    u.getUserName(),
+                    u.getEmail(),
+                    u.getMbti(),
+                    u.getJobClassCode(),
+                    u.getProfileImage(),
+                    u.getRole(),
+                    u.getRegistStatus(),
+                    u.getBirthday(),
+                    u.getCreatedAt()
+            ))
+            .collect(Collectors.toList());
+    }
+    
+    @Transactional
+    public void deleteUser(Long userId) {
+        User existing = userRepository.findById(userId);
+        if (existing == null) {
+            throw new NoSuchUserException("User not found: " + userId);
+        }
+        userRepository.delete(userId);
+    }
+    
     @Transactional
     public void createUser(String sub, OAuthProvider provider) {
         // sub와 provider를 이용하여 유저가 존재하는지 확인
@@ -65,8 +94,8 @@ public class UserService {
                 .build());
     }
     
-    public User getUser(Long no) {
-        return userRepository.findById(no);
+    public User getUser(Long id) {
+        return userRepository.findById(id);
     }
 
     public Optional<User> getByUserId(String userId) {
@@ -81,8 +110,8 @@ public class UserService {
         userRepository.update(user);
     }
 
-    public void remove(int no) {
-        userRepository.delete(no);
+    public void remove(Long id) {
+        userRepository.delete(id);
     }
 
     public List<User> list() {

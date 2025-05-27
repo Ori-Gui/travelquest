@@ -22,6 +22,8 @@
         </tr>
       </tbody>
     </table>
+    <br>
+    <button class="btn-user-manage" @click="goToUserManagement">회원 관리</button>
   </section>
 </template>
 
@@ -32,6 +34,13 @@ import { getAllParties } from '@/api/party'
 
 const parties = ref([])
 const router = useRouter()
+
+// 회원관리 페이지로 이동
+function goToUserManagement() {
+  router.push({ name: 'AdminUserList' })
+}
+
+onMounted(loadParties)
 
 async function loadParties() {
   try {
@@ -66,6 +75,23 @@ onMounted(loadParties)
   border: 1px solid #ddd;
   padding: 0.5rem;
   text-align: center;
+}
+btn-user-manage {
+  background: transparent;
+  color: #2d2d2d;
+  border: 2px solid #2d2d2d;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+.btn-user-manage:hover {
+  background: #2d2d2d;
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 .clickable {
   cursor: pointer;

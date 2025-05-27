@@ -23,6 +23,9 @@
               class="view-btn"
               @click="viewPhoto(submittedMap.get(q.id))"
             >사진 보기</button>
+            <span class="status-text">
+              {{ statusLabel(submittedMap.get(q.id).status) }}
+            </span>
           </template>
           <button
             v-else
@@ -60,6 +63,16 @@ import { fetchQuests } from '@/api/quest'
 import { fetchVerifications } from '@/api/verification'
 import { useUserStore } from '@/stores/userStore'
 
+const statusLabels = {
+  COMPLETED: '✅ 인증 완료',
+  PENDING:   '⏳ 심사 중',
+  FAILED:    '❌ 인증 실패'
+}
+
+function statusLabel(status) {
+  return statusLabels[status] || ''
+}
+
 // Props, Params, User (변경 없음)
 const props = defineProps({ partyId: Number })
 const partyId = props.partyId
@@ -70,7 +83,7 @@ const currentUserId = userStore.user.id
 
 // State 변경: Map과 뷰어 URL 추가
 const quests = ref([])
-const submittedMap = ref(new Map())  // questId → photoUrl
+const submittedMap = ref(new Map())
 const showModal = ref(false)
 const currentQuestId = ref(null)
 const viewPhotoUrl = ref(null)
@@ -83,10 +96,10 @@ async function loadData() {
       fetchVerifications(partyId)
     ])
     quests.value = qs
-    // Map 생성
-    submittedMap.value = new Map(vs.map(v => [v.questId, v.photoUrl]))
-    console.log(submittedMap);
-    
+    // Map<questId, { photoUrl, status }>
+    submittedMap.value = new Map(
+      vs.map(v => [ v.questId, { photoUrl: v.photoUrl, status: v.status } ])
+    )
   } catch (e) {
     console.error('데이터 로드 실패', e)
   }
@@ -229,5 +242,12 @@ function closePhoto() {
   max-height: 90%;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+
+.status-text {
+  margin-left: 0.5rem;
+  font-weight: bold;
+  color: #333;
+  vertical-align: middle;
 }
 </style>

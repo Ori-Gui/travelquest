@@ -85,6 +85,12 @@ const router = createRouter({
       component: () => import('@/components/AdminPartyVerification.vue'),
       props: route => ({ partyId: Number(route.params.partyId) }),
       meta: { requiresAdmin: true }
+    },
+    {
+      path: '/admin/users',
+      name: 'AdminUserList',
+      component: () => import('@/views/AdminUserList.vue'),
+      meta: { requiresAdmin: true }
     }
   ]
 })

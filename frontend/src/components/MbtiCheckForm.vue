@@ -30,7 +30,6 @@ defineProps({
   text-align: center;
 }
 .question-title {
-  font-family: 'Press Start 2P', cursive;
   font-size: 0.9rem;
   margin-bottom: 1.5rem;
 }
