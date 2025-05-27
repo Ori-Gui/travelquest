@@ -20,7 +20,7 @@
           <component
             :is="extractUrl(attr.homepage) ? 'a' : 'div'"
             :href="extractUrl(attr.homepage)"
-            target="_blank"
+            target="_self"
             class="attraction-link"
           >
             <img :src="attr.firstImage1 || defaultImage" alt="{{ attr.title }} 대표 이미지" />
