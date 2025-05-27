@@ -120,7 +120,6 @@ public class ChatMessageService {
                 log.debug("  ➡ messageId={}, sentAt={}, content={}",
                         doc.getId(), doc.getSentAt(), doc.getMessage())
         );
-
         List<ChatMessageDto> result = pageResult
                 .map(ChatMessageDto::from)
                 .getContent()

@@ -31,6 +31,7 @@ public class AuthService {
         String accessToken = jwtUtils.provideTokens(
                 user.getId(),
                 user.getUserName(),
+                user.getJobClassCode(),
                 user.getRole(),
                 user.getRegistStatus()
         ).getAccessToken();

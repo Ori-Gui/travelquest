@@ -52,7 +52,7 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<Void> registUser(@AuthenticationPrincipal CustomUserDetails userDetails, @RequestBody UserProfileEditRequest userProfileEditRequest) {
-        userService.editUserProfile(userDetails.getId(), userProfileEditRequest);
+        userService.registUser(userDetails.getId(), userProfileEditRequest);
         return ResponseEntity.ok().build();
     }
     

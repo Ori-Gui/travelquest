@@ -1,4 +1,4 @@
-<template>
+<<template>
   <section class="party-info" v-if="partyMembers && partyMembers.length">
     <div class="party-members">
       <div v-for="member in partyMembers" :key="member.id" class="member-card">
@@ -23,7 +23,7 @@
 
     <button
       class="join-button"
-      v-if="status === 'MATCHING' && currentUserId && partyMembers.length > 0 && !isAlreadyMember"
+      v-if="status === 'MATCHING' && currentUserId && partyMembers.length > 0 && !isAlreadyMember && canJoinByJob"
       @click="joinPartyEvent"
     >
       파티에 참가하기
@@ -81,6 +81,19 @@ const isCurrentUserLeader = computed(() => {
   );
 });
 
+// Check if current user is already a member
+const isAlreadyMember = computed(() => {
+  return partyMembers.value.some(
+    member => String(member.id) === String(currentUserId.value)
+  );
+});
+
+// Check if current user’s job is in required jobs
+const userJobCode = computed(() => userStore.user?.job);
+const canJoinByJob = computed(() => {
+  return requiredJobs.value.some(job => job.job === userJobCode.value);
+});
+
 const jobEmojiMap = {
   WARRIOR: '🛡️',
   MAGE: '🪄',
@@ -95,12 +108,6 @@ const jobEmojiMap = {
 function getJobEmoji(jobCode) {
   return jobEmojiMap[jobCode] || '🎯';
 }
-
-const isAlreadyMember = computed(() => {
-  return partyMembers.value.some(
-    member => String(member.id) === String(currentUserId.value)
-  );
-});
 
 watchEffect(async () => {
   if (!props.partyId || !userStore.user?.id) {
@@ -122,7 +129,7 @@ watchEffect(async () => {
       return 0;
     });
     partyMembers.value = sorted;
-    requiredJobs.value = jobs;
+    requiredJobs.value = jobs;    
   } catch (e) {
     console.error('파티 정보 불러오기 오류:', e);
     partyMembers.value = [];
@@ -180,6 +187,7 @@ async function kickMember(memberId) {
 </script>
 
 <style scoped>
+
 .party-info {
   margin-top: 1rem;
 }
@@ -258,8 +266,8 @@ async function kickMember(memberId) {
   background-color: #fff;
   border: 2px solid #a0d8a0;
   padding: 1rem;
-  border-radius: 12px;
-  box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.05);
+ 	border-radius: 12px;
+ 	box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.05);
   margin-top: 1rem;
 }
 
@@ -290,4 +298,5 @@ async function kickMember(memberId) {
   color: #3b633c;
   box-shadow: inset 0 1px 2px rgba(0,0,0,0.03);
 }
+
 </style>
