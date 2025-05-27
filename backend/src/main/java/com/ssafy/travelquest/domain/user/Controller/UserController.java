@@ -37,6 +37,18 @@ import org.springframework.web.util.WebUtils;
 @RequestMapping("/api/v1/user")
 public class UserController {
     private final UserService userService;
+    
+    @GetMapping
+    public ResponseEntity<List<UserProfileResponse>> listUsers() {
+        List<UserProfileResponse> users = userService.getAllUsers();
+        return ResponseEntity.ok(users);
+    }
+
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<Void> deleteUser(@PathVariable Long userId) {
+        userService.deleteUser(userId);
+        return ResponseEntity.noContent().build();
+    }
 
     @PostMapping("/register")
     public ResponseEntity<Void> registUser(@AuthenticationPrincipal CustomUserDetails userDetails, @RequestBody UserProfileEditRequest userProfileEditRequest) {

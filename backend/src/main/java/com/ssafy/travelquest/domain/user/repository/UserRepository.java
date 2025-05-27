@@ -10,11 +10,11 @@ import com.ssafy.travelquest.domain.user.entity.User;
 
 @Mapper
 public interface UserRepository {
-    User findById(Long no);
+    User findById(Long id);
     User findByUserId(String userId);
     int insert(User user);
     void update(User user);
-    void delete(int no);
+    void delete(Long id);
     List<User> findAll();
     User findByUserIdAndNameAndEmail(@Param("userId") String userId,
             @Param("userName") String userName,

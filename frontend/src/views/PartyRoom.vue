@@ -23,9 +23,9 @@
         :attractions="attractions"
       />
 
-      <!-- 매칭중: 탐험 시작 버튼 -->
+      <!-- 매칭중: 탐험 시작 버튼 (리더만 보임) -->
       <section
-        v-if="activeTab === 'info' && isMatching"
+        v-if="activeTab === 'info' && isMatching && isLeader"
         class="start-exploration"
       >
         <div class="warning">⚠️ 경고!</div>
@@ -40,9 +40,7 @@
         v-else-if="activeTab === 'info' && isInProgress"
         class="start-exploration started"
       >
-        <div class="checkmark">✅</div>
-        <p>탐험이 시작되었습니다!</p>
-        <p>퀘스트 탭을 눌러 수행할 퀘스트를 확인하세요!</p>
+        <!-- ... -->
       </section>
 
       <!-- 완료 -->
@@ -50,8 +48,7 @@
         v-else-if="activeTab === 'info' && isCompleted"
         class="start-exploration completed"
       >
-        <div class="checkmark">🏁</div>
-        <p>해당 파티는 탐험을 완료했습니다!</p>
+        <!-- ... -->
       </section>
 
       <!-- 실패 -->
@@ -59,8 +56,7 @@
         v-else-if="activeTab === 'info' && isFailed"
         class="start-exploration failed"
       >
-        <div class="checkmark">❌</div>
-        <p>해당 파티는 탐험을 실패했습니다!</p>
+        <!-- ... -->
       </section>
 
       <!-- 퀘스트, 채팅, 파티 섹션 -->
@@ -94,6 +90,7 @@ const activeTab = ref('info')
 // 유저 & 파티 멤버 조회
 const userStore    = useUserStore()
 const userReady    = computed(() => !!userStore.user?.id)
+
 const partyMembers = ref([])
 async function loadPartyMembers() {
   if (userReady.value) {
@@ -122,6 +119,10 @@ const isMatching   = computed(() => party.value?.status === 'MATCHING')
 const isInProgress = computed(() => party.value?.status === 'IN_PROGRESS')
 const isCompleted  = computed(() => party.value?.status === 'COMPLETED')
 const isFailed     = computed(() => party.value?.status === 'FAILED')
+
+const isLeader = computed(() =>
+  String(party.value?.leaderId) === String(userStore.user?.id)
+)
 
 async function loadParty() {
   party.value = await getPartyStatus(partyId)

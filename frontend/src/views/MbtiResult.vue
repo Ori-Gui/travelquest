@@ -88,7 +88,6 @@ async function goToMap() {
 }
 
 .welcome-text {
-  font-family: 'Press Start 2P', cursive;
   font-size: 0.8rem;
   margin-bottom: 1.5rem;
   line-height: 1.6;

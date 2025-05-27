@@ -10,15 +10,17 @@ import lombok.Getter;
 public class PartyResponse {
     private Long partyId;
     private Long dungeonId;
+    private Long leaderId; 
     private String title;
     private String description;
     private PartyStatus status;
     private Integer maxMember;
 
-    public static PartyResponse of(Long partyId, Long dungeonId, String title, String description, PartyStatus status, Integer maxMember) {
+    public static PartyResponse of(Long partyId, Long dungeonId, Long leaderId, String title, String description, PartyStatus status, Integer maxMember) {
         return PartyResponse.builder()
                 .partyId(partyId)
                 .dungeonId(dungeonId)
+                .leaderId(leaderId)
                 .title(title)
                 .description(description)
                 .status(status)
@@ -30,6 +32,7 @@ public class PartyResponse {
         return PartyResponse.builder()
             .partyId(party.getId())
             .dungeonId(party.getDungeonId())
+            .leaderId(party.getLeaderId()) 
             .title(party.getTitle())
             .description(party.getDescription())
             .status(party.getStatus())

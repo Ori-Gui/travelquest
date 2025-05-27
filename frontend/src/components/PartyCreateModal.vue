@@ -119,7 +119,6 @@ const close = () => emit('close')
   max-height: 90vh;
   overflow-y: auto;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-  font-family: 'Pretendard', sans-serif;
 }
 
 .modal h3 {
@@ -139,7 +138,6 @@ const close = () => emit('close')
   border: 1px solid #ccc;
   border-radius: 8px;
   font-size: 0.9rem;
-  font-family: inherit;
   resize: none;
 }
 

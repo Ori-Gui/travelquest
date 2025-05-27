@@ -1,4 +1,4 @@
-<<template>
+<template>
   <section class="party-info" v-if="partyMembers && partyMembers.length">
     <div class="party-members">
       <div v-for="member in partyMembers" :key="member.id" class="member-card">
@@ -129,7 +129,7 @@ watchEffect(async () => {
       return 0;
     });
     partyMembers.value = sorted;
-    requiredJobs.value = jobs;    
+    requiredJobs.value = jobs;
   } catch (e) {
     console.error('파티 정보 불러오기 오류:', e);
     partyMembers.value = [];
@@ -156,15 +156,15 @@ async function leavePartyEvent() {
     console.error('파티 떠나기 실패:', error);
     alert('파티 떠나기에 실패했습니다.');
   }
-  stompClient.publish({
-    destination: `/ws/chat.leave.${props.partyId}`,
-    body: JSON.stringify({
-      userId: currentUserId.value,
-      name: userStore.user?.nickname,
-      system: true,
-      content: `${userStore.user?.nickname}님이 파티에서 나가셨습니다.`
-    })
-  });
+  // stompClient.publish({
+  //   destination: `/ws/chat.leave.${props.partyId}`,
+  //   body: JSON.stringify({
+  //     userId: currentUserId.value,
+  //     name: userStore.user?.nickname,
+  //     system: true,
+  //     content: `${userStore.user?.nickname}님이 파티에서 나가셨습니다.`
+  //   })
+  // });
 }
 
 // Kick member function for leader
