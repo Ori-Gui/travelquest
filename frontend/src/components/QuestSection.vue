@@ -124,7 +124,8 @@ async function onSubmitted() {
 
 // 사진 보기/닫기
 function viewPhoto(url) {
-  viewPhotoUrl.value = url
+  console.log(url)
+  viewPhotoUrl.value = `${url.photoUrl}`;
 }
 function closePhoto() {
   viewPhotoUrl.value = null
