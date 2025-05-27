@@ -1,4 +1,4 @@
-<<template>
+<template>
   <section class="party-info" v-if="partyMembers && partyMembers.length">
     <div class="party-members">
       <div v-for="member in partyMembers" :key="member.id" class="member-card">
@@ -129,7 +129,7 @@ watchEffect(async () => {
       return 0;
     });
     partyMembers.value = sorted;
-    requiredJobs.value = jobs;    
+    requiredJobs.value = jobs;
   } catch (e) {
     console.error('파티 정보 불러오기 오류:', e);
     partyMembers.value = [];
