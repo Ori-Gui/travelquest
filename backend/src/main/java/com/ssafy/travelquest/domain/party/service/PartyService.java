@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -66,33 +67,48 @@ public class PartyService {
         List<PartyMember> partyMembers = partyMemberRepository.getPartyMembersByPartyId(partyId);
         Party target = partyRepository.findById(partyId);
         List<PartyRoleRequirement> partyRoleRequirements = partyRoleRequirementRepository.findByPartyId(partyId);
+
+        // 전체 정원 검사
         if (partyMembers.size() >= target.getMaxMember()) {
             throw new IllegalArgumentException("파티가 꽉찼습니다.");
         }
-        for(PartyMember partyMember : partyMembers) {
-        	if(partyMember.getUserId() == userDetails.getId()) {
-        		throw new IllegalArgumentException("이미 참가되어 있는 사용자입니다.");
-        	}
-        }
-        for (PartyRoleRequirement requirement : partyRoleRequirements) {
-        	if(!requirement.getJobCode().equals(userDetails.getJobCode())) continue;
-            long currentCount = partyMembers.stream()
-                    .filter(member -> member.getJobCode().equals(requirement.getJobCode()))
-                    .count();
-
-            if (currentCount >= requirement.getMaxCount()) {
-                throw new IllegalArgumentException("해당 직업군의 자리가 가득 찼습니다.");
+        // 이미 참가 여부
+        for (PartyMember pm : partyMembers) {
+            if (pm.getUserId().equals(userDetails.getId())) {
+                throw new IllegalArgumentException("이미 참가되어 있는 사용자입니다.");
             }
         }
 
+        // 1) 내 직업군 requirement 찾기
+        Optional<PartyRoleRequirement> myReqOpt = partyRoleRequirements.stream()
+            .filter(req -> req.getJobCode().equals(userDetails.getJobCode()))
+            .findAny();
+
+        // 2) requirement 없으면 조인 불가
+        if (myReqOpt.isEmpty()) {
+            throw new IllegalArgumentException("해당 직업군은 모집 중이 아닙니다.");
+        }
+
+        PartyRoleRequirement myReq = myReqOpt.get();
+
+        // 3) 해당 직업군 정원 검사
+        long currentCount = partyMembers.stream()
+            .filter(member -> member.getJobCode().equals(myReq.getJobCode()))
+            .count();
+        if (currentCount >= myReq.getMaxCount()) {
+            throw new IllegalArgumentException("해당 직업군의 자리가 가득 찼습니다.");
+        }
+
+        // 모두 통과하면 삽입
         partyMemberRepository.insertPartyMember(
-                PartyMember.of(
-                        partyId,
-                        userDetails.getId(),
-                        userDetails.getJobCode()
-                )
+            PartyMember.of(
+                partyId,
+                userDetails.getId(),
+                userDetails.getJobCode()
+            )
         );
     }
+
 
     @Transactional(readOnly = true)
     public List<PartyResponse> getPartyListByDungeonId(Long dungeonId) {

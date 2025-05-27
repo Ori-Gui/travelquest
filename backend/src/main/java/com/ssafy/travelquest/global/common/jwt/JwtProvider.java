@@ -1,5 +1,6 @@
 package com.ssafy.travelquest.global.common.jwt;
 
+import com.ssafy.travelquest.domain.user.entity.JobCode;
 import com.ssafy.travelquest.domain.user.entity.RegistStatus;
 import com.ssafy.travelquest.global.security.CustomUserDetails;
 import io.jsonwebtoken.Claims;
@@ -37,8 +38,8 @@ public class JwtProvider {
 
     private final @Lazy UserDetailsService userDetailsService;
 
-    public JwtToken provideTokens(Long sub, String username, UserRole role, RegistStatus registStatus) {
-        Claims claims = makeAccessClaims(sub, username, role, registStatus);
+    public JwtToken provideTokens(Long sub, String username, JobCode jobCode, UserRole role, RegistStatus registStatus) {
+        Claims claims = makeAccessClaims(sub, username, jobCode, role, registStatus);
         Claims refresh_claims = makeRefreshClaims(sub);
         return JwtToken.builder()
                 .accessToken(generateToken(claims, ACCESS_TIME))
@@ -90,10 +91,11 @@ public class JwtProvider {
         return null;
     }
 
-    private Claims makeAccessClaims(Long sub, String username, UserRole role, RegistStatus registStatus) {
+    private Claims makeAccessClaims(Long sub, String username, JobCode jobCode, UserRole role, RegistStatus registStatus) {
         Claims claims = Jwts.claims();
         claims.setSubject(Long.toString(sub));
         claims.put("username", username);
+        claims.put("job", jobCode);
         claims.put("role", role.name());
         claims.put("registStatus", registStatus.name());
         return claims;

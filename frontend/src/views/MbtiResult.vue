@@ -13,17 +13,20 @@
       </p>
       <p class="job-desc">{{ result.mbtiDescription }}</p>
 
-      <router-link to="/map" class="start-button">
+      <button class="start-button" @click="goToMap">
         🗺 여정으로 가기
-      </router-link>
+      </button>
     </main>
   </div>
 </template>
 
 <script setup>
 import { onMounted, ref, computed } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import axios from '@/lib/axios'
+import { refreshToken } from '@/api/auth'    // 👈 방금 만든 함수
+
+const router = useRouter()
 
 const route = useRoute()
 const userName = route.query.name || '여행자'
@@ -44,6 +47,22 @@ onMounted(async () => {
     console.error('MBTI 결과 불러오기 실패:', e)
   }
 })
+
+async function goToMap() {
+  try {
+    // 1) 토큰 리프레시 시도
+    await refreshToken()
+  } catch (e) {
+    console.error('토큰 리프레시 실패:', e)
+    // 필요하면 로그인 페이지로 리다이렉트
+    return router.push('/login')
+  }
+  // 2) 리프레시 성공했으면 맵으로 이동
+  router.push('/map').then(() => {
+    window.location.reload();
+  });
+}
+
 </script>
 
 <style scoped>
