@@ -384,8 +384,8 @@ REST API는 `/api/v1` 하위에 있고, 인증 관련 경로(`/oauth2`, `/login/
 
 | 단계 | 실행 주체 | 처리 내용 |
 | --- | --- | --- |
-| 1 | `DungeonCreationScheduler` (`@Scheduled(cron = "0 0 0 * * ?")`) | 매일 00시 던전 10개 생성. 기간 0~8일, 최대 인원 4~10명을 무작위로 정함 |
-| 2 | MySQL 프로시저 `create_dungeon_with_attractions` | 기간으로 난이도(1~5)와 필요 명소 수(1~8)를 결정하고, 조건을 만족하는 지역(area_code)을 랜덤 선택해 던전과 `dungeon_attraction` 매핑 생성 |
+| 1 | `DungeonCreationScheduler` (`@Scheduled(cron = "0 0 0 * * ?")`) | 매일 00시 던전 10개 생성. 기간 0\~8일, 최대 인원 4\~10명을 무작위로 정함 |
+| 2 | MySQL 프로시저 `create_dungeon_with_attractions` | 기간으로 난이도(1\~5)와 필요 명소 수(1\~8)를 결정하고, 조건을 만족하는 지역(area_code)을 랜덤 선택해 던전과 `dungeon_attraction` 매핑 생성 |
 | 3 | `QuestGenerationService` | 배정된 관광지 목록을 JSON으로 직렬화해 LLM에 전달, 관광지당 퀘스트 1개를 `{title, description}` JSON 배열로 요청 |
 | 4 | `DungeonService` | 응답 개수와 관광지 수를 비교·검증한 뒤 `quest` 테이블에 순서대로 저장 |
 
