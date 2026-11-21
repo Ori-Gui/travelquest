@@ -23,14 +23,20 @@ let kakaoInstance
 let markerObjs = []
 let infoWindow = null
 
+// 카카오 지도 JavaScript 앱 키 (frontend/.env 의 VITE_KAKAO_MAP_APP_KEY)
+const KAKAO_MAP_APP_KEY = import.meta.env.VITE_KAKAO_MAP_APP_KEY
+
 // 카카오 스크립트 로더
 const loadKakao = () =>
   new Promise((resolve, reject) => {
     if (window.kakao && window.kakao.maps) {
       return resolve(window.kakao)
     }
+    if (!KAKAO_MAP_APP_KEY) {
+      return reject(new Error('VITE_KAKAO_MAP_APP_KEY is not set. See frontend/.env.example.'))
+    }
     const script = document.createElement('script')
-    script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=95641937d8dff26c96d6aa4f99519a55&autoload=false`
+    script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_MAP_APP_KEY}&autoload=false`
     script.onload = () => window.kakao.maps.load(() => resolve(window.kakao))
     script.onerror = reject
     document.head.appendChild(script)

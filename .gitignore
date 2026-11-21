@@ -465,3 +465,18 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.toptal.com/developers/gitignore/api/macos,windows,vue,vuejs,maven,intellij,eclipse,visualstudiocode,node,java
+
+# ---------------------------------------------------------------------
+# TravelQuest: 로컬 환경변수 / 생성 파일
+# ---------------------------------------------------------------------
+# 환경변수 파일 (.env.example 은 키 목록이므로 추적 유지)
+.env
+.env.*
+!.env.example
+
+# 업로드된 이미지 (테스트 데이터)
+uploads/images
+backend/uploads/
+
+# MySQL 데이터 디렉터리 (initdb/*.sql 덤프만 추적)
+scripts/mysql/data/

@@ -5,10 +5,10 @@ services:
     image: mysql:latest
     container_name: travelquest-mysql
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: ssafytrip
-      MYSQL_USER: travelquest
-      MYSQL_PASSWORD: travelquest
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-ssafytrip}
+      MYSQL_USER: ${MYSQL_USER:-travelquest}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-travelquest}
       TZ: Asia/Seoul
     command:
       - --character-set-server=utf8mb4
@@ -45,8 +45,8 @@ services:
     ports:
       - "27017:27017"
     environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: root
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USERNAME:-root}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD:-root}
     restart: unless-stopped
     networks:
       - travelquest-network
@@ -57,11 +57,11 @@ services:
     ports:
       - "18081:8081"
     environment:
-      ME_CONFIG_MONGODB_URL: mongodb://root:root@travelquest-mongodb:27017/?authSource=admin
-      ME_CONFIG_MONGODB_ADMINUSERNAME: root
-      ME_CONFIG_MONGODB_ADMINPASSWORD: root
-      ME_CONFIG_BASICAUTH_USERNAME: admin
-      ME_CONFIG_BASICAUTH_PASSWORD: admin
+      ME_CONFIG_MONGODB_URL: mongodb://${MONGO_ROOT_USERNAME:-root}:${MONGO_ROOT_PASSWORD:-root}@travelquest-mongodb:27017/?authSource=admin
+      ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_ROOT_USERNAME:-root}
+      ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_ROOT_PASSWORD:-root}
+      ME_CONFIG_BASICAUTH_USERNAME: ${MONGO_EXPRESS_USER:-admin}
+      ME_CONFIG_BASICAUTH_PASSWORD: ${MONGO_EXPRESS_PASSWORD:-admin}
     depends_on:
       - travelquest-mongodb
     networks:

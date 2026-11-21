@@ -19,13 +19,22 @@
 <script setup>
 import { onMounted } from 'vue'
 
+// 카카오/네이버 공개 키는 frontend/.env 로 주입합니다(frontend/.env.example 참고).
+// 카카오는 지도(VITE_KAKAO_MAP_APP_KEY)와 같은 JavaScript 앱 키를 씁니다.
+const KAKAO_JS_APP_KEY = import.meta.env.VITE_KAKAO_JS_APP_KEY
+const NAVER_CLIENT_ID = import.meta.env.VITE_NAVER_CLIENT_ID
+
 onMounted(() => {
   // ✅ 카카오 SDK
   if (!window.Kakao) {
     const kakaoScript = document.createElement('script')
     kakaoScript.src = 'https://developers.kakao.com/sdk/js/kakao.js'
     kakaoScript.onload = () => {
-      window.Kakao.init('3164bebdfd11236cfd36fe638572aae1') // 👉 실제 앱 키로 교체
+      if (!KAKAO_JS_APP_KEY) {
+        console.warn('VITE_KAKAO_JS_APP_KEY is not set. Kakao login init skipped. See frontend/.env.example.')
+        return
+      }
+      window.Kakao.init(KAKAO_JS_APP_KEY)
       const kakaoLoginBtn = document.getElementById('kakao-login-btn')
       kakaoLoginBtn.addEventListener('click', () => {
         window.Kakao.Auth.authorize({
@@ -37,11 +46,15 @@ onMounted(() => {
   }
 
   // ✅ 네이버 SDK
+  if (!NAVER_CLIENT_ID) {
+    console.warn('VITE_NAVER_CLIENT_ID is not set. Naver login init skipped. See frontend/.env.example.')
+    return
+  }
   const naverScript = document.createElement('script')
   naverScript.src = 'https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.2.js'
   naverScript.onload = () => {
     new window.naver.LoginWithNaverId({
-      clientId: 'KmZoLWlEVZtPZNHcdUv5',
+      clientId: NAVER_CLIENT_ID,
       callbackUrl: 'http://192.168.205.51:8080/oauth2/authorization/naver',
       isPopup: false,
       loginButton: {

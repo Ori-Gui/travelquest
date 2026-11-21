@@ -459,10 +459,22 @@ if (prompts.size() != attractions.size()) {
 
 ## 🚀 실행 방법
 
+### 0) 환경변수 준비
+
+자격증명(OAuth 시크릿·JWT 키·DB 계정·지도 앱 키)은 저장소에 포함하지 않고 환경변수로만 주입합니다.
+각 위치의 `.env.example`에 필요한 키 목록이 정리되어 있습니다. (`.env`, `.env.*`는 `.gitignore` 대상, `.env.example`만 추적)
+
+| 예시 파일 | 담는 값 | 사용 방법 |
+| --- | --- | --- |
+| `.env.example` | 백엔드(Spring) 환경변수 | IDE Run Configuration 또는 `export`로 주입 |
+| `frontend/.env.example` | `VITE_KAKAO_MAP_APP_KEY`, `VITE_KAKAO_JS_APP_KEY`, `VITE_NAVER_CLIENT_ID` | `frontend/.env`로 복사 |
+| `scripts/.env.example` | docker-compose 계정 값(선택) | `scripts/.env`로 복사 |
+
 ### 1) 인프라 (Docker)
 
 ```bash
 cd scripts
+cp .env.example .env   # 선택: 계정 값을 바꿀 때만
 docker-compose up -d
 ```
 
@@ -474,6 +486,8 @@ docker-compose up -d
 | MongoDB | 27017 | 채팅 메시지 |
 | mongo-express | 18081 | MongoDB 웹 클라이언트 |
 
+> DB 데이터 디렉터리(`scripts/mysql/data/`)는 저장소에 포함하지 않습니다. 처음 기동하면 빈 데이터 디렉터리에 `scripts/mysql/initdb/*.sql`이 자동 적용되어 스키마와 덤프 데이터가 채워집니다. 계정 값을 바꾸지 않았다면 백엔드의 `DB_USERNAME`/`DB_PASSWORD`는 `travelquest`, MongoDB 접속 정보는 `root`/`root`입니다.
+
 ### 2) 백엔드
 
 ```bash
@@ -481,18 +495,21 @@ cd backend
 ./mvnw spring-boot:run
 ```
 
-`application.properties`에 아래 항목이 필요합니다. (값은 실행 환경에 맞게 주입)
+`application.properties`는 값을 직접 담지 않고 아래 환경변수를 참조합니다. 키 목록은 루트 `.env.example`와 동일합니다.
 
-| 항목 | 키 |
-| --- | --- |
-| OpenAI API 키 | `spring.ai.openai.api-key` |
-| Kakao OAuth | `spring.security.oauth2.client.registration.kakao.client-id` |
-| Naver OAuth | `spring.security.oauth2.client.registration.naver.client-id` / `client-secret` |
-| JWT 서명 키 | `jwt.secret` |
-| MySQL | `spring.datasource.url` / `username` / `password` |
-| Redis | `spring.redis.host` / `port` |
-| MongoDB | `spring.data.mongodb.uri` |
-| 프론트 콜백 URL | `url.redirect.base` |
+| 항목 | 환경변수 | 대응 프로퍼티 |
+| --- | --- | --- |
+| OpenAI API 키 | `OPEN_API_KEY` | `spring.ai.openai.api-key` |
+| Kakao OAuth | `KAKAO_CLIENT_ID` | `spring.security.oauth2.client.registration.kakao.client-id` |
+| Naver OAuth | `NAVER_CLIENT_ID`, `NAVER_CLIENT_SECRET` | `spring.security.oauth2.client.registration.naver.client-id` / `client-secret` |
+| JWT 서명 키 | `JWT_SECRET` | `jwt.secret` |
+| MySQL | `DB_URL`(선택, 기본값 있음), `DB_USERNAME`, `DB_PASSWORD` | `spring.datasource.url` / `username` / `password` |
+| Redis | `REDIS_HOST`, `REDIS_PORT`(각각 기본값 있음) | `spring.redis.host` / `port` |
+| MongoDB | `MONGODB_URI` | `spring.data.mongodb.uri` |
+| 프론트 콜백 URL | `FRONT_REDIRECT_BASE`(기본값 있음) | `url.redirect.base` |
+| 업로드 경로 | `UPLOAD_DIR`(기본 `uploads/images`) | `upload.dir` |
+
+위 표에 "기본값 있음"으로 표시한 항목을 제외하면 기본값이 없으므로, 값이 없으면 기동 시 placeholder 오류로 바로 실패합니다.
 
 > CORS 허용 오리진(`SecurityConfig`, `WebConfig`)과 Vite 프록시(`vite.config.js`), STOMP 엔드포인트 오리진에 개발 당시 로컬 네트워크 IP가 지정되어 있으므로, 다른 환경에서 실행할 때는 해당 값을 함께 수정해야 합니다.
 
@@ -500,11 +517,18 @@ cd backend
 
 ```bash
 cd frontend
+cp .env.example .env   # 아래 세 키를 채운 뒤 실행
 npm install
 npm run dev
 ```
 
-기본 개발 서버는 `http://localhost:5173`이며, API 서버 주소는 `src/lib/axios.js`, 채팅 서버 주소는 `src/service/chatService.js`에서 지정합니다.
+| 환경변수 | 사용처 |
+| --- | --- |
+| `VITE_KAKAO_MAP_APP_KEY` | 카카오 지도 SDK (`src/components/MapView.vue`) |
+| `VITE_KAKAO_JS_APP_KEY` | 카카오 로그인 SDK (`src/components/LoginForm.vue`) — 지도와 같은 JavaScript 앱 키 |
+| `VITE_NAVER_CLIENT_ID` | 네이버 로그인 SDK (`src/components/LoginForm.vue`) |
+
+카카오 키에는 `http://localhost:5173` 도메인이 등록되어 있어야 지도·로그인이 동작합니다. 기본 개발 서버는 `http://localhost:5173`이고, API 서버 주소는 `src/lib/axios.js`, 채팅 서버 주소는 `src/service/chatService.js`에서 지정합니다.
 
 ---
 
