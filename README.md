@@ -106,17 +106,32 @@
 
 ### 화면
 
-| MBTI 검사 | 직업 배정 |
-| :---: | :---: |
-| ![MBTI 검사](docs/resources/image%201.png) | ![직업 결과](docs/resources/image%204.png) |
+아래는 2025-05-27 시연 영상에서 캡처한 **실제 구동 화면**입니다. (와이어프레임이 아닌 실행 중인 서비스 화면)
 
-| 던전 탐색 (지도) | 파티 목록 |
+| MBTI 검사 | 직업군 배정 |
 | :---: | :---: |
-| ![던전 지도](docs/resources/image%209.png) | ![파티 목록](docs/resources/image%2013.png) |
+| <img src="docs/screenshots/01_mbti_test.png" width="270" alt="MBTI 검사 화면"/> | <img src="docs/screenshots/02_job_result.png" width="270" alt="직업군 배정 화면"/> |
+| <sub>회원가입 직후 4축 문항에 예/아니오로 답하면 MBTI가 계산됩니다</sub> | <sub>검사 결과에 따라 8개 직업군 중 하나와 캐릭터가 배정됩니다(예: 트릭스터)</sub> |
 
-| 파티 생성 (직업군별 모집) | AI 생성 퀘스트 | 관리자 인증 검토 |
-| :---: | :---: | :---: |
-| ![파티 생성](docs/resources/image%2010.png) | ![퀘스트](docs/resources/image%2015.png) | ![관리자](docs/resources/image%2016.png) |
+| 던전 탐색 (Kakao Map) | 던전 상세 · 파티 목록 |
+| :---: | :---: |
+| <img src="docs/screenshots/03_dungeon_map.png" width="270" alt="던전 탐색 지도 화면"/> | <img src="docs/screenshots/04_dungeon_party.png" width="270" alt="던전 상세와 파티 목록 화면"/> |
+| <sub>시도·구군·테마·기간·키워드로 검색하고, 지도 마커를 눌러 기간·난이도·최대 파티·상태를 확인합니다</sub> | <sub>던전에 배정된 관광지와 모집 중인 파티가 함께 보이고, 파티 카드에 직업군별 모집 현황(예: TRICKSTER 1/1, RANGER 0/1)이 표시됩니다</sub> |
+
+| 파티 생성 (직업군별 모집) | 실시간 파티 채팅 |
+| :---: | :---: |
+| <img src="docs/screenshots/05_party_create.png" width="270" alt="파티 생성 화면"/> | <img src="docs/screenshots/06_party_chat.png" width="270" alt="파티 채팅 화면"/> |
+| <sub>파티 이름·설명·인원과 직업군별 모집 인원을 지정해 생성합니다</sub> | <sub>파티 단위 STOMP 채팅, 입장하면 이전 메시지를 MongoDB에서 불러옵니다</sub> |
+
+| AI 생성 퀘스트 |
+| :---: |
+| <img src="docs/screenshots/07_quest_list.png" width="270" alt="AI 생성 퀘스트 화면"/> |
+| <sub>던전에 배정된 관광지 정보를 LLM에 넘겨 만든 퀘스트가 번호별로 쌓이고, 완료한 퀘스트가 마이페이지에 남습니다</sub> |
+
+| 관리자 인증 검토 |
+| :---: |
+| <img src="docs/screenshots/08_admin_review.png" width="820" alt="관리자 인증 검토 화면"/> |
+| <sub>관리자 페이지에서 파티별 퀘스트 인증 내역을 보고, 인증 사진 확인 후 승인/거절합니다</sub> |
 
 ---
 
